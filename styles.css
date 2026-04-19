@@ -712,6 +712,360 @@ blockquote {
   position: relative;
 }
 
+/* ── Breathing page: visualizer section ─────────────────── */
+.viz-section {
+  background: rgba(20, 10, 35, 0.04);
+  padding: 3.5rem 0 2.5rem;
+}
+
+.viz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.active-tech-header {
+  max-width: 560px;
+}
+
+.active-tech-header h2 {
+  display: block;
+}
+
+/* ── Breathing page: stage + rings ──────────────────────── */
+.breath-stage {
+  position: relative;
+  width: min(300px, 88vw);
+  height: min(300px, 88vw);
+  margin: 2rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.breath-rings {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breath-ring {
+  position: absolute;
+  width: 165px;
+  height: 165px;
+  border-radius: 50%;
+  border: 2px solid rgba(232, 124, 160, 0.45);
+  animation: ringExpand 4s ease-out infinite;
+}
+
+@keyframes ringExpand {
+  0%   { transform: scale(1);   opacity: 0.65; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+/* ── Breathing page: main circle ────────────────────────── */
+#breath-circle {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 33% 33%, #fce7f3, #e87ca0 55%, #a78bfa 90%);
+  z-index: 2;
+  box-shadow: 0 0 30px rgba(167, 139, 250, 0.4);
+  animation: idleBreath 5s ease-in-out infinite;
+  transition: transform 4s ease-in-out, box-shadow 4s ease-in-out;
+}
+
+@keyframes idleBreath {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 22px rgba(167,139,250,0.35); }
+  50%       { transform: scale(1.22); box-shadow: 0 0 45px rgba(232,124,160,0.5); }
+}
+
+#breath-circle.active  { animation: none; }
+
+#breath-circle.holding { animation: holdGlow 2s ease-in-out infinite; }
+
+@keyframes holdGlow {
+  0%, 100% { box-shadow: 0 0 30px rgba(232,124,160,0.45), 0 0 60px rgba(167,139,250,0.2); }
+  50%       { box-shadow: 0 0 65px rgba(232,124,160,0.75), 0 0 110px rgba(167,139,250,0.4); }
+}
+
+/* ── Breathing page: text overlay ───────────────────────── */
+.breath-text {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  gap: 0.1rem;
+}
+
+#phase-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+
+#phase-countdown {
+  font-family: 'Nunito', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  min-height: 3rem;
+}
+
+@keyframes textPop {
+  0%   { transform: scale(0.75); opacity: 0.4; }
+  60%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.text-pop { animation: textPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* ── Breathing page: pattern display ────────────────────── */
+.pattern-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.5rem 0 1rem;
+  min-height: 3.5rem;
+}
+
+.pattern-step {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1.5px solid var(--color-border);
+  transition: all 0.35s ease;
+  min-width: 3rem;
+}
+
+.pattern-step.active {
+  background: rgba(232, 124, 160, 0.12);
+  border-color: var(--color-primary);
+  transform: scale(1.12);
+  box-shadow: 0 2px 14px rgba(232, 124, 160, 0.3);
+}
+
+.step-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.step-num {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.1;
+}
+
+.pattern-step.active .step-num   { color: var(--color-primary-dk); }
+.pattern-step.active .step-label { color: var(--color-primary); }
+
+.pattern-sep {
+  color: var(--color-border);
+  font-size: 1.3rem;
+  line-height: 2.2;
+  margin: 0 0.1rem;
+}
+
+/* ── Breathing page: stats + controls ───────────────────── */
+.breath-stats {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.1rem;
+}
+
+@keyframes roundFlash {
+  0%   { transform: scale(1);   color: inherit; }
+  50%  { transform: scale(1.5); color: var(--color-primary); }
+  100% { transform: scale(1);   color: inherit; }
+}
+.round-flash { display: inline-block; animation: roundFlash 0.5s ease; }
+
+.breath-controls {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ctrl-btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.75rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.ctrl-btn:disabled { opacity: 0.4; cursor: default; transform: none !important; }
+
+.ctrl-start {
+  background: var(--gradient-main);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(232, 124, 160, 0.4);
+}
+.ctrl-start:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(232, 124, 160, 0.55);
+}
+
+.ctrl-pause, .ctrl-reset {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  backdrop-filter: blur(4px);
+}
+.ctrl-pause:hover:not(:disabled),
+.ctrl-reset:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary-dk);
+  background: var(--color-selected);
+  transform: translateY(-1px);
+}
+
+/* ── Breathing page: technique cards ────────────────────── */
+.technique-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 2px solid var(--color-border);
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  animation: cardIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  text-align: left;
+}
+
+.technique-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--card-color, var(--color-primary));
+}
+
+.technique-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+  transform: translateX(-160%);
+  pointer-events: none;
+  transition: transform 0.65s ease;
+}
+.technique-card:hover::after { transform: translateX(160%); }
+
+.technique-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px var(--card-glow, rgba(232,124,160,0.3));
+}
+
+.technique-card.selected {
+  border-color: var(--card-color, var(--color-primary));
+  box-shadow: 0 0 0 3px var(--card-glow, rgba(232,124,160,0.3)),
+              0 8px 32px var(--card-glow, rgba(232,124,160,0.25));
+}
+
+/* ── Breathing page: mini orb ───────────────────────────── */
+.mini-orb {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, rgba(255,255,255,0.85), var(--orb-color, #e87ca0));
+  box-shadow: 0 0 14px var(--orb-color, #e87ca0);
+  margin-bottom: 0.85rem;
+  animation: miniBreath var(--orb-cycle, 10s) ease-in-out infinite;
+}
+
+@keyframes miniBreath {
+  0%, 100% { transform: scale(0.62); opacity: 0.5; box-shadow: 0 0 6px  var(--orb-color, #e87ca0); }
+  45%, 55% { transform: scale(1.22); opacity: 1;   box-shadow: 0 0 24px var(--orb-color, #e87ca0); }
+}
+
+.technique-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--color-text);
+  margin-bottom: 0.15rem;
+}
+
+.technique-tagline {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--card-color, var(--color-primary));
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 0.45rem;
+}
+
+.technique-pattern {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.55rem;
+}
+
+.technique-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.try-btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--card-color, var(--color-primary));
+  border: 2px solid currentColor;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.try-btn:hover,
+.technique-card.selected .try-btn {
+  background: var(--card-color, var(--color-primary));
+  color: #fff;
+}
+
+/* ── Breathing page: title glow ─────────────────────────── */
+.breathing-page header h1 {
+  animation: titleGlow 3.5s ease-in-out infinite;
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   header h1 { font-size: 2rem; }

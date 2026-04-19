@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Animated breathing technique guides for calm, focus, and sleep.">
+  <title>Bran — Breathing Techniques</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="breathing-page">
+  <div id="bg-stars" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header role="banner">
+    <div class="petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container">
+      <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
+      <h1>Breathing Techniques</h1>
+      <p class="tagline">✨ Breathe in. Let go. ✨</p>
+      <nav aria-label="Page navigation">
+        <a href="index.html">🌸 Wellness</a>
+        <a href="characters.html" target="_blank" rel="noopener noreferrer">⭐ Characters</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ── VISUALIZER ── -->
+    <section class="viz-section" aria-labelledby="viz-label">
+      <div class="container viz-container">
+
+        <div class="active-tech-header">
+          <h2 id="viz-label"><span id="active-name">Box Breathing</span></h2>
+          <p class="section-intro" id="active-desc">Used by Navy SEALs and first responders. Equal phases create balance across your nervous system.</p>
+        </div>
+
+        <div class="breath-stage" id="breath-stage">
+          <div class="breath-rings">
+            <div class="breath-ring r1"></div>
+            <div class="breath-ring r2"></div>
+            <div class="breath-ring r3"></div>
+          </div>
+          <div id="breath-circle" aria-hidden="true"></div>
+          <div class="breath-text">
+            <div id="phase-label">Ready</div>
+            <div id="phase-countdown"></div>
+          </div>
+        </div>
+
+        <div class="pattern-display" id="pattern-display" aria-label="Breathing pattern" role="status"></div>
+
+        <div class="breath-stats">
+          Rounds completed: <strong id="rounds-count">0</strong>
+        </div>
+
+        <div class="breath-controls" role="group" aria-label="Breathing controls">
+          <button class="ctrl-btn ctrl-start" id="btn-start">▶ Start</button>
+          <button class="ctrl-btn ctrl-pause" id="btn-pause" disabled>⏸ Pause</button>
+          <button class="ctrl-btn ctrl-reset" id="btn-reset">↺ Reset</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TECHNIQUE CARDS ── -->
+    <section aria-labelledby="techniques-label">
+      <div class="container">
+        <h2 id="techniques-label">Choose a Technique</h2>
+        <p class="section-intro">Click a card to load it — then press Start above.</p>
+        <div class="card-grid" id="techniques-grid" role="list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>Breathing exercises are not a substitute for medical treatment. In crisis? Call or text <a href="tel:988">988</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    'use strict';
+
+    // ── Technique data ────────────────────────────────────────
+    const TECHNIQUES = [
+      {
+        id: 'box',
+        name: 'Box Breathing',
+        emoji: '⬜',
+        tagline: 'Calm · Focus · Balance',
+        desc: 'Used by Navy SEALs and first responders. Equal phases create balance across your nervous system.',
+        color: '#e87ca0',
+        glow: 'rgba(232,124,160,0.4)',
+        phases: [
+          { label: 'Inhale',  type: 'inhale',   duration: 4 },
+          { label: 'Hold',    type: 'hold-in',  duration: 4 },
+          { label: 'Exhale',  type: 'exhale',   duration: 4 },
+          { label: 'Hold',    type: 'hold-out', duration: 4 },
+        ],
+      },
+      {
+        id: '478',
+        name: '4-7-8 Breathing',
+        emoji: '🌊',
+        tagline: 'Sleep · Anxiety · Calm',
+        desc: 'Dr. Andrew Weil\'s technique. The extended hold and exhale powerfully activate the parasympathetic nervous system.',
+        color: '#60a5fa',
+        glow: 'rgba(96,165,250,0.4)',
+        phases: [
+          { label: 'Inhale', type: 'inhale',  duration: 4 },
+          { label: 'Hold',   type: 'hold-in', duration: 7 },
+          { label: 'Exhale', type: 'exhale',  duration: 8 },
+        ],
+      },
+      {
+        id: 'triangle',
+        name: 'Triangle Breathing',
+        emoji: '△',
+        tagline: 'Grounding · Simple · Clear',
+        desc: 'Three equal phases make this perfect for beginners. Use it any time you need to quickly return to center.',
+        color: '#a78bfa',
+        glow: 'rgba(167,139,250,0.4)',
+        phases: [
+          { label: 'Inhale', type: 'inhale',  duration: 4 },
+          { label: 'Hold',   type: 'hold-in', duration: 4 },
+          { label: 'Exhale', type: 'exhale',  duration: 4 },
+        ],
+      },
+      {
+        id: 'coherent',
+        name: 'Coherent Breathing',
+        emoji: '💞',
+        tagline: 'Balance · HRV · Flow',
+        desc: '5-second cycles synchronize your breath with heart rate variability, creating a state of calm coherence.',
+        color: '#34d399',
+        glow: 'rgba(52,211,153,0.4)',
+        phases: [
+          { label: 'Inhale', type: 'inhale', duration: 5 },
+          { label: 'Exhale', type: 'exhale', duration: 5 },
+        ],
+      },
+      {
+        id: 'extended-exhale',
+        name: 'Extended Exhale',
+        emoji: '🌬️',
+        tagline: 'Release · Unwind · Let go',
+        desc: 'A longer exhale than inhale signals safety to the brain, reducing cortisol and physical tension fast.',
+        color: '#fb923c',
+        glow: 'rgba(251,146,60,0.4)',
+        phases: [
+          { label: 'Inhale', type: 'inhale',  duration: 4 },
+          { label: 'Hold',   type: 'hold-in', duration: 2 },
+          { label: 'Exhale', type: 'exhale',  duration: 8 },
+        ],
+      },
+      {
+        id: 'physiological-sigh',
+        name: 'Physiological Sigh',
+        emoji: '😮‍💨',
+        tagline: 'Fastest · Stress relief · Now',
+        desc: 'Stanford research: double nasal inhale then a long exhale deflates air sacs and dumps CO₂ rapidly.',
+        color: '#f59e0b',
+        glow: 'rgba(245,158,11,0.4)',
+        phases: [
+          { label: 'Inhale',       type: 'inhale', duration: 2 },
+          { label: 'Inhale again', type: 'inhale', duration: 1 },
+          { label: 'Slow exhale',  type: 'exhale', duration: 6 },
+        ],
+      },
+    ];
+
+    // ── State ─────────────────────────────────────────────────
+    let state = {
+      techniqueId: 'box',
+      isRunning: false,
+      phaseIdx: 0,
+      secondsLeft: 0,
+      roundsCompleted: 0,
+      timer: null,
+    };
+
+    // ── Helpers ───────────────────────────────────────────────
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function getTech() {
+      return TECHNIQUES.find(t => t.id === state.techniqueId);
+    }
+
+    // ── Star field (same as characters page) ─────────────────
+    function createStars() {
+      const container = document.getElementById('bg-stars');
+      for (let i = 0; i < 55; i++) {
+        const star = document.createElement('div');
+        star.className = 'bg-star';
+        const size = 1.5 + Math.random() * 3;
+        star.style.cssText = [
+          `left:${(Math.random() * 100).toFixed(2)}%`,
+          `top:${(Math.random() * 100).toFixed(2)}%`,
+          `width:${size.toFixed(1)}px`,
+          `height:${size.toFixed(1)}px`,
+          `animation-delay:${(Math.random() * 5).toFixed(2)}s`,
+          `animation-duration:${(1.5 + Math.random() * 3).toFixed(2)}s`,
+        ].join(';');
+        container.appendChild(star);
+      }
+    }
+
+    // ── UI ────────────────────────────────────────────────────
+    function updateActiveTechInfo() {
+      const tech = getTech();
+      document.getElementById('active-name').textContent = tech.name;
+      document.getElementById('active-desc').textContent = tech.desc;
+    }
+
+    function updatePatternDisplay(activeIdx) {
+      const tech = getTech();
+      const container = document.getElementById('pattern-display');
+      container.innerHTML = tech.phases.map((p, i) => `
+        <span class="pattern-step${i === activeIdx ? ' active' : ''}"
+              aria-label="${escapeHtml(p.label)}: ${p.duration} seconds">
+          <span class="step-label">${escapeHtml(p.label.split(' ')[0])}</span>
+          <span class="step-num">${p.duration}</span>
+        </span>
+        ${i < tech.phases.length - 1 ? '<span class="pattern-sep" aria-hidden="true">·</span>' : ''}
+      `).join('');
+    }
+
+    function updateButtons() {
+      const btnStart = document.getElementById('btn-start');
+      const btnPause = document.getElementById('btn-pause');
+      btnStart.disabled = state.isRunning;
+      btnStart.textContent = (!state.isRunning && state.secondsLeft > 0) ? '▶ Resume' : '▶ Start';
+      btnPause.disabled = !state.isRunning;
+    }
+
+    function updateRounds() {
+      const el = document.getElementById('rounds-count');
+      el.textContent = state.roundsCompleted;
+      if (state.roundsCompleted > 0) {
+        el.classList.remove('round-flash');
+        void el.offsetWidth;
+        el.classList.add('round-flash');
+      }
+    }
+
+    function setPhaseText(label, countdown) {
+      const labelEl = document.getElementById('phase-label');
+      labelEl.classList.remove('text-pop');
+      void labelEl.offsetWidth;
+      labelEl.classList.add('text-pop');
+      labelEl.textContent = label;
+      document.getElementById('phase-countdown').textContent = countdown ?? '';
+    }
+
+    // ── Ring speed ────────────────────────────────────────────
+    function setRingDuration(dur) {
+      document.querySelectorAll('.breath-ring').forEach((r, i) => {
+        r.style.animationDuration = dur + 's';
+        r.style.animationDelay   = (i * dur / 3).toFixed(2) + 's';
+      });
+    }
+
+    // ── Circle animation ──────────────────────────────────────
+    function applyPhaseToCircle(phase) {
+      const circle = document.getElementById('breath-circle');
+      circle.classList.remove('holding');
+      circle.classList.add('active');
+
+      if (phase.type === 'inhale') {
+        circle.style.transition = `transform ${phase.duration}s ease-in-out, box-shadow ${phase.duration}s ease-in-out`;
+        void circle.offsetWidth;
+        circle.style.transform  = 'scale(1.75)';
+        circle.style.boxShadow  = '0 0 65px rgba(232,124,160,0.7), 0 0 120px rgba(167,139,250,0.35)';
+        setRingDuration(2);
+      } else if (phase.type === 'exhale') {
+        circle.style.transition = `transform ${phase.duration}s ease-in-out, box-shadow ${phase.duration}s ease-in-out`;
+        void circle.offsetWidth;
+        circle.style.transform  = 'scale(1)';
+        circle.style.boxShadow  = '0 0 22px rgba(167,139,250,0.5)';
+        setRingDuration(4);
+      } else if (phase.type === 'hold-in') {
+        circle.style.transition = 'box-shadow 0.5s ease';
+        circle.style.transform  = 'scale(1.75)';
+        circle.style.boxShadow  = '0 0 45px rgba(232,124,160,0.55), 0 0 90px rgba(167,139,250,0.25)';
+        circle.classList.add('holding');
+        setRingDuration(6);
+      } else {
+        circle.style.transition = 'box-shadow 0.5s ease';
+        circle.style.transform  = 'scale(1)';
+        circle.style.boxShadow  = '0 0 18px rgba(167,139,250,0.4)';
+        circle.classList.add('holding');
+        setRingDuration(8);
+      }
+    }
+
+    function resetCircle() {
+      const circle = document.getElementById('breath-circle');
+      circle.classList.remove('holding', 'active');
+      circle.style.transition = 'transform 0.8s ease-in-out, box-shadow 0.8s ease-in-out';
+      circle.style.transform  = '';
+      circle.style.boxShadow  = '';
+      setPhaseText('Ready', '');
+      setRingDuration(4);
+      updatePatternDisplay(-1);
+    }
+
+    // ── Breathing engine ──────────────────────────────────────
+    function selectTechnique(id) {
+      resetSession();
+      state.techniqueId = id;
+      updateActiveTechInfo();
+      resetCircle();
+      document.querySelectorAll('.technique-card').forEach(c =>
+        c.classList.toggle('selected', c.dataset.id === id)
+      );
+    }
+
+    function startOrResume() {
+      state.isRunning = true;
+      updateButtons();
+      if (state.secondsLeft > 0) {
+        // Resume paused phase
+        const phase = getTech().phases[state.phaseIdx];
+        setPhaseText(phase.label, state.secondsLeft);
+        state.timer = setInterval(tick, 1000);
+      } else {
+        state.phaseIdx = 0;
+        state.roundsCompleted = 0;
+        updateRounds();
+        beginPhase();
+      }
+    }
+
+    function pauseSession() {
+      state.isRunning = false;
+      clearInterval(state.timer);
+      state.timer = null;
+      setPhaseText('Paused', '');
+      updateButtons();
+    }
+
+    function resetSession() {
+      state.isRunning = false;
+      clearInterval(state.timer);
+      state.timer = null;
+      state.phaseIdx    = 0;
+      state.secondsLeft = 0;
+      state.roundsCompleted = 0;
+      updateButtons();
+      updateRounds();
+      resetCircle();
+    }
+
+    function beginPhase() {
+      const phase = getTech().phases[state.phaseIdx];
+      state.secondsLeft = phase.duration;
+      applyPhaseToCircle(phase);
+      setPhaseText(phase.label, state.secondsLeft);
+      updatePatternDisplay(state.phaseIdx);
+      clearInterval(state.timer);
+      state.timer = setInterval(tick, 1000);
+    }
+
+    function tick() {
+      state.secondsLeft--;
+      document.getElementById('phase-countdown').textContent =
+        state.secondsLeft > 0 ? state.secondsLeft : '';
+      if (state.secondsLeft <= 0) {
+        clearInterval(state.timer);
+        state.timer = null;
+        nextPhase();
+      }
+    }
+
+    function nextPhase() {
+      const tech = getTech();
+      state.phaseIdx++;
+      if (state.phaseIdx >= tech.phases.length) {
+        state.phaseIdx = 0;
+        state.roundsCompleted++;
+        updateRounds();
+      }
+      if (state.isRunning) beginPhase();
+    }
+
+    // ── Render technique cards ────────────────────────────────
+    function renderCards() {
+      const grid = document.getElementById('techniques-grid');
+      grid.innerHTML = TECHNIQUES.map((t, i) => {
+        const cycleSecs = t.phases.reduce((s, p) => s + p.duration, 0);
+        const pattern   = t.phases.map(p => p.duration).join(' · ');
+        const selected  = t.id === state.techniqueId ? ' selected' : '';
+        return `
+          <article class="technique-card${selected}" data-id="${t.id}" role="listitem"
+                   style="--card-color:${t.color};--card-glow:${t.glow};animation-delay:${(i*0.07).toFixed(2)}s">
+            <div class="mini-orb" aria-hidden="true"
+                 style="--orb-color:${t.color};--orb-cycle:${cycleSecs}s"></div>
+            <div class="technique-name">${t.emoji} ${escapeHtml(t.name)}</div>
+            <div class="technique-tagline">${escapeHtml(t.tagline)}</div>
+            <div class="technique-pattern">${pattern}</div>
+            <p class="technique-desc">${escapeHtml(t.desc)}</p>
+            <button class="try-btn" data-id="${t.id}">Try it →</button>
+          </article>
+        `;
+      }).join('');
+
+      grid.querySelectorAll('.technique-card').forEach(card => {
+        card.addEventListener('click', () => {
+          selectTechnique(card.dataset.id);
+          document.querySelector('.viz-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    // ── Init ──────────────────────────────────────────────────
+    createStars();
+    renderCards();
+    updateActiveTechInfo();
+    updatePatternDisplay(-1);
+    updateButtons();
+
+    document.getElementById('btn-start').addEventListener('click', startOrResume);
+    document.getElementById('btn-pause').addEventListener('click', pauseSession);
+    document.getElementById('btn-reset').addEventListener('click', resetSession);
+  </script>
+</body>
+</html>
