@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Iconic quotes from Naruto, Inuyasha, and Star Wars characters.">
+  <title>Bran — Characters &amp; Quotes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header role="banner">
+    <div class="petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container">
+      <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
+      <h1>Characters &amp; Quotes</h1>
+      <p class="tagline">✨ Words that shaped worlds ✨</p>
+      <nav aria-label="Page navigation">
+        <a href="index.html">🌸 Back to Wellness</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section aria-labelledby="quotes-heading">
+      <div class="container">
+        <h2 id="quotes-heading">Iconic Quotes</h2>
+        <p class="section-intro">From ninja villages to feudal Japan to galaxies far, far away.</p>
+
+        <div class="filter-bar" role="group" aria-label="Filter by series">
+          <button class="filter-btn active" data-filter="all" aria-pressed="true">✨ All</button>
+          <button class="filter-btn naruto-btn" data-filter="naruto" aria-pressed="false">🍥 Naruto</button>
+          <button class="filter-btn inuyasha-btn" data-filter="inuyasha" aria-pressed="false">⚔️ Inuyasha</button>
+          <button class="filter-btn starwars-btn" data-filter="starwars" aria-pressed="false">🌌 Star Wars</button>
+        </div>
+
+        <div class="card-grid" id="quotes-grid" role="list" aria-live="polite">
+          <!-- Rendered by script below -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>Characters and quotes belong to their respective creators and studios.</p>
+    </div>
+  </footer>
+
+  <script>
+    const CHARACTERS = [
+      // ── Naruto ────────────────────────────────────────────
+      {
+        series: 'naruto',
+        name: 'Naruto Uzumaki',
+        avatar: '🍥',
+        quote: "I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!"
+      },
+      {
+        series: 'naruto',
+        name: 'Itachi Uchiha',
+        avatar: '🌑',
+        quote: "Those who cannot acknowledge themselves will eventually fail."
+      },
+      {
+        series: 'naruto',
+        name: 'Rock Lee',
+        avatar: '🥋',
+        quote: "A dropout will beat a genius through hard work."
+      },
+      {
+        series: 'naruto',
+        name: 'Kakashi Hatake',
+        avatar: '⚡',
+        quote: "Those who break the rules are scum, but those who abandon their friends are worse than scum."
+      },
+      {
+        series: 'naruto',
+        name: 'Gaara',
+        avatar: '🏜️',
+        quote: "I want to be needed by someone. Not as a tool, but as myself."
+      },
+      {
+        series: 'naruto',
+        name: 'Jiraiya',
+        avatar: '📜',
+        quote: "Never give up. Hardships will only make you stronger."
+      },
+      {
+        series: 'naruto',
+        name: 'Sakura Haruno',
+        avatar: '🌸',
+        quote: "I know that the pain of losing someone you love is hard, but having the courage to keep going makes you stronger."
+      },
+
+      // ── Inuyasha ──────────────────────────────────────────
+      {
+        series: 'inuyasha',
+        name: 'Inuyasha',
+        avatar: '⚔️',
+        quote: "Keh! Don't you dare underestimate me."
+      },
+      {
+        series: 'inuyasha',
+        name: 'Kagome Higurashi',
+        avatar: '🏹',
+        quote: "No matter how far away you are, my heart is always with you."
+      },
+      {
+        series: 'inuyasha',
+        name: 'Sesshomaru',
+        avatar: '🌙',
+        quote: "This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?"
+      },
+      {
+        series: 'inuyasha',
+        name: 'Kikyo',
+        avatar: '🌺',
+        quote: "To die was the only freedom open to me. Yet here I stand — between two worlds."
+      },
+      {
+        series: 'inuyasha',
+        name: 'Miroku',
+        avatar: '☯️',
+        quote: "Every life is precious. Even those filled with darkness have the chance to find light."
+      },
+      {
+        series: 'inuyasha',
+        name: 'Sango',
+        avatar: '🛡️',
+        quote: "I will protect the people I love, even if it costs me everything."
+      },
+
+      // ── Star Wars ─────────────────────────────────────────
+      {
+        series: 'starwars',
+        name: 'Yoda',
+        avatar: '🌿',
+        quote: "Do or do not. There is no try."
+      },
+      {
+        series: 'starwars',
+        name: 'Darth Vader',
+        avatar: '🖤',
+        quote: "I find your lack of faith disturbing."
+      },
+      {
+        series: 'starwars',
+        name: 'Obi-Wan Kenobi',
+        avatar: '🔵',
+        quote: "In my experience, there is no such thing as luck."
+      },
+      {
+        series: 'starwars',
+        name: 'Luke Skywalker',
+        avatar: '⭐',
+        quote: "I am a Jedi, like my father before me."
+      },
+      {
+        series: 'starwars',
+        name: 'Princess Leia',
+        avatar: '👑',
+        quote: "Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night."
+      },
+      {
+        series: 'starwars',
+        name: 'Han Solo',
+        avatar: '🚀',
+        quote: "Never tell me the odds!"
+      },
+      {
+        series: 'starwars',
+        name: 'Qui-Gon Jinn',
+        avatar: '🌱',
+        quote: "Your focus determines your reality."
+      },
+    ];
+
+    const SERIES_LABELS = {
+      naruto:   '🍥 Naruto',
+      inuyasha: '⚔️ Inuyasha',
+      starwars: '🌌 Star Wars',
+    };
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
+    function renderCards(filter) {
+      const grid = document.getElementById('quotes-grid');
+      const visible = filter === 'all' ? CHARACTERS : CHARACTERS.filter(c => c.series === filter);
+
+      grid.innerHTML = visible.map(c => `
+        <article class="quote-card" data-series="${c.series}" role="listitem">
+          <div class="char-avatar" aria-hidden="true">${c.avatar}</div>
+          <div class="char-name">${escapeHtml(c.name)}</div>
+          <div class="char-series">${escapeHtml(SERIES_LABELS[c.series])}</div>
+          <blockquote>${escapeHtml(c.quote)}</blockquote>
+        </article>
+      `).join('');
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+        renderCards(btn.dataset.filter);
+      });
+    });
+
+    renderCards('all');
+  </script>
+</body>
+</html>

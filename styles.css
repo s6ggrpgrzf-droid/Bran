@@ -521,6 +521,91 @@ footer {
 footer a { color: #fce7f3; }
 footer a:hover { color: #fff; }
 
+/* ── Filter bar (characters page) ──────────────────────── */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-btn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.filter-btn:hover { border-color: var(--color-primary); color: var(--color-primary-dk); }
+.filter-btn.active { background: var(--color-selected); border-color: var(--color-primary); color: var(--color-primary-dk); }
+.filter-btn.naruto-btn.active   { background: #fff7ed; border-color: #ff8c00; color: #c2410c; }
+.filter-btn.inuyasha-btn.active { background: #fef2f2; border-color: #dc2626; color: #991b1b; }
+.filter-btn.starwars-btn.active { background: #eff6ff; border-color: #2563eb; color: #1e40af; }
+
+/* ── Quote cards (characters page) ─────────────────────── */
+.quote-card {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 2px solid var(--color-border);
+  backdrop-filter: blur(4px);
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+.quote-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+}
+.quote-card[data-series="naruto"]::before   { background: linear-gradient(90deg, #ff8c00, #ffd700); }
+.quote-card[data-series="inuyasha"]::before { background: linear-gradient(90deg, #dc2626, #9f1239); }
+.quote-card[data-series="starwars"]::before { background: linear-gradient(90deg, #2563eb, #7c3aed); }
+
+.char-avatar {
+  font-size: 2.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.char-name {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--color-text);
+  margin-bottom: 0.1rem;
+}
+
+.char-series {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+blockquote {
+  font-style: italic;
+  color: var(--color-text);
+  font-size: 0.93rem;
+  line-height: 1.7;
+  border-left: 3px solid var(--color-border);
+  padding-left: 0.85rem;
+  margin: 0;
+  position: relative;
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   header h1 { font-size: 2rem; }
