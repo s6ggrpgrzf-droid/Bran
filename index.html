@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A calm space for self-care tips and daily mood tracking.">
+  <title>Bran — Mental Wellness</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header role="banner">
+    <div class="container">
+      <h1>Bran</h1>
+      <p class="tagline">A calm space for you.</p>
+      <nav aria-label="Page sections">
+        <a href="#self-care">Self-Care Tips</a>
+        <a href="#mood-tracker">Mood Tracker</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ── SELF-CARE TIPS ── -->
+    <section id="self-care" aria-labelledby="self-care-heading">
+      <div class="container">
+        <h2 id="self-care-heading">Self-Care Tips</h2>
+        <p class="section-intro">Small actions, meaningful change.</p>
+        <div class="card-grid" role="list">
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">🌬️</div>
+            <h3>Box Breathing</h3>
+            <p>Inhale for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat 4 times. This activates your parasympathetic nervous system and reduces acute anxiety within minutes.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">🚶</div>
+            <h3>Move Your Body</h3>
+            <p>Even a 10-minute walk changes your brain chemistry. Step outside, notice your surroundings, and let movement break the cycle of rumination.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">💧</div>
+            <h3>Hydrate First</h3>
+            <p>Dehydration amplifies feelings of anxiety and fatigue. Before reaching for your phone in the morning, drink a full glass of water.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">📵</div>
+            <h3>Digital Sunset</h3>
+            <p>Stop screens 60 minutes before bed. Blue light suppresses melatonin; replacing that time with a book or gentle stretching measurably improves sleep quality.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">✍️</div>
+            <h3>Three Good Things</h3>
+            <p>Each evening, write down three specific things that went well today, however small. This rewires attention toward the positive without toxic positivity.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">🧹</div>
+            <h3>Tidy One Thing</h3>
+            <p>Clutter is a low-grade stressor. Pick one surface, drawer, or corner and clear it. Completing a visible task creates a concrete sense of control.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">🫂</div>
+            <h3>Reach Out</h3>
+            <p>Send a text to one person you haven't spoken to in a while. Connection is protective; you don't need to share how you're feeling — just saying hello is enough.</p>
+          </article>
+
+          <article class="tip-card" role="listitem">
+            <div class="tip-icon" aria-hidden="true">😴</div>
+            <h3>Guard Your Sleep</h3>
+            <p>Sleep is not a luxury — it is the foundation every other coping strategy rests on. Set a consistent bedtime and treat it like a non-negotiable appointment.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MOOD TRACKER ── -->
+    <section id="mood-tracker" aria-labelledby="mood-heading">
+      <div class="container">
+        <h2 id="mood-heading">Daily Mood Tracker</h2>
+        <p class="section-intro">Check in with yourself. No judgment.</p>
+
+        <form id="mood-form" novalidate aria-label="Log today's mood">
+          <fieldset>
+            <legend>How are you feeling today?</legend>
+            <div class="mood-options" role="group" aria-label="Mood selection">
+              <!-- Built dynamically by app.js -->
+            </div>
+          </fieldset>
+
+          <label for="mood-note">Add a note <span class="optional">(optional)</span></label>
+          <textarea id="mood-note" name="note" rows="3"
+                    placeholder="What's on your mind?"
+                    maxlength="300"
+                    aria-describedby="note-hint"></textarea>
+          <span id="note-hint" class="hint">Max 300 characters</span>
+
+          <button type="submit">Log Mood</button>
+        </form>
+
+        <div id="mood-history" aria-live="polite" aria-label="Mood history">
+          <!-- Rendered by app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>If you're in crisis, please contact the <a href="tel:988">988 Suicide &amp; Crisis Lifeline</a> by calling or texting <strong>988</strong>.</p>
+    </div>
+  </footer>
+
+  <script defer src="app.js"></script>
+</body>
+</html>
