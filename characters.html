@@ -44,7 +44,7 @@
         </div>
 
         <div class="card-grid" id="quotes-grid" role="list" aria-live="polite">
-          <!-- Rendered by script below -->
+          <!-- Rendered by script -->
         </div>
       </div>
     </section>
@@ -57,92 +57,223 @@
   </footer>
 
   <script>
-    // ── Data ─────────────────────────────────────────────────
+    'use strict';
+
+    // ── Character data ────────────────────────────────────────
     const CHARACTERS = [
-      // Naruto
-      { series: 'naruto',   name: 'Naruto Uzumaki',   avatar: '🍥', quote: "I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!" },
-      { series: 'naruto',   name: 'Itachi Uchiha',    avatar: '🌑', quote: "Those who cannot acknowledge themselves will eventually fail." },
-      { series: 'naruto',   name: 'Rock Lee',         avatar: '🥋', quote: "A dropout will beat a genius through hard work." },
-      { series: 'naruto',   name: 'Kakashi Hatake',   avatar: '⚡', quote: "Those who break the rules are scum, but those who abandon their friends are worse than scum." },
-      { series: 'naruto',   name: 'Gaara',            avatar: '🏜️', quote: "I want to be needed by someone. Not as a tool, but as myself." },
-      { series: 'naruto',   name: 'Jiraiya',          avatar: '📜', quote: "Never give up. Hardships will only make you stronger." },
-      { series: 'naruto',   name: 'Sakura Haruno',    avatar: '🌸', quote: "Having the courage to keep going makes you stronger." },
-      // Inuyasha
-      { series: 'inuyasha', name: 'Inuyasha',         avatar: '⚔️', quote: "Keh! Don't you dare underestimate me." },
-      { series: 'inuyasha', name: 'Kagome Higurashi', avatar: '🏹', quote: "No matter how far away you are, my heart is always with you." },
-      { series: 'inuyasha', name: 'Sesshomaru',       avatar: '🌙', quote: "This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?" },
-      { series: 'inuyasha', name: 'Kikyo',            avatar: '🌺', quote: "To die was the only freedom open to me. Yet here I stand — between two worlds." },
-      { series: 'inuyasha', name: 'Miroku',           avatar: '☯️', quote: "Every life is precious. Even those filled with darkness have the chance to find light." },
-      { series: 'inuyasha', name: 'Sango',            avatar: '🛡️', quote: "I will protect the people I love, even if it costs me everything." },
-      // Star Wars
-      { series: 'starwars', name: 'Yoda',             avatar: '🌿', quote: "Do or do not. There is no try." },
-      { series: 'starwars', name: 'Darth Vader',      avatar: '🖤', quote: "I find your lack of faith disturbing." },
-      { series: 'starwars', name: 'Obi-Wan Kenobi',   avatar: '🔵', quote: "In my experience, there is no such thing as luck." },
-      { series: 'starwars', name: 'Luke Skywalker',   avatar: '⭐', quote: "I am a Jedi, like my father before me." },
-      { series: 'starwars', name: 'Princess Leia',    avatar: '👑', quote: "Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night." },
-      { series: 'starwars', name: 'Han Solo',         avatar: '🚀', quote: "Never tell me the odds!" },
-      { series: 'starwars', name: 'Qui-Gon Jinn',     avatar: '🌱', quote: "Your focus determines your reality." },
+      // Naruto (Jikan API)
+      { series:'naruto',   name:'Naruto Uzumaki',   avatar:'🍥', imgSearch:'Naruto Uzumaki',   gifQuery:'naruto uzumaki rasengan',      quote:"I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!" },
+      { series:'naruto',   name:'Itachi Uchiha',    avatar:'🌑', imgSearch:'Itachi Uchiha',    gifQuery:'itachi uchiha amaterasu',      quote:"Those who cannot acknowledge themselves will eventually fail." },
+      { series:'naruto',   name:'Rock Lee',         avatar:'🥋', imgSearch:'Rock Lee',         gifQuery:'rock lee eight gates',         quote:"A dropout will beat a genius through hard work." },
+      { series:'naruto',   name:'Kakashi Hatake',   avatar:'⚡', imgSearch:'Kakashi Hatake',   gifQuery:'kakashi hatake sharingan',     quote:"Those who break the rules are scum, but those who abandon their friends are worse than scum." },
+      { series:'naruto',   name:'Gaara',            avatar:'🏜️', imgSearch:'Gaara',            gifQuery:'gaara sand naruto',            quote:"I want to be needed by someone. Not as a tool, but as myself." },
+      { series:'naruto',   name:'Jiraiya',          avatar:'📜', imgSearch:'Jiraiya',          gifQuery:'jiraiya sage mode naruto',     quote:"Never give up. Hardships will only make you stronger." },
+      { series:'naruto',   name:'Sakura Haruno',    avatar:'🌸', imgSearch:'Sakura Haruno',    gifQuery:'sakura haruno punch',          quote:"Having the courage to keep going makes you stronger." },
+      // Inuyasha (Jikan API)
+      { series:'inuyasha', name:'Inuyasha',         avatar:'⚔️', imgSearch:'Inuyasha',         gifQuery:'inuyasha wind scar',           quote:"Keh! Don't you dare underestimate me." },
+      { series:'inuyasha', name:'Kagome Higurashi', avatar:'🏹', imgSearch:'Kagome Higurashi', gifQuery:'kagome higurashi arrow',       quote:"No matter how far away you are, my heart is always with you." },
+      { series:'inuyasha', name:'Sesshomaru',       avatar:'🌙', imgSearch:'Sesshoumaru',      gifQuery:'sesshomaru sword inuyasha',    quote:"This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?" },
+      { series:'inuyasha', name:'Kikyo',            avatar:'🌺', imgSearch:'Kikyou',           gifQuery:'kikyo inuyasha anime',         quote:"To die was the only freedom open to me. Yet here I stand — between two worlds." },
+      { series:'inuyasha', name:'Miroku',           avatar:'☯️', imgSearch:'Miroku',           gifQuery:'miroku wind tunnel inuyasha',  quote:"Every life is precious. Even those filled with darkness have the chance to find light." },
+      { series:'inuyasha', name:'Sango',            avatar:'🛡️', imgSearch:'Sango',            gifQuery:'sango boomerang inuyasha',     quote:"I will protect the people I love, even if it costs me everything." },
+      // Star Wars (Wikipedia API)
+      { series:'starwars', name:'Yoda',             avatar:'🌿', imgSearch:'Yoda',             gifQuery:'yoda star wars',               quote:"Do or do not. There is no try." },
+      { series:'starwars', name:'Darth Vader',      avatar:'🖤', imgSearch:'Darth Vader',      gifQuery:'darth vader lightsaber',       quote:"I find your lack of faith disturbing." },
+      { series:'starwars', name:'Obi-Wan Kenobi',   avatar:'🔵', imgSearch:'Obi-Wan Kenobi',   gifQuery:'obi wan kenobi',               quote:"In my experience, there is no such thing as luck." },
+      { series:'starwars', name:'Luke Skywalker',   avatar:'⭐', imgSearch:'Luke Skywalker',   gifQuery:'luke skywalker lightsaber',    quote:"I am a Jedi, like my father before me." },
+      { series:'starwars', name:'Princess Leia',    avatar:'👑', imgSearch:'Leia Organa',      gifQuery:'princess leia star wars',      quote:"Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night." },
+      { series:'starwars', name:'Han Solo',         avatar:'🚀', imgSearch:'Han Solo',         gifQuery:'han solo star wars',           quote:"Never tell me the odds!" },
+      { series:'starwars', name:'Qui-Gon Jinn',     avatar:'🌱', imgSearch:'Qui-Gon Jinn',     gifQuery:'qui gon jinn star wars',       quote:"Your focus determines your reality." },
     ];
 
-    const SERIES_LABELS = { naruto: '🍥 Naruto', inuyasha: '⚔️ Inuyasha', starwars: '🌌 Star Wars' };
+    const SERIES_LABELS = { naruto:'🍥 Naruto', inuyasha:'⚔️ Inuyasha', starwars:'🌌 Star Wars' };
 
     const BURST_COLORS = {
-      naruto:   ['#ff8c00', '#ffd700', '#ff6b00'],
-      inuyasha: ['#dc2626', '#9f1239', '#f87171'],
-      starwars: ['#2563eb', '#7c3aed', '#60a5fa'],
+      naruto:   ['#ff8c00','#ffd700','#ff6b00'],
+      inuyasha: ['#dc2626','#9f1239','#f87171'],
+      starwars: ['#2563eb','#7c3aed','#60a5fa'],
     };
 
-    // ── Helpers ──────────────────────────────────────────────
-    function escapeHtml(str) {
-      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-                .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    // ── Cache helpers ─────────────────────────────────────────
+    function getCached(key) {
+      try { return sessionStorage.getItem(key); } catch { return null; }
+    }
+    function setCached(key, val) {
+      try { sessionStorage.setItem(key, val); } catch {}
     }
 
-    // ── Twinkling star field ──────────────────────────────────
-    function createStars() {
-      const container = document.getElementById('bg-stars');
-      for (let i = 0; i < 55; i++) {
-        const star = document.createElement('div');
-        star.className = 'bg-star';
-        const size = 1.5 + Math.random() * 3;
-        star.style.cssText = [
-          `left:${(Math.random() * 100).toFixed(2)}%`,
-          `top:${(Math.random() * 100).toFixed(2)}%`,
-          `width:${size.toFixed(1)}px`,
-          `height:${size.toFixed(1)}px`,
-          `animation-delay:${(Math.random() * 5).toFixed(2)}s`,
-          `animation-duration:${(1.5 + Math.random() * 3).toFixed(2)}s`,
-        ].join(';');
-        container.appendChild(star);
+    // ── Image fetching ────────────────────────────────────────
+    async function fetchCharImage(char) {
+      const key = `bran_img_${char.name}`;
+      const cached = getCached(key);
+      if (cached) return cached === 'null' ? null : cached;
+
+      try {
+        let url = null;
+        if (char.series === 'starwars') {
+          const res = await fetch(
+            `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(char.imgSearch)}&prop=pageimages&format=json&pithumbsize=400&origin=*`
+          );
+          const data = await res.json();
+          const pages = data.query?.pages ?? {};
+          const page  = pages[Object.keys(pages)[0]];
+          url = page?.thumbnail?.source ?? null;
+        } else {
+          const res = await fetch(
+            `https://api.jikan.moe/v4/characters?q=${encodeURIComponent(char.imgSearch)}&limit=3`
+          );
+          const data = await res.json();
+          // pick the first result whose name closely matches
+          const match = (data.data ?? []).find(d =>
+            d.name.toLowerCase().includes(char.imgSearch.split(' ')[0].toLowerCase())
+          ) ?? data.data?.[0];
+          url = match?.images?.jpg?.image_url ?? null;
+        }
+        setCached(key, url ?? 'null');
+        return url;
+      } catch {
+        return null;
       }
     }
 
-    // ── Particle burst on click ───────────────────────────────
+    // ── GIF fetching (Tenor demo key) ─────────────────────────
+    async function fetchGif(char) {
+      const key = `bran_gif_${char.name}`;
+      const cached = getCached(key);
+      if (cached) return cached === 'null' ? null : cached;
+
+      try {
+        const res = await fetch(
+          `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(char.gifQuery)}&key=LIVDSRZULELA&limit=3&media_filter=gif`
+        );
+        const data = await res.json();
+        const url = data.results?.[0]?.media_formats?.gif?.url ?? null;
+        setCached(key, url ?? 'null');
+        return url;
+      } catch {
+        return null;
+      }
+    }
+
+    // ── Apply loaded image to a card ──────────────────────────
+    function applyImage(card, char, url) {
+      const skeleton = card.querySelector('.img-skeleton');
+      const imgEl    = card.querySelector('.char-img');
+      if (!imgEl) return;
+
+      if (url) {
+        imgEl.onload = () => {
+          imgEl.style.opacity = '1';
+          if (skeleton) skeleton.style.display = 'none';
+        };
+        imgEl.onerror = () => showImgFallback(skeleton, char.avatar);
+        imgEl.src = url;
+      } else {
+        showImgFallback(skeleton, char.avatar);
+      }
+    }
+
+    function showImgFallback(skeleton, avatar) {
+      if (!skeleton) return;
+      skeleton.innerHTML = `<span style="font-size:3.5rem;line-height:1">${avatar}</span>`;
+      skeleton.style.animation = 'none';
+      skeleton.style.background = 'none';
+    }
+
+    // ── Load images for a rendered set of characters ──────────
+    async function loadImages(visible) {
+      const cards = [...document.querySelectorAll('.quote-card')];
+
+      // Star Wars: Wikipedia API — parallel, no rate limit
+      const swPairs = visible.map((c, i) => ({ c, i })).filter(({ c }) => c.series === 'starwars');
+      await Promise.all(swPairs.map(async ({ c, i }) => {
+        const url = await fetchCharImage(c);
+        if (cards[i]) applyImage(cards[i], c, url);
+      }));
+
+      // Anime: Jikan API — sequential, ~3 req/s limit
+      const animePairs = visible.map((c, i) => ({ c, i })).filter(({ c }) => c.series !== 'starwars');
+      for (const { c, i } of animePairs) {
+        const url = await fetchCharImage(c);
+        if (cards[i]) applyImage(cards[i], c, url);
+        await new Promise(r => setTimeout(r, 380));
+      }
+    }
+
+    // ── Particle burst ────────────────────────────────────────
     function spawnParticles(e, card) {
       const rect   = card.getBoundingClientRect();
       const x      = e.clientX - rect.left;
       const y      = e.clientY - rect.top;
-      const colors = BURST_COLORS[card.dataset.series] || ['#e87ca0', '#a78bfa'];
-
+      const colors = BURST_COLORS[card.dataset.series] || ['#e87ca0','#a78bfa'];
       for (let i = 0; i < 14; i++) {
         const angle = (i / 14) * Math.PI * 2;
         const dist  = 38 + Math.random() * 48;
         const p     = document.createElement('div');
         p.className = 'burst-particle';
         p.style.cssText = [
-          `left:${x}px`,
-          `top:${y}px`,
+          `left:${x}px`, `top:${y}px`,
           `background:${colors[i % colors.length]}`,
-          `--tx:${(Math.cos(angle) * dist).toFixed(1)}px`,
-          `--ty:${(Math.sin(angle) * dist).toFixed(1)}px`,
-          `animation-duration:${(0.5 + Math.random() * 0.35).toFixed(2)}s`,
+          `--tx:${(Math.cos(angle)*dist).toFixed(1)}px`,
+          `--ty:${(Math.sin(angle)*dist).toFixed(1)}px`,
+          `animation-duration:${(0.5+Math.random()*0.35).toFixed(2)}s`,
         ].join(';');
         card.appendChild(p);
         setTimeout(() => p.remove(), 900);
       }
     }
 
-    // ── Render cards with stagger + fade ─────────────────────
+    // ── Scene toggle ──────────────────────────────────────────
+    async function handleSceneToggle(btn) {
+      const idx     = parseInt(btn.dataset.idx, 10);
+      const char    = CHARACTERS[idx];
+      const card    = btn.closest('.quote-card');
+      const gifWrap = card.querySelector('.gif-wrap');
+      const gifSkel = card.querySelector('.gif-skeleton');
+      const gifImg  = card.querySelector('.gif-img');
+
+      if (gifWrap.classList.contains('open')) {
+        gifWrap.classList.remove('open');
+        btn.textContent = '▶ Show Scene';
+        return;
+      }
+
+      gifWrap.classList.add('open');
+      btn.textContent = '▲ Hide Scene';
+
+      if (gifWrap.dataset.loaded) return; // already fetched
+
+      btn.disabled = true;
+      const url = await fetchGif(char);
+      btn.disabled = false;
+      gifWrap.dataset.loaded = '1';
+
+      if (url) {
+        gifImg.onload = () => {
+          gifSkel.style.display = 'none';
+          gifImg.style.display = 'block';
+        };
+        gifImg.src = url;
+      } else {
+        gifSkel.innerHTML = '🙈 No scene found';
+        gifSkel.style.cssText += ';animation:none;background:none;color:var(--color-text-muted);font-family:Nunito,sans-serif;font-weight:700;font-size:0.9rem';
+      }
+    }
+
+    // ── Event delegation on grid ──────────────────────────────
+    document.getElementById('quotes-grid').addEventListener('click', e => {
+      const scenBtn = e.target.closest('.scene-btn');
+      if (scenBtn) { e.stopPropagation(); handleSceneToggle(scenBtn); return; }
+      const card = e.target.closest('.quote-card');
+      if (card) spawnParticles(e, card);
+    });
+
+    // ── Render ────────────────────────────────────────────────
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    }
+
     function renderCards(filter) {
       const grid = document.getElementById('quotes-grid');
       grid.classList.add('fading');
@@ -152,21 +283,30 @@
           ? CHARACTERS
           : CHARACTERS.filter(c => c.series === filter);
 
-        grid.innerHTML = visible.map((c, i) => `
-          <article class="quote-card" data-series="${c.series}" role="listitem"
-                   style="animation-delay:${(i * 0.065).toFixed(3)}s">
-            <div class="char-avatar" aria-hidden="true">${c.avatar}</div>
-            <div class="char-name">${escapeHtml(c.name)}</div>
-            <div class="char-series">${escapeHtml(SERIES_LABELS[c.series])}</div>
-            <blockquote>${escapeHtml(c.quote)}</blockquote>
-          </article>
-        `).join('');
-
-        grid.querySelectorAll('.quote-card').forEach(card => {
-          card.addEventListener('click', e => spawnParticles(e, card));
-        });
+        grid.innerHTML = visible.map((c, i) => {
+          const globalIdx = CHARACTERS.indexOf(c);
+          return `
+            <article class="quote-card" data-series="${c.series}" data-char-idx="${globalIdx}"
+                     role="listitem" style="animation-delay:${(i*0.065).toFixed(3)}s">
+              <div class="char-img-wrap">
+                <div class="img-skeleton" aria-hidden="true"></div>
+                <img class="char-img" alt="${escapeHtml(c.name)}" loading="lazy">
+              </div>
+              <div class="card-body">
+                <div class="char-name">${escapeHtml(c.name)}</div>
+                <div class="char-series">${escapeHtml(SERIES_LABELS[c.series])}</div>
+                <blockquote>${escapeHtml(c.quote)}</blockquote>
+                <button class="scene-btn" data-idx="${globalIdx}">▶ Show Scene</button>
+                <div class="gif-wrap">
+                  <div class="gif-skeleton" aria-hidden="true"></div>
+                  <img class="gif-img" alt="${escapeHtml(c.name)} scene">
+                </div>
+              </div>
+            </article>`;
+        }).join('');
 
         grid.classList.remove('fading');
+        loadImages(visible);
       }, 180);
     }
 
@@ -175,15 +315,33 @@
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => {
           b.classList.remove('active');
-          b.setAttribute('aria-pressed', 'false');
+          b.setAttribute('aria-pressed','false');
         });
         btn.classList.add('active');
-        btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('aria-pressed','true');
         renderCards(btn.dataset.filter);
       });
     });
 
-    // ── Init ─────────────────────────────────────────────────
+    // ── Star field ────────────────────────────────────────────
+    function createStars() {
+      const c = document.getElementById('bg-stars');
+      for (let i = 0; i < 55; i++) {
+        const s = document.createElement('div');
+        s.className = 'bg-star';
+        const sz = 1.5 + Math.random() * 3;
+        s.style.cssText = [
+          `left:${(Math.random()*100).toFixed(2)}%`,
+          `top:${(Math.random()*100).toFixed(2)}%`,
+          `width:${sz.toFixed(1)}px`, `height:${sz.toFixed(1)}px`,
+          `animation-delay:${(Math.random()*5).toFixed(2)}s`,
+          `animation-duration:${(1.5+Math.random()*3).toFixed(2)}s`,
+        ].join(';');
+        c.appendChild(s);
+      }
+    }
+
+    // ── Init ──────────────────────────────────────────────────
     createStars();
     renderCards('all');
   </script>

@@ -521,6 +521,96 @@ footer {
 footer a { color: #fce7f3; }
 footer a:hover { color: #fff; }
 
+/* ── Characters page: character image cards ─────────────── */
+.char-img-wrap {
+  position: relative;
+  height: 200px;
+  margin: -1.5rem -1.5rem 0 -1.5rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  overflow: hidden;
+  background: var(--color-selected);
+}
+
+.quote-card[data-series="naruto"]   .char-img-wrap { box-shadow: 0 3px 0 #ff8c00; }
+.quote-card[data-series="inuyasha"] .char-img-wrap { box-shadow: 0 3px 0 #dc2626; }
+.quote-card[data-series="starwars"] .char-img-wrap { box-shadow: 0 3px 0 #2563eb; }
+
+.char-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  display: block;
+}
+
+.img-skeleton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #f0d4e8 25%, #fce7f3 50%, #f0d4e8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.card-body {
+  padding-top: 1rem;
+}
+
+/* ── Characters page: scene / GIF ───────────────────────── */
+.scene-btn {
+  display: inline-block;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--color-primary-dk);
+  border: 2px solid var(--color-border);
+  padding: 0.28rem 0.8rem;
+  border-radius: 999px;
+  background: none;
+  cursor: pointer;
+  margin-top: 0.8rem;
+  transition: all var(--transition);
+}
+.scene-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: var(--color-selected);
+}
+.scene-btn:disabled { opacity: 0.5; cursor: default; }
+
+.gif-wrap {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.gif-wrap.open { max-height: 350px; margin-top: 0.75rem; }
+
+.gif-skeleton {
+  height: 180px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #f0d4e8 25%, #fce7f3 50%, #f0d4e8 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.gif-img {
+  width: 100%;
+  border-radius: 12px;
+  display: none;
+  animation: cardIn 0.4s ease both;
+}
+
 /* ── Characters page: star field ───────────────────────── */
 #bg-stars {
   position: fixed;
