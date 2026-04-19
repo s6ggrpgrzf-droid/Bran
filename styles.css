@@ -28,8 +28,9 @@ body {
   font-family: 'Nunito Sans', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  background: linear-gradient(160deg, #fdf4f9 0%, #f5f0ff 50%, #edf8ff 100%);
-  background-attachment: fixed;
+  background: linear-gradient(160deg, #fdf4f9, #f5f0ff, #edf8ff, #fce7f3, #fdf4f9);
+  background-size: 400% 400%;
+  animation: bgDrift 16s ease infinite;
   color: var(--color-text);
 }
 
@@ -98,6 +99,12 @@ a:hover { color: var(--color-accent); }
 .petals span:nth-child(4) { width: 9px;  height: 9px;  left: 68%; background: #f9b8d0; animation-duration: 8s;  animation-delay: 3.5s; }
 .petals span:nth-child(5) { width: 7px;  height: 7px;  left: 82%; background: #bae6fd; animation-duration: 10s; animation-delay: 0.8s; }
 .petals span:nth-child(6) { width: 11px; height: 11px; left: 93%; background: #e8b4e8; animation-duration: 6s;  animation-delay: 4s;   }
+
+@keyframes bgDrift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
 
 @keyframes petalFall {
   0%   { opacity: 0;   transform: translateY(-20px) rotate(0deg)   translateX(0); }
