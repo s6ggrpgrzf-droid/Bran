@@ -521,6 +521,112 @@ footer {
 footer a { color: #fce7f3; }
 footer a:hover { color: #fff; }
 
+/* ── Characters page: star field ───────────────────────── */
+#bg-stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
+  animation: twinkle ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.08; transform: scale(0.6); }
+  to   { opacity: 0.95; transform: scale(1.5); }
+}
+
+/* ── Characters page: title glow ────────────────────────── */
+.characters-page header h1 {
+  animation: titleGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { filter: drop-shadow(0 0 6px  rgba(232, 124, 160, 0.5)); }
+  50%       { filter: drop-shadow(0 0 22px rgba(167, 139, 250, 0.75)); }
+}
+
+/* ── Characters page: card entrance ─────────────────────── */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(30px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+.quote-card {
+  animation: cardIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Characters page: card shimmer on hover ─────────────── */
+.quote-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 70%
+  );
+  transform: translateX(-160%);
+  pointer-events: none;
+  transition: transform 0.65s ease;
+}
+.quote-card:hover::after { transform: translateX(160%); }
+
+/* ── Characters page: series glow on hover ──────────────── */
+.quote-card[data-series="naruto"]:hover {
+  box-shadow: 0 8px 32px rgba(255, 140, 0, 0.45), 0 0 0 1px rgba(255, 140, 0, 0.2);
+}
+.quote-card[data-series="inuyasha"]:hover {
+  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.4), 0 0 0 1px rgba(220, 38, 38, 0.2);
+}
+.quote-card[data-series="starwars"]:hover {
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.45), 0 0 0 1px rgba(37, 99, 235, 0.2);
+}
+
+/* ── Characters page: avatar float on hover ─────────────── */
+@keyframes avatarFloat {
+  0%, 100% { transform: translateY(0)    rotate(0deg); }
+  50%       { transform: translateY(-9px) rotate(8deg); }
+}
+.quote-card:hover .char-avatar {
+  display: inline-block;
+  animation: avatarFloat 1s ease-in-out infinite;
+}
+
+/* ── Characters page: click particle burst ──────────────── */
+.burst-particle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 20;
+  animation: burst 0.7s ease-out forwards;
+}
+
+@keyframes burst {
+  0%   { opacity: 1; transform: translate(-50%, -50%) translate(0, 0)                 scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(0.15); }
+}
+
+/* ── Characters page: filter grid fade ──────────────────── */
+#quotes-grid {
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+#quotes-grid.fading {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
 /* ── Filter bar (characters page) ──────────────────────── */
 .filter-bar {
   display: flex;

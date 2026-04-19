@@ -10,7 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="characters-page">
+  <div id="bg-stars" aria-hidden="true"></div>
+
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header role="banner">
@@ -54,159 +56,120 @@
   </footer>
 
   <script>
+    // ── Data ─────────────────────────────────────────────────
     const CHARACTERS = [
-      // ── Naruto ────────────────────────────────────────────
-      {
-        series: 'naruto',
-        name: 'Naruto Uzumaki',
-        avatar: '🍥',
-        quote: "I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!"
-      },
-      {
-        series: 'naruto',
-        name: 'Itachi Uchiha',
-        avatar: '🌑',
-        quote: "Those who cannot acknowledge themselves will eventually fail."
-      },
-      {
-        series: 'naruto',
-        name: 'Rock Lee',
-        avatar: '🥋',
-        quote: "A dropout will beat a genius through hard work."
-      },
-      {
-        series: 'naruto',
-        name: 'Kakashi Hatake',
-        avatar: '⚡',
-        quote: "Those who break the rules are scum, but those who abandon their friends are worse than scum."
-      },
-      {
-        series: 'naruto',
-        name: 'Gaara',
-        avatar: '🏜️',
-        quote: "I want to be needed by someone. Not as a tool, but as myself."
-      },
-      {
-        series: 'naruto',
-        name: 'Jiraiya',
-        avatar: '📜',
-        quote: "Never give up. Hardships will only make you stronger."
-      },
-      {
-        series: 'naruto',
-        name: 'Sakura Haruno',
-        avatar: '🌸',
-        quote: "I know that the pain of losing someone you love is hard, but having the courage to keep going makes you stronger."
-      },
-
-      // ── Inuyasha ──────────────────────────────────────────
-      {
-        series: 'inuyasha',
-        name: 'Inuyasha',
-        avatar: '⚔️',
-        quote: "Keh! Don't you dare underestimate me."
-      },
-      {
-        series: 'inuyasha',
-        name: 'Kagome Higurashi',
-        avatar: '🏹',
-        quote: "No matter how far away you are, my heart is always with you."
-      },
-      {
-        series: 'inuyasha',
-        name: 'Sesshomaru',
-        avatar: '🌙',
-        quote: "This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?"
-      },
-      {
-        series: 'inuyasha',
-        name: 'Kikyo',
-        avatar: '🌺',
-        quote: "To die was the only freedom open to me. Yet here I stand — between two worlds."
-      },
-      {
-        series: 'inuyasha',
-        name: 'Miroku',
-        avatar: '☯️',
-        quote: "Every life is precious. Even those filled with darkness have the chance to find light."
-      },
-      {
-        series: 'inuyasha',
-        name: 'Sango',
-        avatar: '🛡️',
-        quote: "I will protect the people I love, even if it costs me everything."
-      },
-
-      // ── Star Wars ─────────────────────────────────────────
-      {
-        series: 'starwars',
-        name: 'Yoda',
-        avatar: '🌿',
-        quote: "Do or do not. There is no try."
-      },
-      {
-        series: 'starwars',
-        name: 'Darth Vader',
-        avatar: '🖤',
-        quote: "I find your lack of faith disturbing."
-      },
-      {
-        series: 'starwars',
-        name: 'Obi-Wan Kenobi',
-        avatar: '🔵',
-        quote: "In my experience, there is no such thing as luck."
-      },
-      {
-        series: 'starwars',
-        name: 'Luke Skywalker',
-        avatar: '⭐',
-        quote: "I am a Jedi, like my father before me."
-      },
-      {
-        series: 'starwars',
-        name: 'Princess Leia',
-        avatar: '👑',
-        quote: "Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night."
-      },
-      {
-        series: 'starwars',
-        name: 'Han Solo',
-        avatar: '🚀',
-        quote: "Never tell me the odds!"
-      },
-      {
-        series: 'starwars',
-        name: 'Qui-Gon Jinn',
-        avatar: '🌱',
-        quote: "Your focus determines your reality."
-      },
+      // Naruto
+      { series: 'naruto',   name: 'Naruto Uzumaki',   avatar: '🍥', quote: "I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!" },
+      { series: 'naruto',   name: 'Itachi Uchiha',    avatar: '🌑', quote: "Those who cannot acknowledge themselves will eventually fail." },
+      { series: 'naruto',   name: 'Rock Lee',         avatar: '🥋', quote: "A dropout will beat a genius through hard work." },
+      { series: 'naruto',   name: 'Kakashi Hatake',   avatar: '⚡', quote: "Those who break the rules are scum, but those who abandon their friends are worse than scum." },
+      { series: 'naruto',   name: 'Gaara',            avatar: '🏜️', quote: "I want to be needed by someone. Not as a tool, but as myself." },
+      { series: 'naruto',   name: 'Jiraiya',          avatar: '📜', quote: "Never give up. Hardships will only make you stronger." },
+      { series: 'naruto',   name: 'Sakura Haruno',    avatar: '🌸', quote: "Having the courage to keep going makes you stronger." },
+      // Inuyasha
+      { series: 'inuyasha', name: 'Inuyasha',         avatar: '⚔️', quote: "Keh! Don't you dare underestimate me." },
+      { series: 'inuyasha', name: 'Kagome Higurashi', avatar: '🏹', quote: "No matter how far away you are, my heart is always with you." },
+      { series: 'inuyasha', name: 'Sesshomaru',       avatar: '🌙', quote: "This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?" },
+      { series: 'inuyasha', name: 'Kikyo',            avatar: '🌺', quote: "To die was the only freedom open to me. Yet here I stand — between two worlds." },
+      { series: 'inuyasha', name: 'Miroku',           avatar: '☯️', quote: "Every life is precious. Even those filled with darkness have the chance to find light." },
+      { series: 'inuyasha', name: 'Sango',            avatar: '🛡️', quote: "I will protect the people I love, even if it costs me everything." },
+      // Star Wars
+      { series: 'starwars', name: 'Yoda',             avatar: '🌿', quote: "Do or do not. There is no try." },
+      { series: 'starwars', name: 'Darth Vader',      avatar: '🖤', quote: "I find your lack of faith disturbing." },
+      { series: 'starwars', name: 'Obi-Wan Kenobi',   avatar: '🔵', quote: "In my experience, there is no such thing as luck." },
+      { series: 'starwars', name: 'Luke Skywalker',   avatar: '⭐', quote: "I am a Jedi, like my father before me." },
+      { series: 'starwars', name: 'Princess Leia',    avatar: '👑', quote: "Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night." },
+      { series: 'starwars', name: 'Han Solo',         avatar: '🚀', quote: "Never tell me the odds!" },
+      { series: 'starwars', name: 'Qui-Gon Jinn',     avatar: '🌱', quote: "Your focus determines your reality." },
     ];
 
-    const SERIES_LABELS = {
-      naruto:   '🍥 Naruto',
-      inuyasha: '⚔️ Inuyasha',
-      starwars: '🌌 Star Wars',
+    const SERIES_LABELS = { naruto: '🍥 Naruto', inuyasha: '⚔️ Inuyasha', starwars: '🌌 Star Wars' };
+
+    const BURST_COLORS = {
+      naruto:   ['#ff8c00', '#ffd700', '#ff6b00'],
+      inuyasha: ['#dc2626', '#9f1239', '#f87171'],
+      starwars: ['#2563eb', '#7c3aed', '#60a5fa'],
     };
 
+    // ── Helpers ──────────────────────────────────────────────
     function escapeHtml(str) {
       return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
                 .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
     }
 
-    function renderCards(filter) {
-      const grid = document.getElementById('quotes-grid');
-      const visible = filter === 'all' ? CHARACTERS : CHARACTERS.filter(c => c.series === filter);
-
-      grid.innerHTML = visible.map(c => `
-        <article class="quote-card" data-series="${c.series}" role="listitem">
-          <div class="char-avatar" aria-hidden="true">${c.avatar}</div>
-          <div class="char-name">${escapeHtml(c.name)}</div>
-          <div class="char-series">${escapeHtml(SERIES_LABELS[c.series])}</div>
-          <blockquote>${escapeHtml(c.quote)}</blockquote>
-        </article>
-      `).join('');
+    // ── Twinkling star field ──────────────────────────────────
+    function createStars() {
+      const container = document.getElementById('bg-stars');
+      for (let i = 0; i < 55; i++) {
+        const star = document.createElement('div');
+        star.className = 'bg-star';
+        const size = 1.5 + Math.random() * 3;
+        star.style.cssText = [
+          `left:${(Math.random() * 100).toFixed(2)}%`,
+          `top:${(Math.random() * 100).toFixed(2)}%`,
+          `width:${size.toFixed(1)}px`,
+          `height:${size.toFixed(1)}px`,
+          `animation-delay:${(Math.random() * 5).toFixed(2)}s`,
+          `animation-duration:${(1.5 + Math.random() * 3).toFixed(2)}s`,
+        ].join(';');
+        container.appendChild(star);
+      }
     }
 
+    // ── Particle burst on click ───────────────────────────────
+    function spawnParticles(e, card) {
+      const rect   = card.getBoundingClientRect();
+      const x      = e.clientX - rect.left;
+      const y      = e.clientY - rect.top;
+      const colors = BURST_COLORS[card.dataset.series] || ['#e87ca0', '#a78bfa'];
+
+      for (let i = 0; i < 14; i++) {
+        const angle = (i / 14) * Math.PI * 2;
+        const dist  = 38 + Math.random() * 48;
+        const p     = document.createElement('div');
+        p.className = 'burst-particle';
+        p.style.cssText = [
+          `left:${x}px`,
+          `top:${y}px`,
+          `background:${colors[i % colors.length]}`,
+          `--tx:${(Math.cos(angle) * dist).toFixed(1)}px`,
+          `--ty:${(Math.sin(angle) * dist).toFixed(1)}px`,
+          `animation-duration:${(0.5 + Math.random() * 0.35).toFixed(2)}s`,
+        ].join(';');
+        card.appendChild(p);
+        setTimeout(() => p.remove(), 900);
+      }
+    }
+
+    // ── Render cards with stagger + fade ─────────────────────
+    function renderCards(filter) {
+      const grid = document.getElementById('quotes-grid');
+      grid.classList.add('fading');
+
+      setTimeout(() => {
+        const visible = filter === 'all'
+          ? CHARACTERS
+          : CHARACTERS.filter(c => c.series === filter);
+
+        grid.innerHTML = visible.map((c, i) => `
+          <article class="quote-card" data-series="${c.series}" role="listitem"
+                   style="animation-delay:${(i * 0.065).toFixed(3)}s">
+            <div class="char-avatar" aria-hidden="true">${c.avatar}</div>
+            <div class="char-name">${escapeHtml(c.name)}</div>
+            <div class="char-series">${escapeHtml(SERIES_LABELS[c.series])}</div>
+            <blockquote>${escapeHtml(c.quote)}</blockquote>
+          </article>
+        `).join('');
+
+        grid.querySelectorAll('.quote-card').forEach(card => {
+          card.addEventListener('click', e => spawnParticles(e, card));
+        });
+
+        grid.classList.remove('fading');
+      }, 180);
+    }
+
+    // ── Filter buttons ────────────────────────────────────────
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-btn').forEach(b => {
@@ -219,6 +182,8 @@
       });
     });
 
+    // ── Init ─────────────────────────────────────────────────
+    createStars();
     renderCards('all');
   </script>
 </body>
