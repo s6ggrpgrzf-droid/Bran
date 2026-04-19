@@ -524,22 +524,22 @@ footer a:hover { color: #fff; }
 /* ── Characters page: character image cards ─────────────── */
 .char-img-wrap {
   position: relative;
-  height: 200px;
+  height: 220px;
   margin: -1.5rem -1.5rem 0 -1.5rem;
   border-radius: var(--radius) var(--radius) 0 0;
   overflow: hidden;
-  background: var(--color-selected);
+  background: linear-gradient(160deg, #f0d4e8, #fce7f3);
 }
 
-.quote-card[data-series="naruto"]   .char-img-wrap { box-shadow: 0 3px 0 #ff8c00; }
-.quote-card[data-series="inuyasha"] .char-img-wrap { box-shadow: 0 3px 0 #dc2626; }
-.quote-card[data-series="starwars"] .char-img-wrap { box-shadow: 0 3px 0 #2563eb; }
+.quote-card[data-series="naruto"]   .char-img-wrap { box-shadow: 0 3px 0 #ff8c00; background: linear-gradient(160deg, #fff5ed, #fed7aa); }
+.quote-card[data-series="inuyasha"] .char-img-wrap { box-shadow: 0 3px 0 #dc2626; background: linear-gradient(160deg, #fef2f2, #fecaca); }
+.quote-card[data-series="starwars"] .char-img-wrap { box-shadow: 0 3px 0 #2563eb; background: linear-gradient(160deg, #eff6ff, #bfdbfe); }
 
 .char-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  object-fit: contain;
+  object-position: center bottom;
   opacity: 0;
   transition: opacity 0.5s ease;
   display: block;

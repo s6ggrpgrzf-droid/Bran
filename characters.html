@@ -155,18 +155,22 @@
       }
     }
 
-    // ── GIF fetching (Tenor demo key) ─────────────────────────
+    // ── GIF fetching (Tenor v1 demo key) ─────────────────────
     async function fetchGif(char) {
       const key = `bran_gif_${char.name}`;
       const cached = getCached(key);
       if (cached) return cached === 'null' ? null : cached;
 
       try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
         const res = await fetch(
-          `https://tenor.googleapis.com/v2/search?q=${encodeURIComponent(char.gifQuery)}&key=LIVDSRZULELA&limit=3&media_filter=gif`
+          `https://g.tenor.com/v1/search?q=${encodeURIComponent(char.gifQuery)}&key=LIVDSRZULELA&limit=3&media_filter=basic`,
+          { signal: controller.signal }
         );
+        clearTimeout(timeout);
         const data = await res.json();
-        const url = data.results?.[0]?.media_formats?.gif?.url ?? null;
+        const url = data.results?.[0]?.media?.[0]?.gif?.url ?? null;
         setCached(key, url ?? 'null');
         return url;
       } catch {
@@ -262,9 +266,12 @@
 
       if (gifWrap.dataset.loaded) return; // already fetched
 
+      const origText = btn.textContent;
+      btn.textContent = '⟳ Loading…';
       btn.disabled = true;
       const url = await fetchGif(char);
       btn.disabled = false;
+      btn.textContent = '▲ Hide Scene';
       gifWrap.dataset.loaded = '1';
 
       if (url) {
