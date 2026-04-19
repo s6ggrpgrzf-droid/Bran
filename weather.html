@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Daily weather forecast for McCloud, Oklahoma.">
+  <title>Bran — McCloud Weather</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="weather-page">
+  <div id="bg-stars" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header role="banner">
+    <div class="petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container">
+      <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
+      <h1>McCloud Weather</h1>
+      <p class="tagline">📍 McCloud, Oklahoma</p>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section aria-labelledby="weather-heading">
+      <div class="container">
+        <h2 id="weather-heading" class="sr-only">Current Weather</h2>
+
+        <!-- Loading skeleton -->
+        <div id="wx-loading" aria-live="polite" aria-label="Loading weather data">
+          <div class="wx-skeleton-hero"></div>
+          <div class="wx-skeleton-cards">
+            <div class="wx-skeleton-card"></div>
+            <div class="wx-skeleton-card"></div>
+            <div class="wx-skeleton-card"></div>
+            <div class="wx-skeleton-card"></div>
+          </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="wx-error" hidden class="weather-error" role="alert">
+          <p>⚠️ Couldn't load weather data.</p>
+          <button class="ctrl-btn ctrl-start" id="retry-btn">Try again</button>
+        </div>
+
+        <!-- Weather content -->
+        <div id="wx-content" hidden>
+
+          <!-- Hero: current conditions -->
+          <div class="weather-hero wx-default" id="weather-hero" aria-live="polite">
+            <button class="wx-refresh-btn" id="refresh-btn" aria-label="Refresh weather">↻</button>
+            <div class="wx-emoji" id="wx-emoji" aria-hidden="true">🌤️</div>
+            <div class="wx-temp" id="wx-temp">—°</div>
+            <div class="wx-desc" id="wx-desc">—</div>
+            <div class="wx-meta">
+              <span id="wx-wind">—</span>
+              <span aria-hidden="true">·</span>
+              <span id="wx-period-name">—</span>
+            </div>
+            <div class="wx-updated" id="wx-updated"></div>
+          </div>
+
+          <!-- 7-day forecast -->
+          <h3 class="wx-section-title">7-Day Forecast</h3>
+          <div class="forecast-scroll" id="forecast-scroll" role="list"
+               aria-label="7-day forecast"></div>
+
+          <!-- Detail panel -->
+          <div class="forecast-detail" id="forecast-detail" aria-live="polite">
+            <p id="detail-text"></p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>Weather data from <a href="https://www.weather.gov" target="_blank" rel="noopener noreferrer">National Weather Service</a>. Updated every 30 min.</p>
+    </div>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌸</span>
+      <span class="bottom-nav__label">Wellness</span>
+    </a>
+    <a href="characters.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">⭐</span>
+      <span class="bottom-nav__label">Characters</span>
+    </a>
+    <a href="breathing.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌬️</span>
+      <span class="bottom-nav__label">Breathing</span>
+    </a>
+    <a href="weather.html" class="bottom-nav__item active" aria-current="page">
+      <span class="bottom-nav__icon" aria-hidden="true">🌤️</span>
+      <span class="bottom-nav__label">Weather</span>
+    </a>
+  </nav>
+
+  <script>
+    'use strict';
+
+    // ── McCloud, OK coordinates ───────────────────────────────
+    const LAT = 35.0111;
+    const LON = -97.0967;
+    const CACHE_KEY  = 'bran_weather_v1';
+    const CACHE_TTL  = 30 * 60 * 1000; // 30 min
+
+    // ── Star field ────────────────────────────────────────────
+    (function createStars() {
+      const c = document.getElementById('bg-stars');
+      for (let i = 0; i < 55; i++) {
+        const s = document.createElement('div');
+        s.className = 'bg-star';
+        const sz = 1.5 + Math.random() * 3;
+        s.style.cssText = [
+          `left:${(Math.random()*100).toFixed(2)}%`,
+          `top:${(Math.random()*100).toFixed(2)}%`,
+          `width:${sz.toFixed(1)}px`, `height:${sz.toFixed(1)}px`,
+          `animation-delay:${(Math.random()*5).toFixed(2)}s`,
+          `animation-duration:${(1.5+Math.random()*3).toFixed(2)}s`,
+        ].join(';');
+        c.appendChild(s);
+      }
+    })();
+
+    // ── Cache ─────────────────────────────────────────────────
+    function getCache() {
+      try {
+        const raw = sessionStorage.getItem(CACHE_KEY);
+        if (!raw) return null;
+        const { data, ts } = JSON.parse(raw);
+        if (Date.now() - ts > CACHE_TTL) return null;
+        return data;
+      } catch { return null; }
+    }
+
+    function setCache(data) {
+      try {
+        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+      } catch {}
+    }
+
+    // ── Emoji + condition mapping ─────────────────────────────
+    function weatherEmoji(forecast, isDaytime) {
+      const f = (forecast || '').toLowerCase();
+      if (f.includes('tornado'))                             return '🌪️';
+      if (f.includes('thunder') || f.includes('t-storm'))   return '⛈️';
+      if (f.includes('blizzard'))                            return '🌨️';
+      if (f.includes('snow') || f.includes('flurr'))        return '❄️';
+      if (f.includes('sleet') || f.includes('freezing rain') || f.includes('ice pellet')) return '🌨️';
+      if (f.includes('freezing'))                            return '🌧️';
+      if (f.includes('heavy rain') || f.includes('heavy shower')) return '🌧️';
+      if (f.includes('rain') || f.includes('shower') || f.includes('drizzle')) return '🌦️';
+      if (f.includes('fog') || f.includes('mist') || f.includes('haze')) return '🌫️';
+      if (f.includes('windy') || f.includes('breezy') || f.includes('gusty')) return '💨';
+      if (f.includes('mostly sunny'))      return isDaytime ? '🌤️' : '🌙';
+      if (f.includes('partly sunny'))      return '🌤️';
+      if (f.includes('sunny'))             return '☀️';
+      if (f.includes('mostly clear'))      return isDaytime ? '🌤️' : '🌙';
+      if (f.includes('clear'))             return isDaytime ? '☀️' : '🌙';
+      if (f.includes('partly cloudy'))     return '⛅';
+      if (f.includes('mostly cloudy'))     return '☁️';
+      if (f.includes('overcast') || f.includes('cloudy')) return '☁️';
+      if (f.includes('hot'))               return '🌡️';
+      return isDaytime ? '🌤️' : '🌙';
+    }
+
+    function conditionClass(forecast, isDaytime) {
+      const f = (forecast || '').toLowerCase();
+      if (!isDaytime)                                        return 'wx-night';
+      if (f.includes('tornado') || f.includes('thunder'))   return 'wx-stormy';
+      if (f.includes('snow') || f.includes('blizzard') || f.includes('ice') || f.includes('sleet')) return 'wx-snowy';
+      if (f.includes('rain') || f.includes('shower') || f.includes('drizzle')) return 'wx-rainy';
+      if (f.includes('fog') || f.includes('mist') || f.includes('haze')) return 'wx-foggy';
+      if (f.includes('sunny') || (f.includes('clear') && isDaytime)) return 'wx-sunny';
+      if (f.includes('cloud'))                               return 'wx-cloudy';
+      return 'wx-default';
+    }
+
+    // ── Render ────────────────────────────────────────────────
+    function renderWeather({ periods, fetchedAt }) {
+      const current = periods[0];
+
+      // Hero
+      const hero = document.getElementById('weather-hero');
+      const cls  = conditionClass(current.shortForecast, current.isDaytime);
+      hero.className = `weather-hero ${cls}`;
+
+      document.getElementById('wx-emoji').textContent      = weatherEmoji(current.shortForecast, current.isDaytime);
+      document.getElementById('wx-temp').textContent       = `${current.temperature}°F`;
+      document.getElementById('wx-desc').textContent       = current.shortForecast;
+      document.getElementById('wx-wind').textContent       = `💨 ${current.windSpeed} ${current.windDirection}`;
+      document.getElementById('wx-period-name').textContent = current.name;
+
+      const ago = Math.round((Date.now() - fetchedAt) / 60000);
+      document.getElementById('wx-updated').textContent =
+        ago < 1 ? 'Updated just now' : `Updated ${ago} min ago`;
+
+      // Build day/night pairs for 7-day forecast
+      const days = [];
+      for (let i = 0; i < periods.length; i++) {
+        const p = periods[i];
+        if (p.isDaytime) {
+          days.push({ day: p, night: periods[i + 1] || null });
+        } else if (days.length === 0) {
+          days.push({ day: null, night: p }); // page loads at night
+        }
+        if (days.length >= 7) break;
+      }
+
+      // Forecast scroll
+      const scroll = document.getElementById('forecast-scroll');
+      scroll.innerHTML = days.map((d, i) => {
+        const p  = d.day || d.night;
+        const nm = p.name.replace(' Night','').replace('This ','');
+        const label = i === 0 ? 'Today' : nm.split(' ')[0];
+        return `
+          <button class="forecast-card${i === 0 ? ' active' : ''}"
+                  role="listitem" data-idx="${i}"
+                  aria-pressed="${i === 0}" aria-label="${label}: ${p.shortForecast}">
+            <div class="fc-day">${label}</div>
+            <div class="fc-emoji" aria-hidden="true">${weatherEmoji(p.shortForecast, p.isDaytime)}</div>
+            ${d.day   ? `<div class="fc-high">${d.day.temperature}°</div>`   : ''}
+            ${d.night ? `<div class="fc-low">${d.night.temperature}°</div>`  : ''}
+            <div class="fc-desc">${p.shortForecast}</div>
+          </button>`;
+      }).join('');
+
+      // Show first detail by default
+      showDetail(days, 0);
+
+      // Click handlers
+      scroll.querySelectorAll('.forecast-card').forEach(card => {
+        card.addEventListener('click', () => {
+          scroll.querySelectorAll('.forecast-card').forEach(c => {
+            c.classList.remove('active');
+            c.setAttribute('aria-pressed','false');
+          });
+          card.classList.add('active');
+          card.setAttribute('aria-pressed','true');
+          showDetail(days, parseInt(card.dataset.idx, 10));
+        });
+      });
+
+      show('wx-content');
+      hide('wx-loading');
+      hide('wx-error');
+    }
+
+    function showDetail(days, idx) {
+      const d      = days[idx];
+      const p      = d.day || d.night;
+      const detail = document.getElementById('forecast-detail');
+      document.getElementById('detail-text').textContent = p.detailedForecast;
+      detail.classList.add('open');
+    }
+
+    // ── Fetch ─────────────────────────────────────────────────
+    async function loadWeather(forceRefresh) {
+      show('wx-loading');
+      hide('wx-content');
+      hide('wx-error');
+
+      if (!forceRefresh) {
+        const cached = getCache();
+        if (cached) { renderWeather(cached); return; }
+      }
+
+      try {
+        // Step 1: resolve grid
+        const ptRes = await fetch(
+          `https://api.weather.gov/points/${LAT},${LON}`,
+          { headers: { 'User-Agent': 'Bran wellness app (github.com/s6ggrpgrzf-droid/Bran)' } }
+        );
+        if (!ptRes.ok) throw new Error('points');
+        const ptData = await ptRes.json();
+        const forecastUrl = ptData.properties.forecast;
+
+        // Step 2: fetch forecast
+        const fcRes = await fetch(forecastUrl,
+          { headers: { 'User-Agent': 'Bran wellness app (github.com/s6ggrpgrzf-droid/Bran)' } }
+        );
+        if (!fcRes.ok) throw new Error('forecast');
+        const fcData = await fcRes.json();
+
+        const payload = { periods: fcData.properties.periods, fetchedAt: Date.now() };
+        setCache(payload);
+        renderWeather(payload);
+      } catch {
+        hide('wx-loading');
+        show('wx-error');
+      }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────
+    function show(id) { document.getElementById(id).hidden = false; }
+    function hide(id) { document.getElementById(id).hidden = true;  }
+
+    // ── Controls ──────────────────────────────────────────────
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+      const btn = document.getElementById('refresh-btn');
+      btn.classList.add('spinning');
+      btn.addEventListener('animationend', () => btn.classList.remove('spinning'), { once: true });
+      sessionStorage.removeItem(CACHE_KEY);
+      loadWeather(true);
+    });
+
+    document.getElementById('retry-btn').addEventListener('click', () => loadWeather(true));
+
+    // ── Init ──────────────────────────────────────────────────
+    loadWeather(false);
+  </script>
+</body>
+</html>
