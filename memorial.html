@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="In loving memory of Tracy Renee Willis — beloved mother, veteran, and free spirit.">
+  <title>Bran — For Tracy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Memorial page ─────────────────────────────────────── */
+    body.memorial-page {
+      background: #16043a;
+      animation: none;
+    }
+    body.memorial-page::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(170deg, #16043a 0%, #2e1065 25%, #1e3a5f 65%, #0c4a6e 100%);
+      background-size: 300% 300%;
+      animation: memBg 14s ease-in-out infinite;
+      z-index: -2;
+      pointer-events: none;
+    }
+    @keyframes memBg {
+      0%,100% { background-position: 0% 0%; }
+      50%      { background-position: 100% 100%; }
+    }
+
+    /* ── Wave canvas ───────────────────────────────────────── */
+    #mem-waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 45%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    /* ── Sparkles ──────────────────────────────────────────── */
+    .mem-sparkle {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      animation: memTwinkle var(--d,4s) ease-in-out var(--dl,0s) infinite;
+    }
+    @keyframes memTwinkle {
+      0%,100% { opacity: 0;   transform: scale(0.6); }
+      50%     { opacity: var(--op,.5); transform: scale(1.3); }
+    }
+
+    /* ── Header ────────────────────────────────────────────── */
+    .memorial-page header {
+      background: transparent;
+      padding: 3.5rem 1rem 5.5rem;
+      border-bottom: none;
+      box-shadow: none;
+      position: relative;
+      z-index: 5;
+      text-align: center;
+    }
+    .memorial-page header::after { display: none; }
+
+    /* Purple petals */
+    .mem-petals {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .mem-petals span {
+      position: absolute;
+      top: -16px;
+      border-radius: 50% 50% 50% 0;
+      background: rgba(167,139,250,0.55);
+      animation: memPetal linear infinite;
+    }
+    .mem-petals span:nth-child(1)  { left:6%;  width:8px;  height:8px;  animation-duration:7s;   animation-delay:0s;   }
+    .mem-petals span:nth-child(2)  { left:18%; width:11px; height:11px; animation-duration:8.5s; animation-delay:1.3s; }
+    .mem-petals span:nth-child(3)  { left:32%; width:6px;  height:6px;  animation-duration:6s;   animation-delay:0.6s; background:rgba(196,181,253,0.5); }
+    .mem-petals span:nth-child(4)  { left:48%; width:9px;  height:9px;  animation-duration:9s;   animation-delay:2.1s; }
+    .mem-petals span:nth-child(5)  { left:62%; width:7px;  height:7px;  animation-duration:6.8s; animation-delay:0.9s; background:rgba(139,92,246,0.6); }
+    .mem-petals span:nth-child(6)  { left:75%; width:10px; height:10px; animation-duration:7.5s; animation-delay:1.7s; }
+    .mem-petals span:nth-child(7)  { left:87%; width:8px;  height:8px;  animation-duration:9.5s; animation-delay:3.2s; background:rgba(196,181,253,0.45); }
+    .mem-petals span:nth-child(8)  { left:38%; width:7px;  height:7px;  animation-duration:7.2s; animation-delay:0.4s; }
+    @keyframes memPetal {
+      0%   { transform: translateY(0)    rotate(0deg);   opacity: 0;   }
+      8%   { opacity: 0.75; }
+      92%  { opacity: 0.4; }
+      100% { transform: translateY(110vh) rotate(800deg); opacity: 0; }
+    }
+
+    .mem-eyebrow {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: 0.95rem;
+      letter-spacing: 0.2em;
+      color: #c4b5fd;
+      opacity: 0.9;
+      margin-bottom: 0.7rem;
+    }
+    .mem-name {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2rem, 7vw, 3.6rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 0.55rem;
+      text-shadow: 0 0 48px rgba(167,139,250,0.65), 0 2px 12px rgba(0,0,0,0.35);
+    }
+    .mem-dates {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #c4b5fd;
+      margin-bottom: 1rem;
+    }
+    .mem-roles {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .mem-roles span { margin: 0 0.45rem; }
+    .mem-roles span:not(:last-child)::after {
+      content: '·';
+      margin-left: 0.9rem;
+      color: #8b5cf6;
+    }
+
+    /* ── Main ──────────────────────────────────────────────── */
+    .memorial-page main {
+      position: relative;
+      z-index: 5;
+      padding-bottom: 7rem;
+    }
+    .memorial-page .container { max-width: 680px; }
+
+    /* ── Quote ─────────────────────────────────────────────── */
+    .mem-quote-wrap {
+      text-align: center;
+      padding: 1.5rem 0 2rem;
+    }
+    .mem-quote-wrap blockquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.05rem, 3.5vw, 1.4rem);
+      color: rgba(255,255,255,0.88);
+      line-height: 1.7;
+      margin: 0;
+      padding: 1.25rem 2.25rem;
+      position: relative;
+      text-shadow: 0 0 24px rgba(139,92,246,0.3);
+    }
+    .mem-quote-wrap blockquote::before,
+    .mem-quote-wrap blockquote::after {
+      font-size: 4rem;
+      color: #7c3aed;
+      opacity: 0.45;
+      line-height: 0;
+      position: absolute;
+    }
+    .mem-quote-wrap blockquote::before { content: '\201C'; top: 1.8rem;  left: 0; }
+    .mem-quote-wrap blockquote::after  { content: '\201D'; bottom: 0.6rem; right: 0; }
+    .mem-quote-wrap cite {
+      display: block;
+      margin-top: 0.6rem;
+      font-style: normal;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a78bfa;
+    }
+
+    /* ── Section label ─────────────────────────────────────── */
+    .mem-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #a78bfa;
+      opacity: 0.75;
+      margin-bottom: 0.7rem;
+    }
+
+    /* ── Photo gallery ─────────────────────────────────────── */
+    /*
+      TO ADD PHOTOS:
+      1. Create a "photos" folder inside /home/user/Bran/
+      2. Save Tracy's photos with these names:
+           photos/tracy-1.jpg  → Tracy on her motorcycle
+           photos/tracy-2.jpg  → Tracy & Brandon (Darth Vader shirt)
+           photos/tracy-3.jpg  → Christmas with silly glasses
+           photos/tracy-4.jpg  → Concert selfie
+           photos/tracy-5.jpg  → Portrait closeup (her beautiful smile)
+      3. The page will display them automatically.
+    */
+    .mem-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+    .mem-photo {
+      border-radius: 14px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #3b0764, #1e3a5f);
+      border: 1.5px solid rgba(167,139,250,0.25);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      aspect-ratio: 3/4;
+    }
+    .mem-photo:first-child { grid-column: span 2; aspect-ratio: 4/3; }
+    .mem-photo:last-child  { grid-column: span 2; aspect-ratio: 16/9; }
+    .mem-photo:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.45), 0 0 20px rgba(139,92,246,0.35);
+    }
+    .mem-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .mem-photo-fb {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 1rem;
+      text-align: center;
+    }
+    .mem-photo-fb span { font-size: 1.8rem; }
+    .mem-photo-fb p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: rgba(196,181,253,0.5);
+      line-height: 1.4;
+    }
+
+    /* ── Traits ────────────────────────────────────────────── */
+    .mem-traits {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.55rem;
+      margin-bottom: 1.75rem;
+    }
+    .mem-trait {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 14px;
+      padding: 0.9rem 0.5rem 0.7rem;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      transition: all 0.28s ease;
+    }
+    .mem-trait:hover {
+      background: rgba(139,92,246,0.15);
+      border-color: rgba(167,139,250,0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+    }
+    .mem-trait-icon { font-size: 1.5rem; line-height: 1; margin-bottom: 0.35rem; }
+    .mem-trait-label {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #c4b5fd;
+    }
+
+    /* ── Cards (story / encouragement) ─────────────────────── */
+    .mem-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(167,139,250,0.2);
+      border-radius: 20px;
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+      backdrop-filter: blur(14px);
+    }
+    .mem-card h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ddd6fe;
+      margin-bottom: 0.85rem;
+    }
+    .mem-card p {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.78);
+      margin: 0;
+    }
+    .mem-card p + p { margin-top: 0.8rem; }
+
+    .mem-card--brandon {
+      background: linear-gradient(145deg, rgba(109,40,217,0.2), rgba(12,74,110,0.2));
+      border-color: rgba(167,139,250,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+    .mem-card--brandon::after {
+      content: '💜';
+      position: absolute;
+      top: -0.5rem;
+      right: 0.75rem;
+      font-size: 5rem;
+      opacity: 0.07;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    .memorial-page footer {
+      position: relative;
+      z-index: 5;
+      background: transparent;
+      text-align: center;
+      padding: 1.25rem 1rem;
+      color: rgba(167,139,250,0.5);
+      font-size: 0.82rem;
+      font-style: italic;
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    .mem-pulse {
+      display: inline-block;
+      animation: memPulse 2.8s ease-in-out infinite;
+    }
+    @keyframes memPulse {
+      0%,100% { transform: scale(1);    opacity: 0.7; }
+      20%     { transform: scale(1.3);  opacity: 1;   }
+      40%     { transform: scale(1.05); opacity: 0.85; }
+    }
+
+    /* ── Bottom nav overrides for memorial ─────────────────── */
+    .memorial-page .bottom-nav {
+      background: rgba(22, 4, 58, 0.88);
+      border-top-color: rgba(109,40,217,0.4);
+    }
+    .memorial-page .bottom-nav__item.active::before {
+      background: linear-gradient(90deg, #7c3aed, #c4b5fd);
+    }
+    .memorial-page .bottom-nav__item.active .bottom-nav__label {
+      background: linear-gradient(90deg, #c4b5fd, #8b5cf6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .memorial-page .bottom-nav__item:hover { color: #c4b5fd; }
+
+    @media (max-width: 520px) {
+      .mem-gallery {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .mem-photo:first-child { grid-column: span 2; }
+      .mem-photo:last-child  { grid-column: span 2; }
+      .mem-traits { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body class="memorial-page">
+
+  <canvas id="mem-waves" aria-hidden="true"></canvas>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header role="banner">
+    <div class="mem-petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container" style="position:relative;z-index:2">
+      <div class="mem-eyebrow">In Loving Memory</div>
+      <h1 class="mem-name">Tracy Renee Willis</h1>
+      <div class="mem-dates">February 3, 1967 &nbsp;·&nbsp; December 8, 2024</div>
+      <div class="mem-roles">
+        <span>Beloved Mother</span>
+        <span>U.S. Army Veteran</span>
+        <span>Free Spirit</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <div class="container">
+
+      <!-- Signature quote -->
+      <div class="mem-quote-wrap">
+        <blockquote>
+          Never without a smile, a cup of coffee, and something to say.
+          <cite>— How Tracy moved through the world</cite>
+        </blockquote>
+      </div>
+
+      <!-- Photo gallery -->
+      <div class="mem-label">Her Story in Moments</div>
+      <div class="mem-gallery" role="list">
+
+        <div class="mem-photo" role="listitem">
+          <img src="photos/tracy-1.jpg" alt="Tracy on her motorcycle — all smiles and open road"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="mem-photo-fb"><span>🏍️</span><p>Tracy on her motorcycle</p></div>
+        </div>
+
+        <div class="mem-photo" role="listitem">
+          <img src="photos/tracy-2.jpg" alt="Tracy and Brandon — mom and son"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="mem-photo-fb"><span>💜</span><p>Tracy & Brandon</p></div>
+        </div>
+
+        <div class="mem-photo" role="listitem">
+          <img src="photos/tracy-3.jpg" alt="Tracy at Christmas with the family, laughing in silly glasses"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="mem-photo-fb"><span>🎄</span><p>Christmas joy</p></div>
+        </div>
+
+        <div class="mem-photo" role="listitem">
+          <img src="photos/tracy-4.jpg" alt="Tracy with Brandon and family at a concert — big smiles"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="mem-photo-fb"><span>🎶</span><p>Making memories</p></div>
+        </div>
+
+        <div class="mem-photo" role="listitem">
+          <img src="photos/tracy-5.jpg" alt="Tracy — her beautiful smile that lit up every room"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="mem-photo-fb"><span>🌟</span><p>That smile</p></div>
+        </div>
+
+      </div>
+
+      <!-- What she loved -->
+      <div class="mem-label">The Things That Were Her</div>
+      <div class="mem-traits" role="list">
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">💜</div><div class="mem-trait-label">Purple</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">🌊</div><div class="mem-trait-label">The Beach</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">☕</div><div class="mem-trait-label">Coffee</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">🎖️</div><div class="mem-trait-label">Veteran</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">🐾</div><div class="mem-trait-label">Dog Mom</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">👟</div><div class="mem-trait-label">White Nikes</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">💍</div><div class="mem-trait-label">Jewelry</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">🏍️</div><div class="mem-trait-label">Open Road</div></div>
+        <div class="mem-trait" role="listitem"><div class="mem-trait-icon">☀️</div><div class="mem-trait-label">Sunshine</div></div>
+      </div>
+
+      <!-- Her story -->
+      <div class="mem-card">
+        <h3>Who She Was</h3>
+        <p>
+          Tracy Willis was the kind of woman who made a room feel different the moment she walked into it — warmer, louder, more alive. Born in Lubbock, Texas, she answered her country's call in 1987 at Fort McClellan, and went on to serve in the Oklahoma Army National Guard, deploying multiple times with the 45th Transportation Unit and leading as a squad leader before retiring with every honor she'd earned.
+        </p>
+        <p>
+          She spent twenty more years as a correctional officer with the Oklahoma Department of Corrections — a supervisor, a mentor, the standard everyone else measured themselves against. She was meticulous with her uniform and commanded every room she stood in. She retired from Mabel Bassett in 2024, after giving 37 years of herself to service.
+        </p>
+        <p>
+          But what no record captures is the laugh. The spotless white Nikes. The coffee that was permanently in her hand. The way everything she wore was just right — classy, fancy, always her. The way she loved the beach and the way sunlight made her feel free. The way she adored Cholly and Nacho. The way she loved Brandon and Paris more than anything this world has to offer.
+        </p>
+      </div>
+
+      <!-- For Brandon -->
+      <div class="mem-card mem-card--brandon">
+        <h3>For You, Brandon</h3>
+        <p>
+          She's not gone — not really. She's in the way you laugh too loud in a quiet room, just like she did. She's in the way you show up for the people you love, every single time, the way she showed up for you every single day of your life.
+        </p>
+        <p>
+          She raised someone worth being proud of, and she was. She always was. Grief is just love with nowhere left to go — so let it remind you how much she gave, and keep giving like she did. Classy. Full of heart. Never without a smile.
+        </p>
+        <p>
+          When the waves come and the weight gets heavy, picture her: sunglasses on, coffee in hand, white Nikes spotless, grinning like she knows something you don't. Because she did. She always did. 💜
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <span class="mem-pulse">💜</span>
+      &nbsp; Rest gently, Tracy. The waves are always yours. &nbsp;
+      <span class="mem-pulse" style="animation-delay:1.4s">💜</span>
+    </div>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌸</span>
+      <span class="bottom-nav__label">Wellness</span>
+    </a>
+    <a href="characters.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">⭐</span>
+      <span class="bottom-nav__label">Characters</span>
+    </a>
+    <a href="breathing.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌬️</span>
+      <span class="bottom-nav__label">Breathing</span>
+    </a>
+    <a href="weather.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌤️</span>
+      <span class="bottom-nav__label">Weather</span>
+    </a>
+    <a href="trivia.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
+      <span class="bottom-nav__label">Trivia</span>
+    </a>
+    <a href="memorial.html" class="bottom-nav__item active" aria-current="page">
+      <span class="bottom-nav__icon" aria-hidden="true">💜</span>
+      <span class="bottom-nav__label">Mom</span>
+    </a>
+  </nav>
+
+  <script>
+    'use strict';
+
+    // ── Purple sparkles ───────────────────────────────────────
+    (function () {
+      const colors = ['#c4b5fd','#a78bfa','#8b5cf6','#ddd6fe','#7c3aed','#e0d7ff'];
+      for (let i = 0; i < 35; i++) {
+        const el  = document.createElement('div');
+        el.className = 'mem-sparkle';
+        const sz  = 1.5 + Math.random() * 5;
+        el.style.cssText = [
+          `left:${(Math.random()*100).toFixed(2)}%`,
+          `top:${(Math.random()*85).toFixed(2)}%`,
+          `width:${sz.toFixed(1)}px`,
+          `height:${sz.toFixed(1)}px`,
+          `background:${colors[Math.floor(Math.random()*colors.length)]}`,
+          `--d:${(2.5+Math.random()*5).toFixed(2)}s`,
+          `--dl:${(Math.random()*7).toFixed(2)}s`,
+          `--op:${(0.25+Math.random()*0.65).toFixed(2)}`,
+        ].join(';');
+        document.body.appendChild(el);
+      }
+    })();
+
+    // ── Animated wave canvas ──────────────────────────────────
+    (function () {
+      const canvas = document.getElementById('mem-waves');
+      const ctx    = canvas.getContext('2d');
+      let W, H, tick = 0;
+
+      const LAYERS = [
+        { ry:0.30, amp:32, freq:0.0090, spd:0.010, color:'rgba(109,40,217,0.28)',  ph:0.0 },
+        { ry:0.42, amp:26, freq:0.0140, spd:0.016, color:'rgba(139,92,246,0.25)',  ph:1.4 },
+        { ry:0.54, amp:20, freq:0.0110, spd:0.013, color:'rgba(8,145,178,0.22)',   ph:2.8 },
+        { ry:0.64, amp:16, freq:0.0180, spd:0.020, color:'rgba(167,139,250,0.38)', ph:0.9 },
+        { ry:0.74, amp:12, freq:0.0130, spd:0.015, color:'rgba(12,74,110,0.55)',   ph:3.5 },
+        { ry:0.84, amp: 8, freq:0.0200, spd:0.024, color:'rgba(30,58,95,0.75)',    ph:1.8 },
+      ];
+
+      function resize() {
+        const dpr = devicePixelRatio || 1;
+        W = canvas.offsetWidth;
+        H = canvas.offsetHeight;
+        canvas.width  = W * dpr;
+        canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function drawLayer(l) {
+        ctx.beginPath();
+        ctx.moveTo(0, H);
+        for (let x = 0; x <= W; x += 3) {
+          const y = l.ry * H + Math.sin(x * l.freq + tick * l.spd + l.ph) * l.amp
+                             + Math.sin(x * l.freq * 1.7 + tick * l.spd * 0.6 + l.ph + 1) * (l.amp * 0.4);
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H);
+        ctx.closePath();
+        ctx.fillStyle = l.color;
+        ctx.fill();
+      }
+
+      function frame() {
+        ctx.clearRect(0, 0, W, H);
+        LAYERS.forEach(drawLayer);
+        tick++;
+        requestAnimationFrame(frame);
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      frame();
+    })();
+  </script>
+</body>
+</html>
