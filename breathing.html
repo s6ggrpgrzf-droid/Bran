@@ -119,6 +119,7 @@
         name: 'Box Breathing',
         emoji: '⬜',
         tagline: 'Calm · Focus · Balance',
+        animeRef: '🍥 Naruto · Chakra Control — steadying your chakra before a critical jutsu',
         desc: 'Used by Navy SEALs and first responders. Equal phases create balance across your nervous system.',
         color: '#e87ca0',
         glow: 'rgba(232,124,160,0.4)',
@@ -134,6 +135,7 @@
         name: '4-7-8 Breathing',
         emoji: '🌊',
         tagline: 'Sleep · Anxiety · Calm',
+        animeRef: '⚔️ Inuyasha · Tessaiga Stillness — the calm before the Wind Scar',
         desc: 'Dr. Andrew Weil\'s technique. The extended hold and exhale powerfully activate the parasympathetic nervous system.',
         color: '#60a5fa',
         glow: 'rgba(96,165,250,0.4)',
@@ -148,6 +150,7 @@
         name: 'Triangle Breathing',
         emoji: '△',
         tagline: 'Grounding · Simple · Clear',
+        animeRef: '⚡ Kakashi · Sharingan Prep — three-phase clarity before reading the enemy',
         desc: 'Three equal phases make this perfect for beginners. Use it any time you need to quickly return to center.',
         color: '#a78bfa',
         glow: 'rgba(167,139,250,0.4)',
@@ -162,6 +165,7 @@
         name: 'Coherent Breathing',
         emoji: '💞',
         tagline: 'Balance · HRV · Flow',
+        animeRef: '✨ Jedi · Force Resonance — synchronizing heartbeat with the Living Force',
         desc: '5-second cycles synchronize your breath with heart rate variability, creating a state of calm coherence.',
         color: '#34d399',
         glow: 'rgba(52,211,153,0.4)',
@@ -175,6 +179,7 @@
         name: 'Extended Exhale',
         emoji: '🌬️',
         tagline: 'Release · Unwind · Let go',
+        animeRef: '🏹 Kagome · Inner Release — letting go of what no longer serves',
         desc: 'A longer exhale than inhale signals safety to the brain, reducing cortisol and physical tension fast.',
         color: '#fb923c',
         glow: 'rgba(251,146,60,0.4)',
@@ -189,6 +194,7 @@
         name: 'Physiological Sigh',
         emoji: '😮‍💨',
         tagline: 'Fastest · Stress relief · Now',
+        animeRef: '💨 Naruto · Quick Reset — instant chakra reset between rounds',
         desc: 'Stanford research: double nasal inhale then a long exhale deflates air sacs and dumps CO₂ rapidly.',
         color: '#f59e0b',
         glow: 'rgba(245,158,11,0.4)',
@@ -433,6 +439,7 @@
             <div class="technique-tagline">${escapeHtml(t.tagline)}</div>
             <div class="technique-pattern">${pattern}</div>
             <p class="technique-desc">${escapeHtml(t.desc)}</p>
+            <div class="anime-ref">${escapeHtml(t.animeRef)}</div>
             <button class="try-btn" data-id="${t.id}">Try it →</button>
           </article>
         `;

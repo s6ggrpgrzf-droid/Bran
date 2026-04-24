@@ -70,6 +70,9 @@
           <div class="forecast-scroll" id="forecast-scroll" role="list"
                aria-label="7-day forecast"></div>
 
+          <!-- Anime weather quote -->
+          <div id="wx-anime-quote" class="wx-anime-quote" hidden></div>
+
           <!-- Detail panel -->
           <div class="forecast-detail" id="forecast-detail" aria-live="polite">
             <p id="detail-text"></p>
@@ -182,6 +185,18 @@
       return isDaytime ? '🌤️' : '🌙';
     }
 
+    // ── Anime weather quotes ──────────────────────────────────
+    const WX_QUOTES = {
+      'wx-sunny':  { icon:'☀️', quote:'"Your focus determines your reality."', char:'— Obi-Wan Kenobi · Star Wars' },
+      'wx-cloudy': { icon:'⛅', quote:'"Even in the darkest clouds, the sun still shines above."', char:'— Iruka · Naruto' },
+      'wx-rainy':  { icon:'🌧️', quote:'"No matter how far away you are, my heart is always with you."', char:'— Kagome · Inuyasha' },
+      'wx-stormy': { icon:'⚡', quote:'"Never give up. Hardships will only make you stronger."', char:'— Jiraiya · Naruto' },
+      'wx-snowy':  { icon:'❄️', quote:'"There is no such thing as true strength without something to protect."', char:'— Sesshomaru · Inuyasha' },
+      'wx-foggy':  { icon:'🌫️', quote:'"Do or do not. There is no try."', char:'— Master Yoda · Star Wars' },
+      'wx-night':  { icon:'🌙', quote:'"I\'m not gonna run away, I never go back on my word! That\'s my nindo — my ninja way!"', char:'— Naruto Uzumaki' },
+      'wx-default':{ icon:'🌤️', quote:'"Your focus determines your reality."', char:'— Obi-Wan Kenobi · Star Wars' },
+    };
+
     function conditionClass(forecast, isDaytime) {
       const f = (forecast || '').toLowerCase();
       if (!isDaytime)                                        return 'wx-night';
@@ -212,6 +227,12 @@
       const ago = Math.round((Date.now() - fetchedAt) / 60000);
       document.getElementById('wx-updated').textContent =
         ago < 1 ? 'Updated just now' : `Updated ${ago} min ago`;
+
+      // Anime quote
+      const q = WX_QUOTES[cls] || WX_QUOTES['wx-default'];
+      const quoteEl = document.getElementById('wx-anime-quote');
+      quoteEl.innerHTML = `<span class="wq-icon">${q.icon}</span><div class="wq-text"><div class="wq-quote">${q.quote}</div><div class="wq-char">${q.char}</div></div>`;
+      quoteEl.hidden = false;
 
       // Build day/night pairs for 7-day forecast
       const days = [];
