@@ -439,7 +439,7 @@
           `background-image: url('${this.shippoImageUrl}')`,
           `top: ${topPos}px`,
           `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
-          `--run-end: ${window.innerWidth + 180}px`,
+          `--run-end: ${window.innerWidth + 180}`,
           `--duration: ${duration}s`,
         ].join(';');
 
@@ -483,8 +483,11 @@
 
     // ── Init ──────────────────────────────────────────────────
     createStars();
-    ShippoAnimationManager.init();
-    renderCards('all');
+    ShippoAnimationManager.init().then(() => {
+      renderCards('all');
+    }).catch(() => {
+      renderCards('all');
+    });
   </script>
 </body>
 </html>

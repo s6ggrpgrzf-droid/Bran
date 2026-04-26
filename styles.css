@@ -2412,11 +2412,11 @@ main {
     transform: translateX(0) translateY(0) scaleX(1);
   }
   50% {
-    transform: translateX(calc(var(--run-end) * 0.5)) translateY(-12px) scaleX(1);
+    transform: translateX(calc(var(--run-end, 1000) * 0.5px)) translateY(-12px) scaleX(1);
   }
   100% {
     opacity: 1;
-    transform: translateX(var(--run-end)) translateY(0) scaleX(1);
+    transform: translateX(calc(var(--run-end, 1000) * 1px)) translateY(0) scaleX(1);
   }
 }
 
@@ -2426,11 +2426,11 @@ main {
     transform: translateX(0) translateY(0) scaleX(-1);
   }
   50% {
-    transform: translateX(calc(var(--run-end) * -0.5)) translateY(-12px) scaleX(-1);
+    transform: translateX(calc(var(--run-end, 1000) * -0.5px)) translateY(-12px) scaleX(-1);
   }
   100% {
     opacity: 1;
-    transform: translateX(calc(var(--run-end) * -1)) translateY(0) scaleX(-1);
+    transform: translateX(calc(var(--run-end, 1000) * -1px)) translateY(0) scaleX(-1);
   }
 }
 
