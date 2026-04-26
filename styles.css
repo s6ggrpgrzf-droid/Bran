@@ -2127,13 +2127,12 @@ main {
   border-radius: 50%;
   cursor: pointer;
   opacity: 0.9;
-  transition: transform 0.2s ease, opacity 0.2s ease;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
 }
 
 .bubble:hover {
-  transform: scale(1.15);
   opacity: 1;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)) drop-shadow(0 0 16px rgba(232,124,160,0.55));
 }
 
 .bubble-animation {
@@ -2156,14 +2155,40 @@ main {
 }
 
 @keyframes bubblePop {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.1);
-    opacity: 0;
-  }
+  0%   { transform: scale(1);   opacity: 1; }
+  30%  { transform: scale(1.3); opacity: 0.85; }
+  100% { transform: scale(0);   opacity: 0; }
+}
+
+.pop-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(232,124,160,0.7);
+  pointer-events: none;
+  animation: popRing 0.5s ease-out forwards;
+}
+
+@keyframes popRing {
+  0%   { transform: scale(0.5); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.combo-text {
+  position: absolute;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #e87ca0;
+  text-shadow: 0 2px 8px rgba(232,124,160,0.45);
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+  animation: comboFloat 0.9s ease-out forwards;
+}
+
+@keyframes comboFloat {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-52px) scale(1.35); }
 }
 
 .particle {
@@ -2356,7 +2381,7 @@ main {
   background: radial-gradient(circle at 35% 35%, #fce7f3, #e87ca0 50%, #c45580 100%);
   cursor: grab;
   user-select: none;
-  transition: all 0.15s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 0 8px 32px rgba(232, 124, 160, 0.4), inset -2px -2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -2366,22 +2391,25 @@ main {
 }
 
 #stress-ball.squeezed {
-  animation: squeeze 0.15s ease-out forwards;
   background: radial-gradient(circle at 35% 35%, #f0c0d8, #c45580 50%, #a03862 100%);
   box-shadow: 0 12px 48px rgba(196, 85, 128, 0.5), inset -3px -3px 12px rgba(0, 0, 0, 0.15);
+  cursor: grabbing;
 }
 
-#stress-ball.relaxing {
-  animation: relaxBreathe 3s ease-in-out infinite;
+#stress-ball.squeezed-hard {
+  background: radial-gradient(circle at 35% 35%, #e8a8c8, #b04070 50%, #882050 100%);
+  box-shadow: 0 16px 56px rgba(176, 64, 112, 0.65), inset -4px -4px 16px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes squeeze {
-  0% {
-    transform: scaleX(1) scaleY(1);
-  }
-  100% {
-    transform: scaleX(1.3) scaleY(0.85);
-  }
+#stress-ball.releasing {
+  animation: squeezeRelease 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes squeezeRelease {
+  0%   { transform: scaleX(1.32) scaleY(0.83); }
+  30%  { transform: scaleX(0.87) scaleY(1.11); }
+  60%  { transform: scaleX(1.06) scaleY(0.97); }
+  100% { transform: scale(1); }
 }
 
 @keyframes relaxBreathe {
@@ -2393,6 +2421,43 @@ main {
     transform: scale(1.05);
     box-shadow: 0 12px 48px rgba(232, 124, 160, 0.6);
   }
+}
+
+#squeeze-ring {
+  position: absolute;
+  width: 118%;
+  height: 118%;
+  top: -9%;
+  left: -9%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+#squeeze-ring circle {
+  fill: none;
+  stroke: #e87ca0;
+  stroke-width: 3;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  stroke-dasharray: 289;
+  stroke-dashoffset: 289;
+  opacity: 0;
+  transition: stroke-dashoffset 0.08s linear, opacity 0.15s ease;
+}
+
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.28);
+  pointer-events: none;
+  z-index: 9999;
+  animation: flashFade 0.35s ease-out forwards;
+}
+
+@keyframes flashFade {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 .particle-container {

@@ -25,6 +25,9 @@ class BubbleGame {
   constructor(containerId) {
     this.container = document.getElementById(containerId);
     this.popCount = 0;
+    this.lastPopTime = 0;
+    this.comboCount = 0;
+    this.comboTimer = null;
     this.init();
   }
 
@@ -79,14 +82,57 @@ class BubbleGame {
 
   popBubble(e, bubble) {
     e.stopPropagation();
+
+    const rect    = bubble.getBoundingClientRect();
+    const size    = rect.width;
+    const contRect = this.container.getBoundingClientRect();
+    const relLeft = rect.left - contRect.left;
+    const relTop  = rect.top  - contRect.top;
+
     bubble.style.animation = 'none';
     bubble.classList.add('bubble-pop');
+
+    // Ring shockwave — positioned relative to container
+    const ring = document.createElement('div');
+    ring.className = 'pop-ring';
+    ring.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${relLeft}px; top:${relTop}px;
+    `;
+    this.container.appendChild(ring);
+    setTimeout(() => ring.remove(), 520);
+
     this.createParticleBurst(e.clientX, e.clientY);
+    this.trackCombo(relLeft + size / 2, relTop);
     this.popCount++;
     this.updateDisplay();
     this.saveStat();
-    setTimeout(() => bubble.remove(), 400);
+    setTimeout(() => bubble.remove(), 500);
     setTimeout(() => this.createBubble(), 500);
+  }
+
+  trackCombo(cx, cy) {
+    const now = Date.now();
+    if (now - this.lastPopTime < 1500) {
+      this.comboCount++;
+    } else {
+      this.comboCount = 1;
+    }
+    this.lastPopTime = now;
+
+    clearTimeout(this.comboTimer);
+    this.comboTimer = setTimeout(() => { this.comboCount = 0; }, 1600);
+
+    if (this.comboCount >= 2) this.showCombo(cx, cy, this.comboCount);
+  }
+
+  showCombo(cx, cy, n) {
+    const el = document.createElement('div');
+    el.className = 'combo-text';
+    el.textContent = `×${n} Combo!`;
+    el.style.cssText = `left:${cx}px; top:${cy}px; transform: translateX(-50%);`;
+    this.container.appendChild(el);
+    setTimeout(() => el.remove(), 920);
   }
 
   createParticleBurst(x, y) {
@@ -351,12 +397,13 @@ class DotTapperGame {
 /* ── Game 4: Stress Ball ────────────────────────────── */
 class StressBallGame {
   constructor(ballId) {
-    this.ball = document.getElementById(ballId);
-    this.squeezeCount = 0;
+    this.ball       = document.getElementById(ballId);
+    this.ringCircle = document.querySelector('#squeeze-ring circle');
+    this.squeezeCount     = 0;
     this.totalSqueezeTime = 0;
-    this.isSqueezing = false;
+    this.isSqueezing  = false;
     this.squeezeStart = 0;
-    this.relaxTimer = null;
+    this.squeezeInterval = null;
     this.init();
   }
 
@@ -367,58 +414,112 @@ class StressBallGame {
 
   loadStats() {
     const stats = getFidgetStats();
-    this.squeezeCount = stats.stressSqueezes ?? 0;
+    this.squeezeCount     = stats.stressSqueezes ?? 0;
     this.totalSqueezeTime = stats.stressTotalTime ?? 0;
     this.updateDisplay();
   }
 
   setupEvents() {
-    const start = () => this.squeeze();
-    const end   = () => this.release();
-
-    this.ball.addEventListener('pointerdown', start);
-    document.addEventListener('pointerup', end);
-    document.addEventListener('pointercancel', end);
+    this.ball.addEventListener('pointerdown', () => this.squeeze());
+    document.addEventListener('pointerup',     () => this.release());
+    document.addEventListener('pointercancel', () => this.release());
   }
 
   squeeze() {
     if (this.isSqueezing) return;
-    this.isSqueezing = true;
+    this.isSqueezing  = true;
     this.squeezeStart = Date.now();
-    this.ball.classList.add('squeezed');
-    this.ball.classList.remove('relaxing');
 
-    this.relaxTimer = setTimeout(() => {
-      if (this.isSqueezing) this.ball.classList.add('relaxing');
-    }, 2500);
+    this.ball.classList.remove('releasing', 'squeezed-hard');
+    this.ball.classList.add('squeezed');
+    this.ball.style.animation = '';
+
+    // Show ring
+    if (this.ringCircle) {
+      this.ringCircle.style.opacity = '0.75';
+      this.ringCircle.style.strokeDashoffset = '289';
+    }
+
+    this.squeezeInterval = setInterval(() => {
+      const elapsed = Date.now() - this.squeezeStart;
+      const t = Math.min(elapsed / 2500, 1);
+
+      // Fill ring
+      if (this.ringCircle) {
+        this.ringCircle.style.strokeDashoffset = (289 * (1 - t)).toFixed(1);
+      }
+
+      // Progressive deformation
+      let sx, sy;
+      if (elapsed < 800) {
+        const p = elapsed / 800;
+        sx = 1 + 0.12 * p;
+        sy = 1 - 0.07 * p;
+      } else if (elapsed < 2000) {
+        const p = (elapsed - 800) / 1200;
+        sx = 1.12 + 0.10 * p;
+        sy = 0.93 - 0.05 * p;
+        if (!this.ball.classList.contains('squeezed-hard')) {
+          this.ball.classList.add('squeezed-hard');
+        }
+      } else {
+        const p = Math.min((elapsed - 2000) / 500, 1);
+        sx = 1.22 + 0.13 * p;
+        sy = 0.88 - 0.06 * p;
+      }
+      this.ball.style.transform = `scaleX(${sx.toFixed(3)}) scaleY(${sy.toFixed(3)})`;
+    }, 40);
   }
 
   release() {
     if (!this.isSqueezing) return;
     this.isSqueezing = false;
-    clearTimeout(this.relaxTimer);
+    clearInterval(this.squeezeInterval);
 
     const dur = Date.now() - this.squeezeStart;
-    this.ball.classList.remove('squeezed', 'relaxing');
+    this.ball.style.transform = '';
+    this.ball.classList.remove('squeezed', 'squeezed-hard');
 
-    this.burst();
+    // Reset ring
+    if (this.ringCircle) {
+      this.ringCircle.style.opacity = '0';
+      this.ringCircle.style.strokeDashoffset = '289';
+    }
+
+    // Jiggle release animation
+    this.ball.classList.add('releasing');
+    this.ball.addEventListener('animationend', () => {
+      this.ball.classList.remove('releasing');
+    }, { once: true });
+
+    this.burst(dur);
     this.squeezeCount++;
     this.totalSqueezeTime += dur;
     this.updateDisplay();
     this.saveStat();
   }
 
-  burst() {
+  burst(dur) {
     const rect = this.ball.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
+    const cx = rect.left + rect.width  / 2;
+    const cy = rect.top  + rect.height / 2;
     const colors = ['#e87ca0','#a78bfa','#7dd3fc','#f472b6','#fbbf24'];
 
-    for (let i = 0; i < 16; i++) {
+    let count, minV, maxV;
+    if (dur < 1000) {
+      count = 8;  minV = 40;  maxV = 80;
+    } else if (dur < 2500) {
+      count = 16; minV = 70;  maxV = 130;
+    } else {
+      count = 28; minV = 100; maxV = 180;
+      this.screenFlash();
+    }
+
+    for (let i = 0; i < count; i++) {
       const p = document.createElement('div');
       p.className = 'stress-particle';
-      const angle = (i / 16) * Math.PI * 2;
-      const v = Math.random() * 100 + 60;
+      const angle = (i / count) * Math.PI * 2;
+      const v = Math.random() * (maxV - minV) + minV;
       p.style.cssText = `
         left:${cx}px; top:${cy}px;
         width:${Math.random() * 7 + 5}px; height:${Math.random() * 7 + 5}px;
@@ -429,6 +530,13 @@ class StressBallGame {
       document.body.appendChild(p);
       setTimeout(() => p.remove(), 700);
     }
+  }
+
+  screenFlash() {
+    const flash = document.createElement('div');
+    flash.className = 'screen-flash';
+    document.body.appendChild(flash);
+    setTimeout(() => flash.remove(), 350);
   }
 
   updateDisplay() {
