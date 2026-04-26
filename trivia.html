@@ -96,6 +96,7 @@
     </a>
   </nav>
 
+  <script src="trivia-questions.js"></script>
   <script>
     'use strict';
 
@@ -117,257 +118,9 @@
       }
     })();
 
-    // ── Question bank ─────────────────────────────────────────
-    const QUESTIONS = [
-      // ── Naruto ──
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Naruto's signature jutsu?",
-        answers: ["Rasengan", "Shadow Clone Jutsu", "Chidori", "Substitution Jutsu"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Who is Naruto's primary mentor?",
-        answers: ["Kakashi Hatake", "Iruka Umino", "Jiraiya", "Minato Namikaze"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which tailed beast is sealed inside Naruto?",
-        answers: ["Eight-Tails", "Seven-Tails", "One-Tail", "Nine-Tails"],
-        correct: 3
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Sasuke's evolved Sharingan called?",
-        answers: ["Byakugan", "Mangekyō Sharingan", "Rinnegan", "Tenseigan"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which village is Naruto from?",
-        answers: ["Sand Village", "Mist Village", "Leaf Village", "Cloud Village"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Rock Lee's fighting style?",
-        answers: ["Genjutsu", "Ninjutsu", "Kenjutsu", "Taijutsu only"],
-        correct: 3
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Who ultimately defeated Itachi Uchiha?",
-        answers: ["Naruto", "Kakashi", "Sasuke", "Obito"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Sakura's specialty in battle?",
-        answers: ["Water style ninjutsu", "Medical ninjutsu", "Fire style ninjutsu", "Illusion techniques"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which clan does Neji Hyuga belong to?",
-        answers: ["Uchiha", "Nara", "Hyuga", "Akimichi"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is the Akatsuki's primary goal?",
-        answers: ["Destroy Konoha", "Kill the Hokages", "Collect all tailed beasts", "Rule the world"],
-        correct: 2
-      },
-
-      // ── Inuyasha ──
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is the Shikon Jewel also known as?",
-        answers: ["Sacred Stone", "Demon Pearl", "Spirit Gem", "Jewel of Four Souls"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Who accidentally shattered the Shikon Jewel into fragments?",
-        answers: ["Inuyasha", "Sango", "Miroku", "Kagome"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is Inuyasha's signature demon-slaying sword?",
-        answers: ["Tenseiga", "Toukijin", "Tessaiga", "Bakusaiga"],
-        correct: 2
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What magic word forces Inuyasha to sit?",
-        answers: ['"Down!"', '"Heel!"', '"Stop!"', '"Sit!" (Osuwari)'],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Who is Inuyasha's older full-demon brother?",
-        answers: ["Naraku", "Bankotsu", "Koga", "Sesshomaru"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What exactly is Naraku?",
-        answers: ["A pure demon lord", "A wolf demon alpha", "A human sorcerer", "A half-demon formed from many demons"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What dangerous power is hidden in Miroku's right hand?",
-        answers: ["Hiraikotsu", "Rosary beads", "Wind Tunnel", "A sacred scroll"],
-        correct: 2
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Where is Kagome originally from?",
-        answers: ["Feudal Japan", "Spirit World", "China", "Modern Japan"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is Sango's signature weapon?",
-        answers: ["Katana", "Sacred bow", "Battle staff", "Hiraikotsu (giant boomerang)"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What kind of demon is Shippo?",
-        answers: ["Wolf demon", "Tanuki demon", "A human child", "Young fox demon"],
-        correct: 3
-      },
-
-      // ── Star Wars ──
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What Sith name did Anakin Skywalker take?",
-        answers: ["Darth Maul", "Darth Plagueis", "Darth Tyranus", "Darth Vader"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What color is Mace Windu's lightsaber?",
-        answers: ["Blue", "Green", "Red", "Purple"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What species is Yoda?",
-        answers: ["Rodian", "Jedi", "Goblin", "Unknown (unnamed species)"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is the Millennium Falcon's most famous feat?",
-        answers: ["Never breaking down", "Fastest ship in the Republic", "Has a cloaking device", "Kessel Run in 12 parsecs"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: 'Who famously said "I am your father"?',
-        answers: ["Darth Sidious", "Obi-Wan Kenobi", "Yoda", "Darth Vader"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What planet is Han Solo from?",
-        answers: ["Tatooine", "Coruscant", "Mandalore", "Corellia"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is Princess Leia's home planet?",
-        answers: ["Naboo", "Coruscant", "Tatooine", "Alderaan"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is the Force-sensitive child in The Mandalorian called?",
-        answers: ["Yaddle", "Yoda", "Wookiee", "Grogu (Baby Yoda)"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "Who trained Obi-Wan Kenobi as a Padawan?",
-        answers: ["Yoda", "Mace Windu", "Count Dooku", "Qui-Gon Jinn"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "How does R2-D2 primarily communicate?",
-        answers: ["Binary code", "English subtitles", "Holographic messages", "Beeps and whistles"],
-        correct: 3
-      },
-    ];
-
     // ── State ─────────────────────────────────────────────────
-    let activeFilter = 'all';
+    let activeRound = null;
+    let completedRounds = new Set();
     let deck = [];
     let deckIdx = 0;
     let scoreCorrect = 0;
@@ -390,13 +143,72 @@
       return               { emoji: '🌱', title: 'Keep studying!', sub: "The force will guide you." };
     }
 
+    function saveRoundCompletion(roundNum) {
+      const completed = JSON.parse(localStorage.getItem('completedRounds') || '[]');
+      if (!completed.includes(roundNum)) {
+        completed.push(roundNum);
+        localStorage.setItem('completedRounds', JSON.stringify(completed));
+      }
+      completedRounds.add(roundNum);
+    }
+
+    function loadCompletedRounds() {
+      const completed = JSON.parse(localStorage.getItem('completedRounds') || '[]');
+      completedRounds = new Set(completed);
+    }
+
+    // ── Render round selector ──────────────────────────────────
+    function renderRoundSelector() {
+      loadCompletedRounds();
+      const wrap = document.getElementById('question-wrap');
+      const filterWrap = document.querySelector('.trivia-filter');
+      const scoreDisplay = document.getElementById('score-display');
+
+      filterWrap.style.display = 'none';
+      scoreDisplay.style.display = 'none';
+
+      wrap.innerHTML = `
+        <div class="round-selector-card">
+          <h2 class="round-selector-title">Select a Difficulty Round</h2>
+          <p class="round-selector-subtitle">25 questions per round</p>
+          <div class="round-selector" role="group" aria-label="Select difficulty round">
+            ${Array.from({ length: 8 }, (_, i) => i + 1).map(roundNum => `
+              <button class="round-btn ${completedRounds.has(roundNum) ? 'completed' : ''}"
+                      data-round="${roundNum}"
+                      aria-label="Round ${roundNum}${completedRounds.has(roundNum) ? ' (completed)' : ''}">
+                Round ${roundNum}
+                ${completedRounds.has(roundNum) ? '<span class="round-badge" aria-hidden="true">✓</span>' : ''}
+              </button>`).join('')}
+          </div>
+        </div>`;
+
+      wrap.querySelectorAll('.round-btn').forEach(btn => {
+        btn.addEventListener('click', () => handleRoundSelect(parseInt(btn.dataset.round, 10)));
+      });
+    }
+
+    // ── Handle round selection ─────────────────────────────────
+    function handleRoundSelect(roundNum) {
+      activeRound = roundNum;
+      const filterWrap = document.querySelector('.trivia-filter');
+      const scoreDisplay = document.getElementById('score-display');
+
+      filterWrap.style.display = 'flex';
+      scoreDisplay.style.display = 'flex';
+
+      buildDeck(roundNum);
+      renderQuestion();
+    }
+
     // ── Build deck ────────────────────────────────────────────
-    function buildDeck() {
-      const pool = activeFilter === 'all'
-        ? QUESTIONS
-        : QUESTIONS.filter(q => q.series === activeFilter);
-      deck = shuffle(pool).map(q => {
-        // Shuffle answers while tracking which index is correct
+    function buildDeck(roundNumber) {
+      const round = QUIZ_ROUNDS[roundNumber - 1];
+      if (!round) {
+        console.error('Invalid round number:', roundNumber);
+        return;
+      }
+
+      deck = shuffle(round.questions).map(q => {
         const paired = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
         const shuffled = shuffle(paired);
         return { ...q, shuffledAnswers: shuffled };
@@ -409,7 +221,7 @@
     // ── Score display ─────────────────────────────────────────
     function updateScore() {
       document.getElementById('score-correct').textContent = scoreCorrect;
-      document.getElementById('score-total').textContent   = deckIdx;
+      document.getElementById('score-total').textContent   = 25;
     }
 
     // ── Render question ───────────────────────────────────────
@@ -420,6 +232,7 @@
 
       wrap.innerHTML = `
         <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
+          <div class="round-info">Round ${activeRound} of 8</div>
           <div class="progress-bar" role="progressbar"
                aria-valuenow="${deckIdx}" aria-valuemin="0" aria-valuemax="${deck.length}"
                aria-label="Question progress">
@@ -458,7 +271,6 @@
         scoreCorrect++;
       } else {
         btn.classList.add('wrong');
-        // Reveal the right answer
         allBtns.forEach((b, i) => {
           if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
         });
@@ -482,6 +294,8 @@
       const total = deck.length;
       const g     = gradeInfo(scoreCorrect, total);
 
+      saveRoundCompletion(activeRound);
+
       wrap.innerHTML = `
         <div class="results-card">
           <div class="results-grade" aria-hidden="true">${g.emoji}</div>
@@ -489,29 +303,24 @@
           <div class="results-subtitle">
             You got <strong>${scoreCorrect} out of ${total}</strong> — ${g.sub}
           </div>
-          <button class="results-again-btn" id="play-again">Play Again</button>
+          <div class="results-buttons">
+            <button class="results-again-btn" id="play-again">Play Again</button>
+            <button class="results-back-btn" id="back-selector">Back to Rounds</button>
+          </div>
         </div>`;
 
       document.getElementById('play-again').addEventListener('click', () => {
-        buildDeck();
+        buildDeck(activeRound);
         renderQuestion();
+      });
+
+      document.getElementById('back-selector').addEventListener('click', () => {
+        renderRoundSelector();
       });
     }
 
-    // ── Filter ────────────────────────────────────────────────
-    document.querySelectorAll('.trivia-filter__btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.trivia-filter__btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeFilter = btn.dataset.filter;
-        buildDeck();
-        renderQuestion();
-      });
-    });
-
     // ── Init ──────────────────────────────────────────────────
-    buildDeck();
-    renderQuestion();
+    renderRoundSelector();
   </script>
 </body>
 </html>

@@ -1802,6 +1802,147 @@ main {
   box-shadow: 0 8px 24px rgba(232,124,160,0.45);
 }
 
+/* Round selector screen */
+.round-selector-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  animation: cardEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.round-selector-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.2rem;
+}
+
+.round-selector-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+}
+
+.round-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.round-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 1rem 0.75rem;
+  border-radius: 12px;
+  border: 2px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition);
+}
+
+.round-btn:hover:not(.completed) {
+  border-color: var(--color-primary);
+  background: var(--color-selected);
+  color: var(--color-primary-dk);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(232,124,160,0.25);
+}
+
+.round-btn:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.round-btn.completed {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dbeafe 100%);
+  border-color: #22c55e;
+  color: #15803d;
+  cursor: default;
+  font-weight: 800;
+}
+
+.round-badge {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  background: #22c55e;
+  color: #fff;
+  font-size: 0.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Round info display during quiz */
+.round-info {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+/* Results buttons container */
+.results-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.results-again-btn,
+.results-back-btn {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 0.65rem 1.75rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.results-again-btn {
+  background: var(--gradient-main);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(232,124,160,0.35);
+}
+
+.results-again-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(232,124,160,0.45);
+}
+
+.results-back-btn {
+  background: rgba(255,255,255,0.8);
+  border: 2px solid var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.results-back-btn:hover {
+  border-color: var(--color-accent);
+  background: #fdf4ff;
+  color: var(--color-primary-dk);
+  transform: translateY(-2px);
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   header h1 { font-size: 2rem; }
@@ -1811,4 +1952,9 @@ main {
   .mood-visual { padding: 0.5rem 0.75rem; font-size: 1.4rem; }
   #mood-form { padding: 1.25rem; }
   .answer-grid { grid-template-columns: 1fr; }
+  .round-selector { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+  .round-selector-card { padding: 1.75rem 1.25rem; }
+  .round-selector-title { font-size: 1.25rem; }
+  .results-buttons { flex-direction: column; }
+  .results-again-btn, .results-back-btn { width: 100%; }
 }
