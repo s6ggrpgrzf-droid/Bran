@@ -83,27 +83,25 @@ class BubbleGame {
   popBubble(e, bubble) {
     e.stopPropagation();
 
-    const rect    = bubble.getBoundingClientRect();
-    const size    = rect.width;
-    const contRect = this.container.getBoundingClientRect();
-    const relLeft = rect.left - contRect.left;
-    const relTop  = rect.top  - contRect.top;
+    const rect = bubble.getBoundingClientRect();
+    const size = rect.width;
 
     bubble.style.animation = 'none';
     bubble.classList.add('bubble-pop');
 
-    // Ring shockwave — positioned relative to container
+    // Ring shockwave — fixed on body to escape overflow:hidden container
     const ring = document.createElement('div');
     ring.className = 'pop-ring';
     ring.style.cssText = `
+      position:fixed;
       width:${size}px; height:${size}px;
-      left:${relLeft}px; top:${relTop}px;
+      left:${rect.left}px; top:${rect.top}px;
     `;
-    this.container.appendChild(ring);
+    document.body.appendChild(ring);
     setTimeout(() => ring.remove(), 520);
 
     this.createParticleBurst(e.clientX, e.clientY);
-    this.trackCombo(relLeft + size / 2, relTop);
+    this.trackCombo(e.clientX, e.clientY);
     this.popCount++;
     this.updateDisplay();
     this.saveStat();
@@ -111,7 +109,7 @@ class BubbleGame {
     setTimeout(() => this.createBubble(), 500);
   }
 
-  trackCombo(cx, cy) {
+  trackCombo(x, y) {
     const now = Date.now();
     if (now - this.lastPopTime < 1500) {
       this.comboCount++;
@@ -123,15 +121,16 @@ class BubbleGame {
     clearTimeout(this.comboTimer);
     this.comboTimer = setTimeout(() => { this.comboCount = 0; }, 1600);
 
-    if (this.comboCount >= 2) this.showCombo(cx, cy, this.comboCount);
+    if (this.comboCount >= 2) this.showCombo(x, y, this.comboCount);
   }
 
-  showCombo(cx, cy, n) {
+  showCombo(x, y, n) {
     const el = document.createElement('div');
     el.className = 'combo-text';
     el.textContent = `×${n} Combo!`;
-    el.style.cssText = `left:${cx}px; top:${cy}px; transform: translateX(-50%);`;
-    this.container.appendChild(el);
+    // Fixed on body — same pattern as particles, avoids overflow:hidden clip
+    el.style.cssText = `position:fixed; left:${x}px; top:${y - 20}px; transform:translateX(-50%);`;
+    document.body.appendChild(el);
     setTimeout(() => el.remove(), 920);
   }
 
@@ -477,6 +476,9 @@ class StressBallGame {
     clearInterval(this.squeezeInterval);
 
     const dur = Date.now() - this.squeezeStart;
+    // Capture current deformed transform before clearing inline style
+    const fromTransform = this.ball.style.transform || 'scale(1)';
+
     this.ball.style.transform = '';
     this.ball.classList.remove('squeezed', 'squeezed-hard');
 
@@ -486,11 +488,13 @@ class StressBallGame {
       this.ringCircle.style.strokeDashoffset = '289';
     }
 
-    // Jiggle release animation
-    this.ball.classList.add('releasing');
-    this.ball.addEventListener('animationend', () => {
-      this.ball.classList.remove('releasing');
-    }, { once: true });
+    // Jiggle spring-back starting from the actual deformed position
+    this.ball.animate([
+      { transform: fromTransform },
+      { transform: 'scaleX(0.87) scaleY(1.11)' },
+      { transform: 'scaleX(1.06) scaleY(0.97)' },
+      { transform: 'scale(1)' },
+    ], { duration: 550, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)', fill: 'none' });
 
     this.burst(dur);
     this.squeezeCount++;
