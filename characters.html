@@ -46,6 +46,8 @@
     </section>
   </main>
 
+  <div id="shippo-animations" aria-hidden="true"></div>
+
   <footer role="contentinfo">
     <div class="container">
       <p>Characters and quotes belong to their respective creators and studios.</p>
@@ -103,6 +105,7 @@
       { series:'inuyasha', name:'Kikyo',            avatar:'🌺', imgSearch:'Kikyou',           gifQuery:'kikyo inuyasha anime',         quote:"To die was the only freedom open to me. Yet here I stand — between two worlds." },
       { series:'inuyasha', name:'Miroku',           avatar:'☯️', imgSearch:'Miroku',           gifQuery:'miroku wind tunnel inuyasha',  quote:"Every life is precious. Even those filled with darkness have the chance to find light." },
       { series:'inuyasha', name:'Sango',            avatar:'🛡️', imgSearch:'Sango',            gifQuery:'sango boomerang inuyasha',     quote:"I will protect the people I love, even if it costs me everything." },
+      { series:'inuyasha', name:'Shippo',           avatar:'🦊', imgSearch:'Shippo Inuyasha',   gifQuery:'shippo inuyasha kitsune',      quote:"Even the smallest fox can help the ones they care about!" },
       // Star Wars (Wikipedia API)
       { series:'starwars', name:'Yoda',             avatar:'🌿', imgSearch:'Yoda',             gifQuery:'yoda star wars',               quote:"Do or do not. There is no try." },
       { series:'starwars', name:'Darth Vader',      avatar:'🖤', imgSearch:'Darth Vader',      gifQuery:'darth vader lightsaber',       quote:"I find your lack of faith disturbing." },
@@ -375,8 +378,112 @@
       }
     }
 
+    // ── Shippo Animation Manager ──────────────────────────────
+    const ShippoAnimationManager = {
+      shippoImageUrl: null,
+      isInitialized: false,
+      animationInterval: null,
+
+      async init() {
+        try {
+          const shippoCharIdx = CHARACTERS.findIndex(c => c.name === 'Shippo');
+          if (shippoCharIdx === -1) return;
+
+          const shippoChar = CHARACTERS[shippoCharIdx];
+          this.shippoImageUrl = await fetchCharImage(shippoChar);
+
+          if (this.shippoImageUrl) {
+            this.isInitialized = true;
+            this.startRandomSchedule();
+          }
+        } catch (e) {
+          // Fail silently if image fetch fails
+        }
+      },
+
+      startRandomSchedule() {
+        const spawnRandomAnimation = () => {
+          if (Math.random() > 0.4) {
+            this.createRunningAnimation();
+          } else {
+            this.createPoppingAnimation();
+          }
+        };
+
+        // Initial delay before first animation
+        setTimeout(spawnRandomAnimation, 2000 + Math.random() * 3000);
+
+        // Set up interval for subsequent animations (every 3-9 seconds)
+        this.animationInterval = setInterval(() => {
+          spawnRandomAnimation();
+        }, 3000 + Math.random() * 6000);
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+          if (this.animationInterval) clearInterval(this.animationInterval);
+        });
+      },
+
+      createRunningAnimation() {
+        const container = document.getElementById('shippo-animations');
+        if (!container) return;
+
+        const animEl = document.createElement('div');
+        animEl.className = 'shippo-anim';
+
+        const isLeftToRight = Math.random() > 0.5;
+        const topPos = Math.random() * (window.innerHeight * 0.6) + window.innerHeight * 0.2;
+        const duration = 3 + Math.random() * 2;
+
+        animEl.style.cssText = [
+          `background-image: url('${this.shippoImageUrl}')`,
+          `top: ${topPos}px`,
+          `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
+          `--run-end: ${window.innerWidth + 180}px`,
+          `--duration: ${duration}s`,
+        ].join(';');
+
+        animEl.className = isLeftToRight ? 'shippo-anim running' : 'shippo-anim running-reverse';
+
+        container.appendChild(animEl);
+
+        setTimeout(() => {
+          animEl.remove();
+        }, (duration + 0.5) * 1000);
+      },
+
+      createPoppingAnimation() {
+        const container = document.getElementById('shippo-animations');
+        if (!container) return;
+
+        const corners = [
+          { x: 20, y: 20 },                                    // top-left
+          { x: window.innerWidth - 100, y: 20 },              // top-right
+          { x: 20, y: window.innerHeight - 100 },             // bottom-left
+          { x: window.innerWidth - 100, y: window.innerHeight - 100 } // bottom-right
+        ];
+
+        const corner = corners[Math.floor(Math.random() * corners.length)];
+
+        const animEl = document.createElement('div');
+        animEl.className = 'shippo-anim popping';
+        animEl.style.cssText = [
+          `background-image: url('${this.shippoImageUrl}')`,
+          `left: ${corner.x}px`,
+          `top: ${corner.y}px`,
+        ].join(';');
+
+        container.appendChild(animEl);
+
+        setTimeout(() => {
+          animEl.remove();
+        }, 2200); // Total animation time: 0.4s pop-in + 1.5s wait + 0.5s pop-out + buffer
+      }
+    };
+
     // ── Init ──────────────────────────────────────────────────
     createStars();
+    ShippoAnimationManager.init();
     renderCards('all');
   </script>
 </body>

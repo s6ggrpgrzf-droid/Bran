@@ -2383,6 +2383,96 @@ main {
   }
 }
 
+/* ── Shippo Animations (Characters page) ────────────────── */
+#shippo-animations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.shippo-anim {
+  position: fixed;
+  width: 80px;
+  height: 80px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes shippoRun {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scaleX(1);
+  }
+  50% {
+    transform: translateX(calc(var(--run-end) * 0.5)) translateY(-12px) scaleX(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(var(--run-end)) translateY(0) scaleX(1);
+  }
+}
+
+@keyframes shippoRunReverse {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scaleX(-1);
+  }
+  50% {
+    transform: translateX(calc(var(--run-end) * -0.5)) translateY(-12px) scaleX(-1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(calc(var(--run-end) * -1)) translateY(0) scaleX(-1);
+  }
+}
+
+@keyframes shippoPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-45deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes shippoPopOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-45deg);
+  }
+}
+
+.shippo-anim.running {
+  animation: shippoRun var(--duration) ease-in-out forwards;
+}
+
+.shippo-anim.running-reverse {
+  animation: shippoRunReverse var(--duration) ease-in-out forwards;
+}
+
+.shippo-anim.popping {
+  animation: shippoPopIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+            shippoPopOut 0.5s ease-in 1.5s forwards;
+}
+
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
   header h1 { font-size: 2rem; }
