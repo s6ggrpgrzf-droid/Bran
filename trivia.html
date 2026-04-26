@@ -236,9 +236,15 @@
     }
 
     // ── Score display ─────────────────────────────────────────
-    function updateScore() {
+    function updateScore(pulse = false) {
       document.getElementById('score-correct').textContent = scoreCorrect;
       document.getElementById('score-total').textContent   = 25;
+      if (pulse) {
+        const el = document.getElementById('score-display');
+        el.classList.remove('pulse');
+        void el.offsetWidth;
+        el.classList.add('pulse');
+      }
     }
 
     // ── Render question ───────────────────────────────────────
@@ -262,6 +268,7 @@
                aria-label="Question progress">
             <div class="progress-bar-inner" style="width:${progress}%"></div>
           </div>
+          <div class="question-counter">Question ${deckIdx + 1} of ${deck.length}</div>
           <div class="question-body">
             <p class="question-text">${q.q}</p>
           </div>
@@ -300,7 +307,7 @@
       }
 
       deckIdx++;
-      updateScore();
+      updateScore(correct);
 
       setTimeout(() => {
         if (deckIdx < deck.length) renderQuestion();
@@ -338,6 +345,17 @@
 
       document.getElementById('back-selector').addEventListener('click', renderRoundSelector);
     }
+
+    // ── Keyboard shortcuts (1-4 to pick answer) ───────────────
+    document.addEventListener('keydown', (e) => {
+      if (!activeRound) return;
+      const keyMap = { '1': 0, '2': 1, '3': 2, '4': 3 };
+      const idx = keyMap[e.key];
+      if (idx === undefined) return;
+      const wrap = document.getElementById('question-wrap');
+      const btns = wrap.querySelectorAll('.answer-btn:not(:disabled)');
+      if (btns[idx]) btns[idx].click();
+    });
 
     // ── Init ──────────────────────────────────────────────────
     renderRoundSelector();

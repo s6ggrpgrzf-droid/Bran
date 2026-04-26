@@ -1707,8 +1707,9 @@ main {
 }
 
 .question-series-header {
-  height: 6px;
+  height: 10px;
   background: var(--series-color, var(--color-primary));
+  box-shadow: 0 3px 16px color-mix(in srgb, var(--series-color, #e87ca0) 45%, transparent);
 }
 
 @keyframes cardEntrance {
@@ -1717,7 +1718,7 @@ main {
 }
 
 .progress-bar {
-  height: 8px;
+  height: 6px;
   background: #f3e8ff;
 }
 .progress-bar-inner {
@@ -1725,6 +1726,18 @@ main {
   background: linear-gradient(90deg, var(--series-color, #e87ca0), color-mix(in srgb, var(--series-color, #e87ca0) 60%, #a78bfa));
   transition: width 0.45s ease;
   border-radius: 0 4px 4px 0;
+}
+
+.question-counter {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--series-color, var(--color-primary));
+  text-align: center;
+  padding: 0.55rem 1.5rem 0.1rem;
+  opacity: 0.8;
 }
 
 .question-card-top {
@@ -1735,7 +1748,7 @@ main {
 }
 
 .question-body {
-  padding: 0.75rem 1.5rem 1rem;
+  padding: 0.5rem 1.5rem 0.75rem;
 }
 
 .question-series-badge {
@@ -1754,17 +1767,18 @@ main {
 
 .question-text {
   font-family: 'Nunito', sans-serif;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--color-text);
-  line-height: 1.45;
+  line-height: 1.5;
   margin: 0 0 1.25rem;
+  text-align: center;
 }
 
 .answer-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.55rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
   padding: 0 1.5rem 1.5rem;
 }
 
@@ -1774,6 +1788,7 @@ main {
   font-weight: 600;
   line-height: 1.35;
   padding: 0.85rem 1rem;
+  min-height: 66px;
   border: 1.5px solid var(--color-border);
   border-radius: 12px;
   background: var(--color-surface);
@@ -1797,13 +1812,13 @@ main {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 26px;
-  height: 26px;
+  min-width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: var(--color-border);
   color: var(--color-text-muted);
   font-family: 'Nunito', sans-serif;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 800;
   flex-shrink: 0;
   transition: background 0.18s, color 0.18s;
@@ -1891,9 +1906,11 @@ main {
 }
 .results-buttons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.75rem;
   align-items: center;
+  justify-content: center;
 }
 .results-again-btn {
   font-family: 'Nunito', sans-serif;
@@ -1927,6 +1944,15 @@ main {
 .results-back-btn:hover {
   background: var(--color-selected);
   transform: translateY(-1px);
+}
+
+@keyframes scorePulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+.trivia-score.pulse {
+  animation: scorePulse 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Round selector screen */
