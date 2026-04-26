@@ -122,12 +122,26 @@
       }
     })();
 
+    // ── Round metadata ────────────────────────────────────────
+    const ROUND_META = [
+      { icon: '🌱', label: 'Beginner',    grad: 'linear-gradient(135deg,#bbf7d0,#4ade80)', text: '#14532d' },
+      { icon: '🌿', label: 'Easy',        grad: 'linear-gradient(135deg,#99f6e4,#2dd4bf)', text: '#134e4a' },
+      { icon: '⭐', label: 'Medium',      grad: 'linear-gradient(135deg,#bfdbfe,#60a5fa)', text: '#1e3a8a' },
+      { icon: '🔥', label: 'Challenging', grad: 'linear-gradient(135deg,#fed7aa,#fb923c)', text: '#7c2d12' },
+      { icon: '⚡', label: 'Hard',        grad: 'linear-gradient(135deg,#fef08a,#facc15)', text: '#713f12' },
+      { icon: '💪', label: 'Expert',      grad: 'linear-gradient(135deg,#fecaca,#f87171)', text: '#7f1d1d' },
+      { icon: '🧠', label: 'Master',      grad: 'linear-gradient(135deg,#e9d5ff,#c084fc)', text: '#4a1d96' },
+      { icon: '💀', label: 'Legend',      grad: 'linear-gradient(135deg,#cbd5e1,#64748b)', text: '#0f172a' },
+    ];
+
     // ── State ─────────────────────────────────────────────────
     let activeRound = null;
     let completedRounds = new Set();
     let deck = [];
     let deckIdx = 0;
     let scoreCorrect = 0;
+
+    const ANSWER_LETTERS = ['A', 'B', 'C', 'D'];
 
     // ── Helpers ───────────────────────────────────────────────
     function shuffle(arr) {
@@ -141,10 +155,10 @@
 
     function gradeInfo(correct, total) {
       const pct = total === 0 ? 0 : correct / total;
-      if (pct >= 0.9) return { emoji: '🏆', title: 'Legendary!',    sub: "You really know your stuff." };
-      if (pct >= 0.7) return { emoji: '⭐', title: 'Nice work!',     sub: "Solid nerd credentials." };
-      if (pct >= 0.5) return { emoji: '👍', title: 'Not bad!',       sub: "Worth a rewatch, maybe?" };
-      return               { emoji: '🌱', title: 'Keep studying!', sub: "The force will guide you." };
+      if (pct >= 0.9) return { emoji: '🏆', title: 'Legendary!',    sub: "You really know your stuff.", grad: 'linear-gradient(135deg,#fef9c3,#fde68a)' };
+      if (pct >= 0.7) return { emoji: '⭐', title: 'Nice work!',     sub: "Solid nerd credentials.",    grad: 'linear-gradient(135deg,#dbeafe,#bfdbfe)' };
+      if (pct >= 0.5) return { emoji: '👍', title: 'Not bad!',       sub: "Worth a rewatch, maybe?",    grad: 'linear-gradient(135deg,#dcfce7,#bbf7d0)' };
+      return               { emoji: '🌱', title: 'Keep studying!', sub: "The force will guide you.",    grad: 'linear-gradient(135deg,#fce7f3,#ede9fe)' };
     }
 
     function saveRoundCompletion(roundNum) {
@@ -173,16 +187,22 @@
 
       wrap.innerHTML = `
         <div class="round-selector-card">
-          <h2 class="round-selector-title">Select a Difficulty Round</h2>
-          <p class="round-selector-subtitle">25 questions per round</p>
+          <h2 class="round-selector-title">Choose Your Round</h2>
+          <p class="round-selector-subtitle">25 questions · 8 difficulty levels</p>
           <div class="round-selector" role="group" aria-label="Select difficulty round">
-            ${Array.from({ length: 8 }, (_, i) => i + 1).map(roundNum => `
-              <button class="round-btn ${completedRounds.has(roundNum) ? 'completed' : ''}"
-                      data-round="${roundNum}"
-                      aria-label="Round ${roundNum}${completedRounds.has(roundNum) ? ' (completed)' : ''}">
-                Round ${roundNum}
-                ${completedRounds.has(roundNum) ? '<span class="round-badge" aria-hidden="true">✓</span>' : ''}
-              </button>`).join('')}
+            ${ROUND_META.map((m, i) => {
+              const n = i + 1;
+              const done = completedRounds.has(n);
+              return `
+              <button class="round-btn${done ? ' completed' : ''}"
+                      data-round="${n}"
+                      style="--round-grad:${m.grad}; --round-text:${m.text};"
+                      aria-label="Round ${n}: ${m.label}${done ? ' (completed)' : ''}">
+                <span class="round-btn-icon" aria-hidden="true">${m.icon}</span>
+                <span class="round-btn-num">Round ${n}</span>
+                <span class="round-btn-label">${m.label}</span>
+              </button>`;
+            }).join('')}
           </div>
         </div>`;
 
@@ -194,12 +214,8 @@
     // ── Handle round selection ─────────────────────────────────
     function handleRoundSelect(roundNum) {
       activeRound = roundNum;
-      const filterWrap = document.querySelector('.trivia-filter');
-      const scoreDisplay = document.getElementById('score-display');
-
-      filterWrap.style.display = 'flex';
-      scoreDisplay.style.display = 'flex';
-
+      document.querySelector('.trivia-filter').style.display = 'none';
+      document.getElementById('score-display').style.display = 'flex';
       buildDeck(roundNum);
       renderQuestion();
     }
@@ -207,10 +223,7 @@
     // ── Build deck ────────────────────────────────────────────
     function buildDeck(roundNumber) {
       const round = QUIZ_ROUNDS[roundNumber - 1];
-      if (!round) {
-        console.error('Invalid round number:', roundNumber);
-        return;
-      }
+      if (!round) return;
 
       deck = shuffle(round.questions).map(q => {
         const paired = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
@@ -233,25 +246,31 @@
       const wrap = document.getElementById('question-wrap');
       const q    = deck[deckIdx];
       const progress = ((deckIdx / deck.length) * 100).toFixed(1);
+      const meta = ROUND_META[activeRound - 1];
 
       wrap.innerHTML = `
-        <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
-          <div class="round-info">Round ${activeRound} of 8</div>
+        <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}"
+             style="--series-color:${q.seriesColor}">
+          <div class="question-series-header"></div>
+          <div class="question-card-top">
+            <div class="round-info">${meta.icon} Round ${activeRound} · ${meta.label}</div>
+            <span class="question-series-badge"
+                  style="--series-color:${q.seriesColor}">${q.seriesLabel}</span>
+          </div>
           <div class="progress-bar" role="progressbar"
                aria-valuenow="${deckIdx}" aria-valuemin="0" aria-valuemax="${deck.length}"
                aria-label="Question progress">
             <div class="progress-bar-inner" style="width:${progress}%"></div>
           </div>
           <div class="question-body">
-            <span class="question-series-badge"
-                  style="--series-color:${q.seriesColor}">${q.seriesLabel}</span>
             <p class="question-text">${q.q}</p>
           </div>
           <div class="answer-grid" role="group" aria-label="Answer choices">
             ${q.shuffledAnswers.map((a, i) => `
               <button class="answer-btn" data-idx="${i}"
-                      aria-label="Answer option: ${a.text}">
-                ${a.text}
+                      aria-label="${ANSWER_LETTERS[i]}: ${a.text}">
+                <span class="answer-letter" aria-hidden="true">${ANSWER_LETTERS[i]}</span>
+                <span>${a.text}</span>
               </button>`).join('')}
           </div>
         </div>`;
@@ -284,12 +303,9 @@
       updateScore();
 
       setTimeout(() => {
-        if (deckIdx < deck.length) {
-          renderQuestion();
-        } else {
-          renderResults();
-        }
-      }, 900);
+        if (deckIdx < deck.length) renderQuestion();
+        else renderResults();
+      }, 950);
     }
 
     // ── Results ───────────────────────────────────────────────
@@ -299,9 +315,10 @@
       const g     = gradeInfo(scoreCorrect, total);
 
       saveRoundCompletion(activeRound);
+      document.getElementById('score-display').style.display = 'none';
 
       wrap.innerHTML = `
-        <div class="results-card">
+        <div class="results-card" style="--results-grad:${g.grad}">
           <div class="results-grade" aria-hidden="true">${g.emoji}</div>
           <div class="results-title">${g.title}</div>
           <div class="results-subtitle">
@@ -314,13 +331,12 @@
         </div>`;
 
       document.getElementById('play-again').addEventListener('click', () => {
+        document.getElementById('score-display').style.display = 'flex';
         buildDeck(activeRound);
         renderQuestion();
       });
 
-      document.getElementById('back-selector').addEventListener('click', () => {
-        renderRoundSelector();
-      });
+      document.getElementById('back-selector').addEventListener('click', renderRoundSelector);
     }
 
     // ── Init ──────────────────────────────────────────────────
