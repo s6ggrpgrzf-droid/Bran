@@ -1,231 +1,331 @@
-const QUIZ_ROUNDS = [
-  {
-    roundNumber: 1,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the name of Naruto\'s ultimate technique that combines shadow clones with chakra?', answers: ['Rasengan', 'Chidori', 'Shadow Clone Barrage', 'Rasenshuriken'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Which village does Itachi massacre to gain the Mangekyo Sharingan?', answers: ['Hidden Mist Village', 'Hidden Cloud Village', 'Hidden Leaf Village', 'Uchiha Clan'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the primary weakness of the Sharingan according to Kakashi?', answers: ['Genjutsu immunity', 'Excessive chakra drain', 'Predictability', 'Fear of fire jutsu'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who sealed the Nine-Tailed Fox into Naruto as a newborn?', answers: ['Hashirama', 'Minato', 'Sarutobi', 'Jiraiya'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What rank of ninja does Naruto achieve by the end of Shippuden?', answers: ['Jonin', 'Hokage', 'Kage', 'Anbu Captain'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Which character serves as the Fourth Hokage?', answers: ['Minato Namikaze', 'Kakashi Hatake', 'Jiraiya', 'Tsunade'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Orochimaru\'s obsession throughout the series?', answers: ['Power and immortality', 'Revenge on Naruto', 'Protecting the village', 'Peace'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many tailed beasts are there in the Naruto universe?', answers: ['7', '8', '9', '10'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the name of Sasuke\'s cursed seal?', answers: ['Heaven Mark', 'Seal of Heaven', 'Cursed Heavenly Mark', 'Orochimaru\'s Mark'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many Shikon Jewel shards are hidden throughout the series?', answers: ['50', '100', '150', '200'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What demon type is Sesshomaru?', answers: ['Dog demon', 'Dragon demon', 'Serpent demon', 'Bird demon'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is Inuyasha\'s mother?', answers: ['Izayoi', 'Rin', 'Kagura', 'Kanna'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the name of Inuyasha\'s sword?', answers: ['Bakusaiga', 'Tessaiga', 'Tenseiga', 'Sounga'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many years did Inuyasha sleep pinned to a tree?', answers: ['50', '100', '150', '200'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What supernatural priestess ability does Kagome possess?', answers: ['Demon sensing', 'Miko powers', 'Jewel sensing', 'All of the above'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is Naraku\'s primary source of power?', answers: ['Shikon Jewel shards', 'Demon organs', 'Human souls', 'Sacred relics'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What happens to Inuyasha during a new moon?', answers: ['He loses his powers', 'He becomes human', 'He goes berserk', 'He falls asleep'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How old is Sesshomaru approximately in the series?', answers: ['200 years old', '500 years old', '1000 years old', 'Unknown'], correct: 3 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of Han Solo\'s ship?', answers: ['X-Wing', 'Millennium Falcon', 'TIE Fighter', 'Slave I'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'Which planet is Yoda\'s home?', answers: ['Dagobah', 'Naboo', 'Tatooine', 'Endor'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Darth Vader\'s real name?', answers: ['Anakin Skywalker', 'Obi-Wan Kenobi', 'Luke Skywalker', 'Leia Organa'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What year does A New Hope take place?', answers: ['Year 0', 'Year 1', 'Year 5', 'Year 10'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many younglings does Anakin kill in the Jedi Temple?', answers: ['Several', 'Many', 'All of them', 'None shown'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of Luke\'s twin sister?', answers: ['Padme', 'Leia', 'Rey', 'Jyn'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'Which Sith Lord created the Rule of Two?', answers: ['Darth Maul', 'Count Dooku', 'Darth Bane', 'Anakin Skywalker'], correct: 2 }
-    ]
-  },
-  {
-    roundNumber: 2,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Kakashi\'s signature jutsu?', answers: ['Chidori', 'Raikiri', 'Sharingan', 'Shadow Clone'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is Naruto\'s best friend?', answers: ['Sasuke', 'Sakura', 'Sai', 'Lee'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What clan does Rock Lee belong to?', answers: ['Taijutsu clan', 'No clan (orphan)', 'Might clan', 'Youth clan'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the name of Pain\'s organization?', answers: ['Akatsuki', 'Hebi', 'Taka', 'Anbu'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many members does the original Akatsuki have?', answers: ['5', '7', '9', '11'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Gaara\'s tailed beast?', answers: ['Three-tailed', 'Four-tailed', 'One-tailed', 'Two-tailed'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the leader of the Sound Village?', answers: ['Orochimaru', 'Kabuto', 'Kimimaro', 'Zaku'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Madara\'s ultimate goal?', answers: ['World peace through genjutsu', 'Power and strength', 'Revenge', 'Immortality'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many eyes does Obito get after the Fourth Ninja War?', answers: ['Two Sharingan', 'One Sharingan and one Rinnegan', 'Two Rinnegan', 'Three eyes'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Miroku\'s primary weakness?', answers: ['Wind tunnel in palm', 'Insects', 'Sacred ofuda', 'Cold weather'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is Sango\'s brother?', answers: ['Kohaku', 'Miroku', 'Inuyasha', 'Sesshomaru'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Shippo\'s race?', answers: ['Fox demon', 'Tanuki demon', 'Kitsune demon', 'Wolf demon'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who wields the Backlash Wave technique?', answers: ['Sesshomaru', 'Inuyasha', 'Naraku', 'Koga'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What does the Sacred Jewel wish grant?', answers: ['Any wish', 'Only wishes for power', 'Only wishes for immortality', 'The person\'s true desire'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many subordinates does Naraku have in his body?', answers: ['3', '5', '7', 'Multiple'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Kohaku\'s primary weapon?', answers: ['Giant Boomerang', 'Lance', 'Whip-Sword', 'Trident'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is the leader of the Eastern demon tribe?', answers: ['Koga', 'Sesshomaru', 'Naraku', 'Yura'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What binds Kagome and Inuyasha together spiritually?', answers: ['The Shikon Jewel', 'A curse mark', 'Their love', 'A magical rope'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the seat of Palpatine\'s power?', answers: ['The Death Star', 'The Imperial Palace', 'The Star Destroyer', 'Cloud City'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What species is Chewbacca?', answers: ['Wookiee', 'Ewok', 'Gungan', 'Twi\'lek'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Star Destroyers does the Empire have?', answers: ['Thousands', 'Hundreds', 'Tens', 'Just a few'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What planet is destroyed by the first Death Star?', answers: ['Tatooine', 'Alderaan', 'Naboo', 'Mustafar'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Boba Fett\'s armor made of?', answers: ['Durasteel', 'Mandalorian iron', 'Plasteel', 'Beskar'], correct: 3 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How old is Yoda at the start of The Empire Strikes Back?', answers: ['600', '800', '900', '1000'], correct: 2 }
-    ]
-  },
-  {
-    roundNumber: 3,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Naruto\'s relationship to Boruto?', answers: ['Older brother', 'Father', 'Uncle', 'Grandfather'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who does Naruto marry?', answers: ['Sakura', 'Hinata', 'Ino', 'Temari'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the Rinnegan\'s primary ability?', answers: ['Time travel', 'All six paths of pain', 'Immortality', 'Teleportation'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the leader of the Leaf Village at the start of the series?', answers: ['Hashirama', 'Tobirama', 'Hiruzen', 'Minato'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What village is Temari from?', answers: ['Sand Village', 'Stone Village', 'Mist Village', 'Sound Village'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many fingers does Naruto have on each hand?', answers: ['4', '5', '6', 'Varies'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Deidara\'s specialty?', answers: ['Explosive clay', 'Lightning jutsu', 'Water jutsu', 'Genjutsu'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the Uchiha clan\'s sworn enemy?', answers: ['Senju clan', 'Hyuga clan', 'Akimichi clan', 'Aburame clan'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the Third Hokage\'s actual name?', answers: ['Hiruzen Sarutobi', 'Minato Namikaze', 'Hashirama Senju', 'Tobirama Senju'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Inuyasha\'s halfbrother\'s name?', answers: ['Sesshomaru', 'Bankotsu', 'Naraku', 'Koga'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many swords can Sesshomaru wield?', answers: ['Two', 'Three', 'Four', 'Many'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the origin of the Shikon Jewel?', answers: ['From a priestess soul', 'Ancient relic', 'Demon creation', 'Divine artifact'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who was Sango\'s love interest?', answers: ['Miroku', 'Inuyasha', 'Koga', 'Kohaku'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What curse does Miroku have?', answers: ['Wind tunnel in palm', 'Demon blood', 'Jewel curse', 'Aging curse'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How does Yura die?', answers: ['By Inuyasha\'s sword', 'Consumed by the jewel', 'Killed by Naraku', 'Natural causes'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Goshinki\'s ability?', answers: ['Shape shifting', 'Mind reading', 'Possession', 'Petrification'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is Rin\'s protector?', answers: ['Sesshomaru', 'Inuyasha', 'Jaken', 'Miroku'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What triggers Inuyasha\'s berserker mode?', answers: ['Kagome\'s death', 'Severe injury', 'Betrayal by Sesshomaru', 'Blood on his sword'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of Luke\'s original starship on Tatooine?', answers: ['X-Wing', 'T-16', 'Landspeeder', 'Sandcrawler'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'Who is Ben Solo\'s grandfather?', answers: ['Anakin Skywalker', 'Luke Skywalker', 'Han Solo', 'Leia Organa'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What species is Admiral Ackbar?', answers: ['Mon Calamari', 'Sullustan', 'Ewok', 'Gungan'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many moons does Tatooine have?', answers: ['One', 'Two', 'Three', 'Four'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Rey\'s lineage reveal?', answers: ['Solo', 'Skywalker', 'Palpatine', 'Organa'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many times did Luke attempt to kill Ben?', answers: ['Once', 'Twice', 'Never', 'Many times'], correct: 0 }
-    ]
-  },
-  {
-    roundNumber: 4,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Kurama\'s true personality?', answers: ['Evil', 'Protective', 'Neutral', 'Mischievous'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who first taught Naruto the Rasengan?', answers: ['Jiraiya', 'Minato', 'Kakashi', 'Tsunade'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the Sand Village\'s shinobi academy called?', answers: ['Academy', 'Sand Institute', 'Hidden Academy', 'Shinobi School'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many Sharingan eyes does Madara possess at peak power?', answers: ['Two', 'Three', 'Four', 'Six'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Konan\'s paper jutsu called?', answers: ['Paper Style', 'Origami Jutsu', 'Paper Barrier', 'Parchment Technique'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the reincarnation of Ashura?', answers: ['Naruto', 'Sasuke', 'Hashirama', 'Tobirama'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What year is Naruto born?', answers: ['Year 60', 'Year 61', 'Year 62', 'Year 63'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many years pass between the Third and Fourth Great Ninja Wars?', answers: ['5', '10', '15', '20'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Sai\'s true name?', answers: ['Shin', 'Sage', 'Shuai', 'Suzaku'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the nature of the Shikon Jewel curse?', answers: ['It corrupts the holder', 'It grants wishes', 'It amplifies powers', 'It extends life'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is the leader of the Band of Seven?', answers: ['Bankotsu', 'Ginkotsu', 'Jakotsu', 'Suikotsu'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Koga\'s primary weapon?', answers: ['His claws', 'Sacred weapons', 'Jewel shards', 'Demon organs'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many years in the past does Kagome travel?', answers: ['100', '300', '500', 'Unknown'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Jaken\'s primary characteristic?', answers: ['Loyalty to Sesshomaru', 'Great power', 'Kindness', 'Wisdom'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is Suikotsu\'s dual personality?', answers: ['Gentle healer and murderer', 'Two brothers', 'Demon and human', 'Past and present selves'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What binds Naraku and Kikyo together?', answers: ['Love', 'Revenge', 'The Shikon Jewel', 'A curse'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many years ago did Naraku break apart Inuyasha and Kikyo?', answers: ['10', '25', '50', '100'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the source of Naraku\'s immortality?', answers: ['Shikon Jewel', 'Demonic pact', 'Multiple lives', 'Stolen power'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of the Imperial Royal Guard?', answers: ['Red Guard', 'Scarlet Guard', 'Royal Guard', 'Elite Guard'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How long does The Empire Strikes Back take place?', answers: ['3 months', '6 months', 'One year', 'Three years'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of Palpatine\'s hidden home planet?', answers: ['Exegol', 'Korriban', 'Moraband', 'Pesegam'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Sith are there in the Rule of Two?', answers: ['One', 'Two', 'Three', 'Many'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Grogu\'s actual name?', answers: ['Yoda', 'Yaddle', 'Din Djarin', 'Unknown'], correct: 3 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'Who trained Luke Skywalker after Obi-Wan?', answers: ['Yoda', 'Palpatine', 'Leia', 'Han Solo'], correct: 0 }
-    ]
-  },
-  {
-    roundNumber: 5,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Neji\'s primary jutsu?', answers: ['Byakugan', 'Gentle Fist', 'Eight Trigrams', 'Substitution'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the reincarnation of Indra?', answers: ['Naruto', 'Sasuke', 'Hashirama', 'Madara'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the village hidden in the sand\'s real name?', answers: ['Sunagakure', 'Sagakure', 'Sumakure', 'Sunakure'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many people are in Naruto\'s original team?', answers: ['2', '3', '4', '5'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Temari\'s weapon?', answers: ['Fan', 'Spear', 'Scythe', 'Kunai'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is Naruto\'s adoptive grandfather?', answers: ['Sarutobi', 'Hiruzen', 'Third Hokage', 'All of the above'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Black Zetsu\'s true nature?', answers: ['Kaguya\'s will', 'Hashirama\'s creation', 'Madara\'s clone', 'An artificial being'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many tailed beasts does Madara capture?', answers: ['Eight', 'Nine', 'Seven', 'Six'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Kaguya\'s primary weakness?', answers: ['Ice and fire', 'Sealing jutsu', 'Light', 'Thunder'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the name of Shippo\'s father?', answers: ['Inuyasha', 'An old fox demon', 'Unknown', 'Never mentioned'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many times does Naraku resurrect himself?', answers: ['Two', 'Three', 'Four', 'Many'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Kagura\'s origin?', answers: ['Created by Naraku', 'Demon', 'Human priestess', 'Shikon shard'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who creates the Shikon Jewel originally?', answers: ['Midoriko', 'A priestess', 'Naraku', 'Ancient gods'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Jakotsu\'s weapon type?', answers: ['Whip-Sword', 'Boomerang', 'Lance', 'Chain'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many times does Kagome say "SIT" throughout the series?', answers: ['Hundreds', 'Thousands', 'Countless', 'Over 10,000'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the nature of Kikyo\'s resurrection?', answers: ['Soul in clay', 'Reincarnation', 'Spell', 'Demon magic'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What does Hakudoshi\'s symbol represent?', answers: ['Naraku\'s youth', 'His soul', 'His power', 'His memories'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many jewel shards are found by the group?', answers: ['All 100', 'Most of them', 'About 75%', 'Around 80%'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Mace Windu\'s lightsaber color?', answers: ['Red', 'Purple', 'Blue', 'Green'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Jedi survive Order 66?', answers: ['Very few', 'Around 100', 'Thousands', 'None'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Ahsoka\'s species?', answers: ['Togruta', 'Twi\'lek', 'Human', 'Mirialan'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How old is Anakin when he turns to the dark side?', answers: ['20', '22', '23', '25'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Din Djarin\'s armor made of?', answers: ['Beskar steel', 'Durasteel', 'Plasteel', 'Wookiee armor'], correct: 0 }
-    ]
-  },
-  {
-    roundNumber: 6,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Itachi\'s crime against the Uchiha?', answers: ['Massacre', 'Betrayal', 'Theft', 'Abandonment'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who orchestrates the Uchiha massacre?', answers: ['Itachi alone', 'Tobi and Itachi', 'Danzo', 'The village'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Jiraiya\'s pen name?', answers: ['Icha Icha', 'Make Out Paradise', 'The Toad Sage', 'Pervy Sage'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many chakra natures are there?', answers: ['4', '5', '6', '7'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Tsunade\'s legendary status?', answers: ['Strongest woman', 'Greatest medic', 'Hokage', 'All of the above'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the First Hokage?', answers: ['Hashirama Senju', 'Madara Uchiha', 'Tobirama Senju', 'Hiruzen Sarutobi'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the relationship between Hashirama and Madara?', answers: ['Enemies', 'Friends turned enemies', 'Brothers', 'Master and student'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How does Minato become Hokage?', answers: ['Fighting', 'Election', 'Defeating enemies', 'Crisis during war'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the Forbidden Scroll?', answers: ['Ancient secrets', 'Forbidden jutsu', 'History records', 'Power source'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What era is Inuyasha pinned to the tree?', answers: ['Sengoku period', 'Edo period', 'Ancient era', 'Medieval Japan'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How old is Sesshomaru at the series\' start?', answers: ['500 years old', '1000 years old', '500+ years old', 'Unknown'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Ginkotsu\'s primary ability?', answers: ['Mechanized body', 'Strength', 'Speed', 'Magic'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who is the most skilled fighter among the Group?', answers: ['Inuyasha', 'Sesshomaru', 'Miroku', 'Sango'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Bankotsu\'s signature weapon?', answers: ['The Banryu', 'The Tessaiga', 'The Bakusaiga', 'Sacred chain'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How does Naraku achieve his final form?', answers: ['Absorbing Moryomaru', 'Absorbing all shards', 'Demon magic', 'Kaguya\'s power'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Rin\'s relationship to Sesshomaru?', answers: ['Servant', 'Adopted daughter', 'Captive', 'Friend'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many gates of Hell does Naraku create?', answers: ['One', 'Two', 'Three', 'Four'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Kohaku\'s fate at the end of the series?', answers: ['Lives with Sango', 'Becomes a demon', 'Dies', 'Becomes a monk'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is Leia\'s adoptive father\'s name?', answers: ['Bail Organa', 'Han Solo', 'Mon Mothma', 'Wedge Antilles'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Supreme Leader Snookes exist?', answers: ['One original', 'Multiple clones', 'Palpatine reborn', 'Just one'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the Resistance\'s primary objective?', answers: ['Destroy the Empire', 'Defeat the First Order', 'Restore the Republic', 'Find Luke'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many times did Luke face Vader?', answers: ['Once', 'Twice', 'Three times', 'Multiple times'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What does BB-8 communicate with?', answers: ['Beeps and whistles', 'Holographic messages', 'Language', 'Binary'], correct: 0 }
-    ]
-  },
-  {
-    roundNumber: 7,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the Infinite Tsukuyomi?', answers: ['Infinite dream genjutsu', 'Infinite power', 'Infinite time', 'Infinite worlds'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is the creator of Naruto\'s curse seal?', answers: ['Orochimaru', 'Itachi', 'Kabuto', 'Sasuke'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the relationship between the Leaf Village and Sand Village?', answers: ['Enemies', 'Allies', 'Neutral', 'Competitors'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How does Sasuke lose his arm?', answers: ['Madara cuts it', 'Naruto seals it', 'Zetsus attack', 'Black Zetsu'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Kabuto\'s desire?', answers: ['Immortality and identity', 'Power', 'Revenge', 'The Shikon Jewel'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is Shisui Uchiha?', answers: ['Itachi\'s friend', 'Sasuke\'s cousin', 'A prodigy', 'All of the above'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What does Edo Tensei do?', answers: ['Resurrects the dead', 'Freezes time', 'Clones bodies', 'Seals souls'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many times does Naruto die and come back?', answers: ['Once', 'Twice', 'Three times', 'Never'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Pain\'s real name?', answers: ['Nagato', 'Konan', 'Yahiko', 'Obito'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the Meido demon ability?', answers: ['Opens underworld gates', 'Stealing souls', 'Healing', 'Shape shifting'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How does Sesshomaru obtain his Moryomaru form?', answers: ['Absorbing demons', 'Shikon shards', 'Training', 'Demon transformation'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Sango\'s brother\'s demon status?', answers: ['Puppet controlled', 'Partially demon', 'Brainwashed', 'All of the above'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who defeats Moryomaru?', answers: ['Inuyasha', 'Sesshomaru', 'Naraku', 'The group'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the relationship between Naraku and Sesshomaru?', answers: ['Enemies', 'Allies', 'Rivals', 'Neutral'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How long does the anime series span?', answers: ['1 year', '2 years', '3 years', '4 years'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the nature of Kagome and Inuyasha\'s bond?', answers: ['Love and trust', 'Master and servant', 'Curse', 'Reincarnation'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who absorbs the final Shikon Jewel shard?', answers: ['Inuyasha', 'Naraku', 'Kagome', 'Sesshomaru'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What does Inuyasha wish for using the Jewel?', answers: ['To be human', 'To have Kagome\'s love', 'Kagome\'s humanity', 'Nothing (jewel broken)'], correct: 3 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of Palpatine\'s flagship?', answers: ['Executor', 'Supremacy', 'Imperial Star Destroyer', 'Eclipse'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Ewoks are there?', answers: ['Thousands', 'Hundreds', 'Dozens', 'A tribe'], correct: 3 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the sequel trilogy\'s timeframe?', answers: ['30 years after Return of the Jedi', '20 years', '10 years', '50 years'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'Who is Finn\'s love interest?', answers: ['Rey', 'Rose', 'Poe', 'BB-8'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of the Mandalorian\'s ship?', answers: ['Razor Crest', 'X-Wing', 'TIE Fighter', 'Imperial shuttle'], correct: 0 }
-    ]
-  },
-  {
-    roundNumber: 8,
-    questions: [
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Naruto\'s final status in Boruto?', answers: ['Hokage', 'Dead', 'Trapped in Karma seal', 'Missing'], correct: 2 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is Boruto\'s mother?', answers: ['Hinata', 'Sakura', 'Ino', 'Temari'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Kawaki\'s origin?', answers: ['Jigen\'s vessel', 'Kara member', 'Dimension traveler', 'Otsutsuki member'], correct: 3 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many Hokage are there by the start of Boruto?', answers: ['7', '8', '9', '10'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Sarada\'s goal?', answers: ['Become Hokage', 'Restore her clan', 'Find her father', 'Gain Rinnegan'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'Who is Mitsuki\'s parent?', answers: ['Orochimaru', 'Kabuto', 'Sasuke', 'Naruto'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is Code\'s ability in Boruto?', answers: ['Limiter removal', 'Dimension hopping', 'Life stealing', 'Soul transfer'], correct: 0 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'How many episodes does the original Naruto anime have?', answers: ['220', '380', '440', '500'], correct: 1 },
-      { series: 'naruto', seriesLabel: 'Naruto 🍥', seriesColor: '#f97316', q: 'What is the total number of chapters in the original manga?', answers: ['500+', '700+', '800+', '900+'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is Hanyou (half-demon) weakness?', answers: ['Iron', 'Sacred weapons', 'Purification', 'All of the above'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many seasons does the original Inuyasha anime have?', answers: ['4', '5', '7', '8'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the name of the continuation series?', answers: ['Yashahime', 'Inuyasha 2', 'Half-Demon Princess', 'Sesshomaru\'s Tale'], correct: 0 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'Who are Sesshomaru\'s children in Yashahime?', answers: ['With Rin', 'Multiple relationships', 'Never revealed', 'Adopted'], correct: 1 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many manga chapters does Inuyasha have?', answers: ['300+', '400+', '500+', '600+'], correct: 3 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What is the total number of Inuyasha movies?', answers: ['2', '3', '4', '5'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How long did Inuyasha\'s manga run?', answers: ['5 years', '8 years', '12 years', '15 years'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'What year did Inuyasha anime premiere?', answers: ['1998', '2000', '2002', '2004'], correct: 2 },
-      { series: 'inuyasha', seriesLabel: 'Inuyasha 🐶', seriesColor: '#9333ea', q: 'How many filler episodes are in the original Inuyasha anime?', answers: ['50+', '100+', '150+', '200+'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Star Wars movies exist in the Skywalker saga?', answers: ['7', '8', '9', '10'], correct: 2 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the first Star Wars film released?', answers: ['Episode I', 'Episode IV', 'Episode III', 'Rogue One'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many Mandalorian seasons exist?', answers: ['2', '3', '4', '5'], correct: 1 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'What is the name of the Final Order?', answers: ['Palpatine\'s fleet', 'Snoke\'s army', 'First Order remnant', 'Imperial remaining'], correct: 0 },
-      { series: 'starwars', seriesLabel: 'Star Wars ⭐', seriesColor: '#eab308', q: 'How many live-action Star Wars shows exist?', answers: ['1', '2', '3', '4+'], correct: 3 }
-    ]
-  }
+'use strict';
+
+const TRIVIA_QUESTIONS = [
+
+  // ── Naruto (original series + Shippuden only) ─────────────────────────
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the true name of the One-Tailed beast sealed inside Gaara?',
+    answers: ['Kurama','Gyuki','Shukaku','Chomei'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'Which kekkei genkai does Haku wield, combining water and wind nature transformations?',
+    answers: ['Boil Release','Ice Release','Storm Release','Blaze Release'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What forbidden jutsu does Chiyo use to restore Gaara\'s life at the cost of her own?',
+    answers: ['Edo Tensei','Rinne Rebirth','One\'s Own Life Reincarnation','Living Corpse Reincarnation'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What specific ability does Shisui Uchiha\'s Mangekyo Sharingan grant — the one Danzo covets?',
+    answers: ['Tsukuyomi','Amaterasu','Kotoamatsukami','Kamui'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What kekkei tota (three-nature combination) does the Third Tsuchikage Onoki use?',
+    answers: ['Storm Release','Scorch Release','Dust Release','Magnet Release'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'Who is the original founder of the Akatsuki, before Nagato took leadership?',
+    answers: ['Konan','Obito','Yahiko','Kisame'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the technique Minato uses to instantly teleport to marked kunai?',
+    answers: ['Body Flicker Technique','Flying Thunder God Technique','Space-Time Migration','Hiraishin Barrier'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'Which tailed beast is sealed inside Yugito Nii of Kumogakure?',
+    answers: ['One-Tail','Two-Tails','Three-Tails','Four-Tails'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of Orochimaru\'s technique for transferring his soul into a new host body?',
+    answers: ['Soul Migration Jutsu','Living Corpse Reincarnation','Body Replacement Technique','Cursed Seal Transfer'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the exact name of the Uchiha\'s ultimate defensive and offensive chakra avatar?',
+    answers: ['Susanoo','Totsuka Blade','Amaterasu','Izanagi'], correct: 0 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What specific requirement must be met to awaken the Eternal Mangekyo Sharingan?',
+    answers: ['Kill your best friend','Transplant a direct blood relative\'s Mangekyo eyes','Witness a loved one die','Use Tsukuyomi 100 times'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the massive collaborative jutsu Naruto and Minato use against Obito as the Ten-Tails jinchuriki?',
+    answers: ['Spiralling Flash Super Strong Punch','Parent and Child Rasengan','Tailed Beast Rasengan Barrage','Ultra-Big Ball Rasenshuriken'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the sealing barrier used during the Nine-Tails\' attack on Konoha that required four Kage-level shinobi?',
+    answers: ['Four Crimson Ray Formation','Eight Trigrams Sealing Style','Dead Demon Consuming Seal','Four Red Yang Formation'], correct: 0 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'Which Hidden Village possesses the kekkei genkai known as the Shikotsumyaku (dead bone pulse)?',
+    answers: ['Hidden Sound','Hidden Mist','Hidden Stone','Hidden Grass'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of Konan\'s suicide-bomb technique involving hundreds of billions of explosive paper tags?',
+    answers: ['Paper Person of God','Shikigami Dance','Six Hundred Billion Paper Bombs','Dance of the God Tree'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What organisation within Konoha did Danzo secretly lead?',
+    answers: ['ANBU Black Ops','Foundation (Ne)','Uchiha Military Police','ROOT'], correct: 3 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the unique drawback of the Izanagi Sharingan technique?',
+    answers: ['Blinds the user permanently in that eye','Drains all chakra','Kills the user after 60 seconds','Can only be used once — the eye seals shut permanently'], correct: 3 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is Killer B\'s tailed beast, the Eight-Tails, also known as?',
+    answers: ['Kokuo','Gyuki','Saiken','Isobu'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'In what way does Black Zetsu differ from White Zetsu in terms of origin?',
+    answers: ['Black Zetsu is Hashirama\'s will given form','Black Zetsu is Kaguya\'s will manifested','Black Zetsu is Madara\'s shadow clone','Black Zetsu was created by Obito'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the blade sealed within Itachi\'s Susanoo that can seal anything it pierces?',
+    answers: ['Sword of Kagutsuchi','Yata Mirror','Totsuka Blade','Sword of Nunoboko'], correct: 2 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'Which character transplants Hashirama\'s Wood Release cells into multiple shinobi to suppress tailed beasts during the war?',
+    answers: ['Kabuto','Yamato','Madara','Obito'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the technique Nagato uses to destroy the entire Hidden Leaf Village in one sweeping strike?',
+    answers: ['Planetary Devastation','Almighty Push (Shinra Tensei)','Universal Pull','Chibaku Tensei'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the Hidden Village in the Land of Whirlpools where Kushina Uzumaki is originally from?',
+    answers: ['Uzushiogakure','Uzumakigakure','Whirlpool Hidden Village','Kirigakure'], correct: 0 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What specific sensory ability does the Byakugan possess that the Sharingan lacks?',
+    answers: ['Can copy techniques','Near 360-degree vision (with a small blind spot)','Can predict the future','Casts genjutsu passively'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of Pain\'s technique that creates a gravitational sphere, trapping targets in a mock moon?',
+    answers: ['Planetary Devastation (Chibaku Tensei)','Almighty Push','Shinra Tensei Burst','Outer Path: Samsara of Heavenly Life'], correct: 0 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'Who was the first person to defeat Kakuzu, eventually exposing his heart threads — ending his immortality run?',
+    answers: ['Shikamaru','Naruto','Kakashi','Ino-Shika-Cho formation'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the Eight Inner Gates technique Guy opens in his final battle against Madara?',
+    answers: ['Eight Gates Released Formation','Evening Elephant','Night Guy','Hachimon Tonkou no Jin'], correct: 0 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the forbidden technique Kabuto uses that improves on the original Edo Tensei?',
+    answers: ['Impure World Resurrection','Reanimation Kai','Modified Edo Tensei','Kabuto\'s Edo Tensei has no special name'], correct: 3 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the name of the Akatsuki pair assigned to capture the Three-Tails?',
+    answers: ['Hidan and Kakuzu','Deidara and Tobi','Kisame and Itachi','Konan and Nagato'], correct: 1 },
+
+  { series:'naruto', seriesLabel:'Naruto 🍥', seriesColor:'#f97316',
+    q: 'What is the ultimate goal of the Infinite Tsukuyomi?',
+    answers: ['Trap all humanity in an eternal dream','Give Madara infinite chakra','Create a new world','Resurrect Kaguya'], correct: 0 },
+
+  // ── Inuyasha ──────────────────────────────────────────────────────────
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What material was used by Totosai to forge the Tessaiga?',
+    answers: ['Dragon bone','Fang of Inuyasha\'s father the Inu no Taisho','Shikon Jewel shard','Sacred iron ore'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the name of Sesshomaru\'s sword that was forged from his own body and can kill 100 demons per swing?',
+    answers: ['Tenseiga','Tessaiga','Bakusaiga','Sounga'], correct: 2 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is Naraku\'s true form before he became a half-demon — who was he originally?',
+    answers: ['A wolf demon named Onigumo','A human bandit named Onigumo','A spider demon from the west','A spider-human hybrid priest'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the specific power of the Tenseiga that distinguishes it from all other swords?',
+    answers: ['Cuts 100 demons at once','Can resurrect the dead by cutting the pallbearers of the underworld','Absorbs demon energy','Reflects any attack'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'Which of Naraku\'s detachments controls wind using a fan made from her own feathers?',
+    answers: ['Kanna','Hakudoshi','Kagura','Byakuya'], correct: 2 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the origin of the Shikon Jewel — what is it actually made from?',
+    answers: ['Demon king\'s soul condensed into stone','The fused souls of the priestess Midoriko and the demon she battled','A fragment of an ancient god\'s heart','A crystal purified by a thousand Miko'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What specific technique of Tessaiga exploits the gap in an enemy\'s demonic energy when attacking?',
+    answers: ['Wind Scar','Backlash Wave','Adamant Barrage','Meidou Zangetsuha'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What happens to Miroku\'s Wind Tunnel if it absorbs Naraku\'s Saimyosho insects?',
+    answers: ['It collapses and kills him','He becomes paralysed by poison','His hand disintegrates faster','The tunnel reverses direction'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the name of the Meidou Zangetsuha technique and which sword originally uses it?',
+    answers: ['Death Path Slash — Tenseiga','Black Hole Rend — Bakusaiga','Meidou Crescent — Tessaiga (transferred from Tenseiga)','Void Slash — Sounga'], correct: 2 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'Which of Naraku\'s detachments has no heart or emotions and uses a mirror to reflect souls?',
+    answers: ['Kagura','Hakudoshi','Kanna','Byakuya'], correct: 2 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the relationship between Kikyo and Kagome in terms of their souls?',
+    answers: ['They share a piece of the Shikon Jewel','Kagome is the reincarnation of Kikyo','They are twins separated at birth','Kagome absorbed Kikyo\'s power'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the exact curse placed on Miroku\'s lineage by Naraku?',
+    answers: ['Every first-born son becomes a demon','Each generation\'s Wind Tunnel grows until it devours the bearer','Every male will be killed by a demon at age 30','The lineage loses all spiritual power'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What are the Shikon Jewel shards embedded in Kouga\'s body used for?',
+    answers: ['Give him immortality','Dramatically increase his speed','Allow him to control wolves','Give him the ability to regenerate'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What forbidden upgrade does Tessaiga receive from a dragon\'s venom, allowing it to shatter demonic barriers?',
+    answers: ['Dragon Scale Tessaiga','Adamant Barrage','Venom Dragon Fang','Dragon Strike Tessaiga'], correct: 0 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the name of Sesshomaru\'s small two-headed dragon companion that serves as his steed?',
+    answers: ['Jaken','Ah-Un','Rin\'s mount','Ryukotsusei'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What happens to Kohaku after Naraku places a Shikon shard in his back?',
+    answers: ['He gains demon powers','He is kept alive but under Naraku\'s control with no memories of his crimes','He turns into a half-demon','He can see the future'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What hidden secret does the Shikon Jewel\'s true nature reveal about granting any wish?',
+    answers: ['Destroys the world','It fuels the eternal battle between good and evil — no wish can end it cleanly','Resurrects the demon Midoriko fought','Grants the wisher immortality permanently'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'Which villain is revealed to be the incarnation of Naraku\'s heart?',
+    answers: ['Kagura','Byakuya','Hakudoshi','Goshinki'], correct: 2 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What specific upgrade does Tessaiga gain after Inuyasha defeats Ryukotsusei?',
+    answers: ['Barrier-breaking ability','Dragon Scale form','Dragon Strike','Flame Tessaiga'], correct: 0 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the name of Bankotsu\'s signature giant halberd weapon?',
+    answers: ['The Banryu','The Tessaiga','The Bakusaiga','Sacred chain'], correct: 0 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'How does Naraku achieve his final, most powerful form?',
+    answers: ['Absorbing Moryomaru','Absorbing all remaining Shikon Jewel shards','Through a pact with Kaguya','Consuming the Band of Seven\'s souls'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the nature of Kikyo\'s resurrection after her death?',
+    answers: ['Soul fragments gathered in a clay body animated by graveyard soil','Reincarnation as a new being','Sealed in a crystal','A demon-magic copy'], correct: 0 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the name of the swordsmith responsible for forging both Tessaiga and Tenseiga?',
+    answers: ['Jaken','Myoga','Totosai','Kaijinbo'], correct: 2 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What is the full name of the sacred tree that connects Inuyasha\'s era to Kagome\'s modern time?',
+    answers: ['Bone-Eater\'s Well Tree','The Sacred God Tree (Goshinboku)','Higurashi Shrine Oak','The World Tree'], correct: 1 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What two elements does Inuyasha\'s Wind Scar exploit to damage enemies far beyond normal sword range?',
+    answers: ['The gap between two opposing demonic energy flows','Spiritual energy and wind chakra','The demon\'s own aura reflected back','Sacred lightning and wind'], correct: 0 },
+
+  { series:'inuyasha', seriesLabel:'Inuyasha ⚔️', seriesColor:'#9333ea',
+    q: 'What triggers Inuyasha\'s full demon transformation when Tessaiga is absent?',
+    answers: ['Full moon','Near death or extreme anger with Tessaiga removed','Presence of strong spider demons','Kagome saying "Sit"'], correct: 1 },
+
+  // ── Star Wars ─────────────────────────────────────────────────────────
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the specific name of Mace Windu\'s unique lightsaber combat form?',
+    answers: ['Ataru (Form IV)','Shien (Form V)','Vaapad (Form VII)','Makashi (Form II)'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the exact clone trooper designation of Captain Rex?',
+    answers: ['CC-7567','CT-7567','RC-1138','CC-2224'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'Which Sith Lord established the Rule of Two — one master, one apprentice?',
+    answers: ['Darth Plagueis','Darth Revan','Darth Bane','Darth Nihilus'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is Palpatine\'s full given name as revealed in canon?',
+    answers: ['Cos Palpatine','Hego Damask','Sheev Palpatine','Darth Sidious'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the hyperdrive class rating of the Millennium Falcon after Han Solo\'s modifications?',
+    answers: ['Class 1.0','Class 0.5','Class 2.0','Class 0.75'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'On which planet does Order 66 kill Jedi Master Ki-Adi-Mundi?',
+    answers: ['Utapau','Mygeeto','Felucia','Kashyyyk'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'Which planet is Obi-Wan Kenobi stated to be from in both Legends and canon?',
+    answers: ['Coruscant','Alderaan','Stewjon','Mandalore'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What species is the bounty hunter Bossk, who appears in The Empire Strikes Back?',
+    answers: ['Rodian','Trandoshan','Weequay','Klatooinian'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What was the original purpose of the clone troopers\' inhibitor chip?',
+    answers: ['Force them to follow any Sith Lord\'s commands','Override free will and execute any Jedi near them when Order 66 was issued','Shut down clone production','Self-destruct near Jedi starfighters'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the specific model designation of the TIE Fighter used by Darth Vader in the original trilogy?',
+    answers: ['TIE/IN Interceptor','TIE Advanced x1','TIE Bomber','TIE Defender'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'Which planet is Anakin Skywalker born on and what is notable about his conception?',
+    answers: ['Tatooine — he had no father; conceived by midi-chlorians','Coruscant — he was created by the Force in a lab','Tatooine — his mother was a slave who escaped Jabba','Naboo — he was the son of a Jedi Knight'], correct: 0 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the name of the ancient Sith superweapon in Knights of the Old Republic that can build an unlimited army?',
+    answers: ['Death Star','Star Forge','Darksaber','Mass Shadow Generator'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the name of the Clone Wars arc where Ahsoka Tano leaves the Jedi Order?',
+    answers: ['The Wrong Jedi','The Lost One','Shattered','Voices'], correct: 0 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'Which Jedi Master secretly commissioned the creation of the clone army on Kamino?',
+    answers: ['Count Dooku','Sifo-Dyas','Qui-Gon Jinn','Ki-Adi-Mundi'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the name of the Resistance\'s main base planet in The Force Awakens?',
+    answers: ['Jakku','Takodana','D\'Qar','Crait'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the term used in-universe for a Force user who refuses both the Jedi and Sith paths, like the Bendu?',
+    answers: ['Grey Jedi','Force Neutral','The One who stands in the middle','Ashla Force wielder'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'Which battle is considered the turning point that directly led to the formation of the Rebel Alliance?',
+    answers: ['Battle of Geonosis','Battle of Christophsis','Battle of Scarif','Battle of Mon Cala'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What does the Darksaber represent to Mandalorian culture?',
+    answers: ['A Sith relic to be destroyed','The right to rule Mandalore — its wielder commands the people','A sacred weapon that grants Force sensitivity','The first lightsaber ever built'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the real name of the Sith known as Darth Tyranus, Count of Serenno?',
+    answers: ['Sifo-Dyas','Hego Damask','Dooku','Nute Gunray'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What colour is Mace Windu\'s lightsaber, and why is it unique among all Jedi?',
+    answers: ['Blue — he was a Temple Guardian','Green — he mastered Ataru','Purple — reflects his mastery channelling both light and dark side energies','White — signifies Grand Master rank'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the name of the Mandalorian covert\'s creed that Din Djarin follows?',
+    answers: ['The Resol\'nare','The Mandalorian Way','The Way','Mandalorian Creed'], correct: 2 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the name of the move Obi-Wan Kenobi is famous for performing against Anakin on Mustafar?',
+    answers: ['The Soresu Shutdown','The High Ground Maneuver','Reverse Shien Bind','Saber Throw Finish'], correct: 1 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What is the Mandalorian\'s ship called before it is destroyed?',
+    answers: ['Razor Crest','Slave I','Shadow Crest','Havoc Marauder'], correct: 0 },
+
+  { series:'starwars', seriesLabel:'Star Wars ✨', seriesColor:'#eab308',
+    q: 'What species is Ahsoka Tano?',
+    answers: ['Togruta','Twi\'lek','Mirialan','Zabrak'], correct: 0 },
+
 ];

@@ -1650,52 +1650,60 @@ main {
 }
 
 /* ── Trivia page ─────────────────────────────────────────── */
-.trivia-filter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  justify-content: center;
-}
 
-.trivia-filter__btn {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.4rem 1rem;
-  border-radius: 999px;
-  border: 2px solid var(--series-color, var(--color-primary));
-  background: transparent;
-  color: var(--series-color, var(--color-primary));
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.trivia-filter__btn:hover {
-  background: color-mix(in srgb, var(--series-color, var(--color-primary)) 15%, transparent);
-}
-.trivia-filter__btn.active {
-  background: var(--series-color, var(--color-primary));
-  color: #fff;
-}
-
-.trivia-hero {
+/* Start screen */
+.start-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 20px;
+  padding: 2rem 1.5rem 2.5rem;
   text-align: center;
-  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  animation: cardEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-
-.trivia-score {
-  display: inline-flex;
+.start-card h2 {
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+.start-subtitle {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.75rem;
+}
+.series-picker {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.series-card {
+  font-family: 'Nunito', sans-serif;
+  cursor: pointer;
+  border: 2px solid var(--series-color, var(--color-border));
+  border-radius: 16px;
+  padding: 1.25rem 0.75rem 1rem;
+  background: color-mix(in srgb, var(--series-color, var(--color-primary)) 8%, var(--color-surface));
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 0.4rem;
-  background: var(--gradient-main);
-  color: #fff;
-  font-family: 'Nunito', sans-serif;
-  font-size: 1rem;
-  font-weight: 800;
-  padding: 0.4rem 1.2rem;
-  border-radius: 999px;
-  box-shadow: 0 4px 16px rgba(232,124,160,0.3);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
+.series-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--series-color, #e87ca0) 30%, transparent);
+}
+.series-card:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+}
+.series-card-icon  { font-size: 2.2rem; line-height: 1; }
+.series-card-name  { font-size: 0.9rem; font-weight: 800; color: var(--series-color, var(--color-text)); }
+.series-card-count { font-size: 0.72rem; font-weight: 600; color: var(--color-text-muted); }
 
 .question-card {
   background: var(--color-surface);
@@ -1740,12 +1748,33 @@ main {
   opacity: 0.8;
 }
 
-.question-card-top {
+.game-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1.25rem 0.5rem;
+  padding: 0.65rem 1.25rem 0.4rem;
 }
+.game-header .lives { font-size: 1.05rem; letter-spacing: 0.1rem; line-height: 1; }
+.game-header .q-counter {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.game-header .score-badge {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--series-color, var(--color-primary));
+  background: color-mix(in srgb, var(--series-color, var(--color-primary)) 12%, transparent);
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+}
+/* Timer bar colour states */
+.progress-bar-inner.timer-warn   { background: linear-gradient(90deg, #fb923c, #f97316); }
+.progress-bar-inner.timer-urgent { background: linear-gradient(90deg, #ef4444, #dc2626); }
 
 .question-body {
   padding: 0.5rem 1.5rem 0.75rem;
@@ -1944,128 +1973,6 @@ main {
 .results-back-btn:hover {
   background: var(--color-selected);
   transform: translateY(-1px);
-}
-
-@keyframes scorePulse {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.22); }
-  100% { transform: scale(1); }
-}
-.trivia-score.pulse {
-  animation: scorePulse 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Round selector screen */
-.round-selector-card {
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: 20px;
-  padding: 2.5rem 2rem;
-  text-align: center;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
-  animation: cardEntrance 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-.round-selector-title {
-  font-family: 'Nunito', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--color-text);
-  margin-bottom: 0.2rem;
-}
-
-.round-selector-subtitle {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  margin-bottom: 2rem;
-}
-
-.round-selector {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  max-width: 620px;
-  margin: 0 auto;
-}
-
-.round-btn {
-  font-family: 'Nunito', sans-serif;
-  cursor: pointer;
-  position: relative;
-  border: none;
-  border-radius: 16px;
-  padding: 1.1rem 0.5rem 0.9rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  background: var(--round-grad, linear-gradient(135deg, #f0f9ff, #bae6fd));
-  box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  color: var(--round-text, #1e3a5f);
-  min-height: 110px;
-}
-
-.round-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.14);
-}
-
-.round-btn:focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
-.round-btn.completed {
-  box-shadow: 0 3px 12px rgba(34,197,94,0.2);
-}
-
-.round-btn.completed::after {
-  content: '✓';
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 20px;
-  height: 20px;
-  background: #22c55e;
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 800;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 20px;
-  text-align: center;
-}
-
-.round-btn-icon {
-  font-size: 1.7rem;
-  line-height: 1;
-}
-
-.round-btn-num {
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  opacity: 0.75;
-  text-transform: uppercase;
-}
-
-.round-btn-label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  opacity: 0.9;
-}
-
-/* Round info display during quiz */
-.round-info {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
 }
 
 /* Results buttons container */
@@ -2429,11 +2336,9 @@ main {
   .mood-visual { padding: 0.5rem 0.75rem; font-size: 1.4rem; }
   #mood-form { padding: 1.25rem; }
   .answer-grid { grid-template-columns: 1fr; }
-  .round-selector { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
-  .round-selector-card { padding: 1.75rem 1.25rem; }
-  .round-selector-title { font-size: 1.25rem; }
   .results-buttons { flex-direction: column; }
   .results-again-btn, .results-back-btn { width: 100%; }
+  .series-picker { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
 
   /* Fidget games responsive */
   .fidget-game-card { padding: 1.5rem 1rem; }
@@ -2442,6 +2347,4 @@ main {
   #spinner-game { width: 88vw; height: 88vw; max-width: 240px; max-height: 240px; }
   #dot-tapper-game { width: 88vw; height: 88vw; max-width: 230px; max-height: 230px; }
   #stress-ball-game { width: 80vw; height: 80vw; max-width: 190px; max-height: 190px; }
-  .round-btn { min-height: 90px; padding: 0.8rem 0.4rem; }
-  .round-btn-icon { font-size: 1.4rem; }
 }
