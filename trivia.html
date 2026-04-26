@@ -175,6 +175,7 @@
     // ── Start screen ───────────────────────────────────────────
     function renderStart() {
       stopTimer();
+      answering = false;
       const wrap = document.getElementById('question-wrap');
       wrap.innerHTML = `
         <div class="start-card">
@@ -322,7 +323,6 @@
     function renderGameOver() {
       stopTimer();
       const wrap = document.getElementById('question-wrap');
-      const g    = gradeInfo(score, Q_COUNT);
       wrap.innerHTML = `
         <div class="results-card" style="--results-grad:linear-gradient(135deg,#fce7f3,#ffe4e6)">
           <div class="results-grade" aria-hidden="true">💔</div>
