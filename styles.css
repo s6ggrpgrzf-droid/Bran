@@ -2460,17 +2460,89 @@ main {
   }
 }
 
-.shippo-anim.running {
-  animation: shippoRun var(--duration) ease-in-out forwards;
-}
-
-.shippo-anim.running-reverse {
-  animation: shippoRunReverse var(--duration) ease-in-out forwards;
-}
 
 .shippo-anim.popping {
   animation: shippoPopIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
-            shippoPopOut 0.5s ease-in 1.5s forwards;
+            shippoPopOut 0.5s ease-in 1.5s forwards,
+            shippoPulse 0.6s ease-in-out 0.4s infinite;
+}
+
+/* ── Shippo Trail Particles ────────────────────────────────── */
+.shippo-trail {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 165, 0, 0.6), rgba(255, 165, 0, 0));
+  pointer-events: none;
+  z-index: 4;
+  animation: trailFade 0.6s ease-out forwards;
+  box-shadow: 0 0 12px rgba(255, 165, 0, 0.5);
+}
+
+@keyframes trailFade {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+/* ── Enhanced Shippo Animations with Effects ─────────────── */
+@keyframes shippoRunWithEffects {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scaleX(1) rotate(var(--initial-rotation));
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.6));
+  }
+  50% {
+    transform: translateX(calc(var(--run-end, 1000) * 0.5px)) translateY(-12px) scaleX(1) rotate(calc(var(--initial-rotation) + 15deg));
+    filter: drop-shadow(0 0 16px rgba(255, 165, 0, 0.8)) blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(calc(var(--run-end, 1000) * 1px)) translateY(0) scaleX(1) rotate(calc(var(--initial-rotation) + 360deg));
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.6));
+  }
+}
+
+@keyframes shippoRunReverseWithEffects {
+  0% {
+    opacity: 1;
+    transform: translateX(0) translateY(0) scaleX(-1) rotate(var(--initial-rotation));
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.6));
+  }
+  50% {
+    transform: translateX(calc(var(--run-end, 1000) * -0.5px)) translateY(-12px) scaleX(-1) rotate(calc(var(--initial-rotation) + 15deg));
+    filter: drop-shadow(0 0 16px rgba(255, 165, 0, 0.8)) blur(0.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(calc(var(--run-end, 1000) * -1px)) translateY(0) scaleX(-1) rotate(calc(var(--initial-rotation) + 360deg));
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.6));
+  }
+}
+
+@keyframes shippoPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.6), 0 0 16px rgba(255, 165, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 16px rgba(255, 165, 0, 0.8), 0 0 24px rgba(255, 165, 0, 0.5);
+  }
+}
+
+.shippo-anim.running {
+  animation: shippoRunWithEffects var(--duration) ease-in-out forwards;
+}
+
+.shippo-anim.running-reverse {
+  animation: shippoRunReverseWithEffects var(--duration) ease-in-out forwards;
 }
 
 /* ── Responsive ─────────────────────────────────────────── */

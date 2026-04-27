@@ -443,37 +443,52 @@
         const isLeftToRight = Math.random() > 0.5;
         const topPos = Math.random() * (window.innerHeight * 0.6) + window.innerHeight * 0.2;
         const duration = 3 + Math.random() * 2;
+        const rotation = Math.random() * 360;
 
-        if (this.shippoImageUrl) {
-          animEl.style.cssText = [
-            `background-image: url('${this.shippoImageUrl}')`,
-            `top: ${topPos}px`,
-            `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
-            `--run-end: ${window.innerWidth + 180}`,
-            `--duration: ${duration}s`,
-          ].join(';');
-        } else {
-          // Fallback: use emoji
-          animEl.textContent = '🦊';
-          animEl.style.cssText = [
-            `top: ${topPos}px`,
-            `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
-            `--run-end: ${window.innerWidth + 180}`,
-            `--duration: ${duration}s`,
-            'font-size: 60px',
-            'display: flex',
-            'align-items: center',
-            'justify-content: center',
-          ].join(';');
-        }
+        // Use local image file if available, fallback to emoji
+        const imageUrl = 'shippo.png';
+        animEl.style.cssText = [
+          `background-image: url('${imageUrl}')`,
+          `top: ${topPos}px`,
+          `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
+          `--run-end: ${window.innerWidth + 180}`,
+          `--duration: ${duration}s`,
+          `--initial-rotation: ${rotation}deg`,
+        ].join(';');
 
         animEl.className = isLeftToRight ? 'shippo-anim running' : 'shippo-anim running-reverse';
 
         container.appendChild(animEl);
 
+        // Add particle trail effect
+        this.createTrail(animEl, isLeftToRight, topPos, duration);
+
         setTimeout(() => {
           animEl.remove();
         }, (duration + 0.5) * 1000);
+      },
+
+      createTrail(shippoEl, isLeftToRight, topPos, duration) {
+        const container = document.getElementById('shippo-animations');
+        if (!container) return;
+
+        const interval = setInterval(() => {
+          const rect = shippoEl.getBoundingClientRect();
+          if (rect.left < -100 || rect.left > window.innerWidth + 100) {
+            clearInterval(interval);
+            return;
+          }
+
+          const particle = document.createElement('div');
+          particle.className = 'shippo-trail';
+          particle.style.cssText = [
+            `left: ${rect.left}px`,
+            `top: ${rect.top + rect.height / 2}px`,
+          ].join(';');
+          container.appendChild(particle);
+
+          setTimeout(() => particle.remove(), 600);
+        }, 80);
       },
 
       createPoppingAnimation() {
@@ -489,28 +504,16 @@
         ];
 
         const corner = corners[Math.floor(Math.random() * corners.length)];
+        const rotation = Math.random() * 360;
 
         const animEl = document.createElement('div');
         animEl.className = 'shippo-anim popping';
-
-        if (this.shippoImageUrl) {
-          animEl.style.cssText = [
-            `background-image: url('${this.shippoImageUrl}')`,
-            `left: ${corner.x}px`,
-            `top: ${corner.y}px`,
-          ].join(';');
-        } else {
-          // Fallback: use emoji
-          animEl.textContent = '🦊';
-          animEl.style.cssText = [
-            `left: ${corner.x}px`,
-            `top: ${corner.y}px`,
-            'font-size: 60px',
-            'display: flex',
-            'align-items: center',
-            'justify-content: center',
-          ].join(';');
-        }
+        animEl.style.cssText = [
+          `background-image: url('shippo.png')`,
+          `left: ${corner.x}px`,
+          `top: ${corner.y}px`,
+          `--initial-rotation: ${rotation}deg`,
+        ].join(';');
 
         container.appendChild(animEl);
 
