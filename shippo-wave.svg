@@ -1,50 +1,94 @@
-<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-  <!-- Body -->
-  <ellipse cx="50" cy="70" rx="20" ry="26" fill="#D4A574"/>
+<svg viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg">
+  <!-- Tail (prominent and fluffy) -->
+  <g>
+    <path d="M 62 100 Q 85 100 95 75" stroke="#C8714F" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <!-- Tail stripes -->
+    <path d="M 65 98 L 69 94" stroke="#8B5A2B" stroke-width="1.5" opacity="0.6"/>
+    <path d="M 75 93 L 80 87" stroke="#8B5A2B" stroke-width="1.5" opacity="0.6"/>
+    <path d="M 86 80 L 91 74" stroke="#8B5A2B" stroke-width="1.5" opacity="0.6"/>
+  </g>
 
-  <!-- Head -->
-  <circle cx="50" cy="38" r="18" fill="#CD8B4F"/>
+  <!-- Body/Clothes -->
+  <ellipse cx="50" cy="85" rx="22" ry="26" fill="#2FA8A8"/>
+  <!-- Shirt details -->
+  <circle cx="44" cy="82" r="2" fill="#FFD700"/>
+  <circle cx="56" cy="82" r="2" fill="#FFD700"/>
 
-  <!-- Ears -->
-  <polygon points="38,22 32,10 37,25" fill="#CD8B4F"/>
-  <polygon points="62,22 68,10 63,25" fill="#CD8B4F"/>
-  <polygon points="38,22 35,14 36,24" fill="#8B6F47"/>
-  <polygon points="62,22 65,14 64,24" fill="#8B6F47"/>
+  <!-- Pants -->
+  <rect x="43" y="108" width="14" height="18" fill="#1a1a4d" rx="2"/>
 
-  <!-- Hair ribbon -->
-  <rect x="42" y="12" width="16" height="7" fill="#20B2AA" rx="2"/>
+  <!-- Paws/Feet -->
+  <circle cx="47" cy="128" r="2.5" fill="#C8714F"/>
+  <circle cx="53" cy="128" r="2.5" fill="#C8714F"/>
 
-  <!-- Eyes -->
-  <circle cx="44" cy="35" r="2.5" fill="#000"/>
-  <circle cx="56" cy="35" r="2.5" fill="#000"/>
-  <circle cx="45" cy="34" r="1.2" fill="#FFF"/>
-  <circle cx="57" cy="34" r="1.2" fill="#FFF"/>
-
-  <!-- Big happy smile -->
-  <path d="M 43 42 Q 50 46 57 42" stroke="#000" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-  <path d="M 45 42 Q 50 44 55 42" fill="#FFB6C1" opacity="0.6"/>
-
-  <!-- Clothes - shirt -->
-  <rect x="36" y="52" width="28" height="18" fill="#20B2AA" rx="2"/>
-  <circle cx="44" cy="59" r="1.8" fill="#FFD700"/>
-  <circle cx="56" cy="59" r="1.8" fill="#FFD700"/>
-
-  <!-- Clothes - pants -->
-  <rect x="40" y="70" width="20" height="20" fill="#000080"/>
-
-  <!-- Left arm (waving) -->
-  <rect x="30" y="60" width="7" height="16" fill="#CD8B4F" rx="3.5" transform="rotate(-35 33 60)"/>
-  <circle cx="25" cy="52" r="5" fill="#CD8B4F"/>
+  <!-- Left arm (waving!) -->
+  <g>
+    <ellipse cx="28" cy="70" rx="5" ry="12" fill="#2FA8A8" transform="rotate(-40 28 70)"/>
+    <ellipse cx="22" cy="50" rx="5" ry="12" fill="#2FA8A8" transform="rotate(-45 22 50)"/>
+    <!-- Hand -->
+    <circle cx="18" cy="40" r="4.5" fill="#C8714F"/>
+    <!-- Fingers -->
+    <circle cx="16" cy="37" r="1.5" fill="#C8714F"/>
+    <circle cx="19" cy="36" r="1.5" fill="#C8714F"/>
+    <circle cx="20" cy="40" r="1.5" fill="#C8714F"/>
+  </g>
 
   <!-- Right arm -->
-  <rect x="63" y="60" width="7" height="14" fill="#CD8B4F" rx="3.5"/>
-  <circle cx="68" cy="76" r="4" fill="#CD8B4F"/>
+  <rect x="66" y="75" width="7" height="18" fill="#2FA8A8" rx="3.5"/>
+  <circle cx="72" cy="95" r="3.5" fill="#C8714F"/>
 
-  <!-- Tail -->
-  <path d="M 65 88 Q 80 90 85 80" stroke="#CD8B4F" stroke-width="7" fill="none" stroke-linecap="round"/>
-  <path d="M 65 88 Q 80 90 85 80" stroke="#8B6F47" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-dasharray="2,3"/>
+  <!-- Head (large, cute) -->
+  <circle cx="50" cy="43" r="25" fill="#C8714F"/>
 
-  <!-- Hands -->
-  <circle cx="23" cy="48" r="4" fill="#D4A574"/>
-  <circle cx="69" cy="72" r="3.5" fill="#D4A574"/>
+  <!-- Snout/Muzzle -->
+  <ellipse cx="50" cy="52" rx="13" ry="11" fill="#E8B384"/>
+
+  <!-- Ears (pointed fox ears) -->
+  <g>
+    <!-- Left ear -->
+    <polygon points="30,18 20,-2 26,30" fill="#C8714F"/>
+    <polygon points="30,18 25,8 28,28" fill="#E8B384"/>
+    <!-- Right ear -->
+    <polygon points="70,18 80,-2 74,30" fill="#C8714F"/>
+    <polygon points="70,18 75,8 72,28" fill="#E8B384"/>
+  </g>
+
+  <!-- Hair puff -->
+  <circle cx="38" cy="20" r="6" fill="#D4860F"/>
+  <circle cx="62" cy="20" r="6" fill="#D4860F"/>
+  <circle cx="50" cy="14" r="7" fill="#D4860F"/>
+
+  <!-- Hair ribbon -->
+  <rect x="36" y="10" width="28" height="9" fill="#2FA8A8" rx="4"/>
+  <circle cx="40" cy="12" r="2" fill="#2FA8A8"/>
+  <circle cx="60" cy="12" r="2" fill="#2FA8A8"/>
+
+  <!-- Big expressive eyes -->
+  <g>
+    <!-- Left eye -->
+    <ellipse cx="40" cy="40" rx="5.5" ry="7" fill="#FFF"/>
+    <circle cx="40" cy="42" r="3.5" fill="#000"/>
+    <circle cx="41" cy="39" r="2" fill="#FFF"/>
+
+    <!-- Right eye -->
+    <ellipse cx="60" cy="40" rx="5.5" ry="7" fill="#FFF"/>
+    <circle cx="60" cy="42" r="3.5" fill="#000"/>
+    <circle cx="61" cy="39" r="2" fill="#FFF"/>
+  </g>
+
+  <!-- Eyebrows (friendly) -->
+  <path d="M 36 35 Q 40 32 44 35" stroke="#8B5A2B" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M 56 35 Q 60 32 64 35" stroke="#8B5A2B" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+  <!-- Nose -->
+  <ellipse cx="50" cy="50" rx="2.5" ry="3" fill="#000"/>
+
+  <!-- Big happy smile -->
+  <path d="M 46 56 Q 50 60 54 56" stroke="#000" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Mouth interior -->
+  <path d="M 47 56 Q 50 58 53 56" fill="#FFB6C1" opacity="0.5"/>
+
+  <!-- Rosy cheeks -->
+  <circle cx="30" cy="46" r="3.5" fill="#FFB6C1" opacity="0.7"/>
+  <circle cx="70" cy="46" r="3.5" fill="#FFB6C1" opacity="0.7"/>
 </svg>
