@@ -1,0 +1,51 @@
+<svg viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Body -->
+  <ellipse cx="40" cy="60" rx="16" ry="22" fill="#D4A574"/>
+
+  <!-- Head -->
+  <circle cx="40" cy="32" r="16" fill="#CD8B4F"/>
+
+  <!-- Ears -->
+  <polygon points="30,18 24,8 29,22" fill="#CD8B4F"/>
+  <polygon points="50,18 56,8 51,22" fill="#CD8B4F"/>
+  <polygon points="30,18 28,12 29,21" fill="#8B6F47"/>
+  <polygon points="50,18 52,12 51,21" fill="#8B6F47"/>
+
+  <!-- Hair ribbon/bow -->
+  <ellipse cx="40" cy="10" rx="8" ry="5" fill="#20B2AA"/>
+  <circle cx="34" cy="8" r="2.5" fill="#20B2AA"/>
+  <circle cx="46" cy="8" r="2.5" fill="#20B2AA"/>
+
+  <!-- Eyes (big and cute) -->
+  <circle cx="35" cy="30" r="3" fill="#000"/>
+  <circle cx="45" cy="30" r="3" fill="#000"/>
+  <circle cx="36" cy="28" r="1.5" fill="#FFF"/>
+  <circle cx="46" cy="28" r="1.5" fill="#FFF"/>
+
+  <!-- Cute smile -->
+  <path d="M 36 36 Q 40 39 44 36" stroke="#000" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+  <!-- Rosy cheeks -->
+  <circle cx="28" cy="34" r="2.5" fill="#FFB6C1" opacity="0.6"/>
+  <circle cx="52" cy="34" r="2.5" fill="#FFB6C1" opacity="0.6"/>
+
+  <!-- Clothes - shirt -->
+  <rect x="32" y="48" width="16" height="14" fill="#20B2AA" rx="1.5"/>
+  <circle cx="37" cy="54" r="1.2" fill="#FFD700"/>
+  <circle cx="43" cy="54" r="1.2" fill="#FFD700"/>
+
+  <!-- Clothes - pants -->
+  <rect x="35" y="62" width="10" height="14" fill="#000080"/>
+
+  <!-- Arms -->
+  <rect x="25" y="52" width="5" height="10" fill="#CD8B4F" rx="2.5"/>
+  <rect x="50" y="52" width="5" height="10" fill="#CD8B4F" rx="2.5"/>
+
+  <!-- Tail -->
+  <path d="M 53 75 Q 68 72 72 62" stroke="#CD8B4F" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M 53 75 Q 68 72 72 62" stroke="#8B6F47" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-dasharray="1,2"/>
+
+  <!-- Feet/paws -->
+  <circle cx="38" cy="77" r="2" fill="#D4A574"/>
+  <circle cx="42" cy="77" r="2" fill="#D4A574"/>
+</svg>

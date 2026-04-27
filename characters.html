@@ -445,8 +445,8 @@
         const duration = 3 + Math.random() * 2;
         const rotation = Math.random() * 360;
 
-        // Use local image file if available, fallback to emoji
-        const imageUrl = 'shippo.png';
+        // Use SVG animation image (cheerleader version for energy!)
+        const imageUrl = 'shippo-cheerleader.svg';
         animEl.style.cssText = [
           `background-image: url('${imageUrl}')`,
           `top: ${topPos}px`,
@@ -509,7 +509,7 @@
         const animEl = document.createElement('div');
         animEl.className = 'shippo-anim popping';
         animEl.style.cssText = [
-          `background-image: url('shippo.png')`,
+          `background-image: url('shippo-wave.svg')`,
           `left: ${corner.x}px`,
           `top: ${corner.y}px`,
           `--initial-rotation: ${rotation}deg`,
