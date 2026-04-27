@@ -387,22 +387,27 @@
       async init() {
         try {
           const shippoCharIdx = CHARACTERS.findIndex(c => c.name === 'Shippo');
+          console.log('Shippo index:', shippoCharIdx);
           if (shippoCharIdx === -1) return;
 
           const shippoChar = CHARACTERS[shippoCharIdx];
+          console.log('Shippo character:', shippoChar);
           this.shippoImageUrl = await fetchCharImage(shippoChar);
+          console.log('Shippo image URL:', this.shippoImageUrl || '(using emoji fallback)');
 
-          if (this.shippoImageUrl) {
-            this.isInitialized = true;
-            this.startRandomSchedule();
-          }
+          // Start animations regardless of image availability (will use emoji fallback if needed)
+          this.isInitialized = true;
+          console.log('Shippo initialized, starting animations');
+          this.startRandomSchedule();
         } catch (e) {
-          // Fail silently if image fetch fails
+          console.error('Shippo init error:', e);
         }
       },
 
       startRandomSchedule() {
+        console.log('startRandomSchedule called');
         const spawnRandomAnimation = () => {
+          console.log('Spawning animation');
           if (Math.random() > 0.4) {
             this.createRunningAnimation();
           } else {
@@ -426,7 +431,11 @@
 
       createRunningAnimation() {
         const container = document.getElementById('shippo-animations');
-        if (!container) return;
+        console.log('Creating running animation, container:', container);
+        if (!container) {
+          console.log('No animation container found');
+          return;
+        }
 
         const animEl = document.createElement('div');
         animEl.className = 'shippo-anim';
@@ -435,13 +444,28 @@
         const topPos = Math.random() * (window.innerHeight * 0.6) + window.innerHeight * 0.2;
         const duration = 3 + Math.random() * 2;
 
-        animEl.style.cssText = [
-          `background-image: url('${this.shippoImageUrl}')`,
-          `top: ${topPos}px`,
-          `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
-          `--run-end: ${window.innerWidth + 180}`,
-          `--duration: ${duration}s`,
-        ].join(';');
+        if (this.shippoImageUrl) {
+          animEl.style.cssText = [
+            `background-image: url('${this.shippoImageUrl}')`,
+            `top: ${topPos}px`,
+            `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
+            `--run-end: ${window.innerWidth + 180}`,
+            `--duration: ${duration}s`,
+          ].join(';');
+        } else {
+          // Fallback: use emoji
+          animEl.textContent = '🦊';
+          animEl.style.cssText = [
+            `top: ${topPos}px`,
+            `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
+            `--run-end: ${window.innerWidth + 180}`,
+            `--duration: ${duration}s`,
+            'font-size: 60px',
+            'display: flex',
+            'align-items: center',
+            'justify-content: center',
+          ].join(';');
+        }
 
         animEl.className = isLeftToRight ? 'shippo-anim running' : 'shippo-anim running-reverse';
 
@@ -454,6 +478,7 @@
 
       createPoppingAnimation() {
         const container = document.getElementById('shippo-animations');
+        console.log('Creating popping animation, container:', container);
         if (!container) return;
 
         const corners = [
@@ -467,11 +492,25 @@
 
         const animEl = document.createElement('div');
         animEl.className = 'shippo-anim popping';
-        animEl.style.cssText = [
-          `background-image: url('${this.shippoImageUrl}')`,
-          `left: ${corner.x}px`,
-          `top: ${corner.y}px`,
-        ].join(';');
+
+        if (this.shippoImageUrl) {
+          animEl.style.cssText = [
+            `background-image: url('${this.shippoImageUrl}')`,
+            `left: ${corner.x}px`,
+            `top: ${corner.y}px`,
+          ].join(';');
+        } else {
+          // Fallback: use emoji
+          animEl.textContent = '🦊';
+          animEl.style.cssText = [
+            `left: ${corner.x}px`,
+            `top: ${corner.y}px`,
+            'font-size: 60px',
+            'display: flex',
+            'align-items: center',
+            'justify-content: center',
+          ].join(';');
+        }
 
         container.appendChild(animEl);
 
