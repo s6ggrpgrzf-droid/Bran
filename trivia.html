@@ -9,83 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    .trivia-intro {
-      text-align: center;
-      padding: 1rem 1.25rem 0.25rem;
-      color: rgba(255,255,255,0.7);
-      font-size: 0.95rem;
-      line-height: 1.55;
-      max-width: 520px;
-      margin: 0 auto 1.1rem;
-    }
-    .trivia-score-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .trivia-score-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.15rem;
-    }
-    .trivia-score-label {
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-    }
-    .trivia-best-score {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: rgba(255,255,255,0.55);
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 20px;
-      padding: 0.2rem 0.65rem;
-      white-space: nowrap;
-    }
-    .question-num {
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--color-text-muted, #8b7490);
-      margin-bottom: 0.5rem;
-    }
-    .streak-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #f97316, #fbbf24);
-      color: #fff;
-      border-radius: 20px;
-      padding: 0.2rem 0.65rem;
-      margin-bottom: 0.5rem;
-      letter-spacing: 0.04em;
-      box-shadow: 0 2px 8px rgba(249,115,22,0.35);
-      animation: streakPop 0.35s cubic-bezier(0.34,1.56,0.64,1);
-    }
-    @keyframes streakPop {
-      from { transform: scale(0.7); opacity: 0; }
-      to   { transform: scale(1);   opacity: 1; }
-    }
-    .results-pct {
-      font-family: 'Nunito', sans-serif;
-      font-size: 2.4rem;
-      font-weight: 800;
-      background: var(--gradient-main, linear-gradient(135deg,#e87ca0,#a78bfa));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1.1;
-      margin: 0.25rem 0 0.1rem;
-    }
-  </style>
 </head>
 <body>
   <div id="bg-stars" aria-hidden="true"></div>
@@ -108,44 +31,7 @@
       <div class="container">
         <h2 id="trivia-heading" class="sr-only">Trivia Quiz</h2>
 
-        <!-- Intro -->
-        <p class="trivia-intro">Test your knowledge across three legendary universes. Questions shuffle every round — see if you can beat your best score!</p>
-
-        <!-- Filter -->
-        <div class="trivia-filter" role="group" aria-label="Filter by series">
-          <button class="trivia-filter__btn active"
-                  style="--series-color:#e87ca0"
-                  data-filter="all">All</button>
-          <button class="trivia-filter__btn"
-                  style="--series-color:#f97316"
-                  data-filter="naruto">Naruto 🍥</button>
-          <button class="trivia-filter__btn"
-                  style="--series-color:#9333ea"
-                  data-filter="inuyasha">Inuyasha ⚔️</button>
-          <button class="trivia-filter__btn"
-                  style="--series-color:#eab308"
-                  data-filter="starwars">Star Wars ✨</button>
-        </div>
-
-        <!-- Score -->
-        <div class="trivia-hero">
-          <div class="trivia-score-wrap" aria-live="polite">
-            <div class="trivia-score-col">
-              <div class="trivia-score-label">Score</div>
-              <div class="trivia-score" id="score-display">
-                <span id="score-correct">0</span>
-                <span>/</span>
-                <span id="score-total">0</span>
-              </div>
-            </div>
-            <div class="trivia-score-col">
-              <div class="trivia-score-label">Best</div>
-              <div class="trivia-best-score" id="best-display">—</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Question card -->
+        <!-- Game area -->
         <div id="question-wrap"></div>
 
       </div>
@@ -179,12 +65,17 @@
       <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
       <span class="bottom-nav__label">Trivia</span>
     </a>
+    <a href="fidget-games.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__label">Fidgets</span>
+    </a>
     <a href="memorial.html" class="bottom-nav__item">
       <span class="bottom-nav__icon" aria-hidden="true">💜</span>
       <span class="bottom-nav__label">Mom</span>
     </a>
   </nav>
 
+  <script src="trivia-questions.js"></script>
   <script>
     'use strict';
 
@@ -206,261 +97,28 @@
       }
     })();
 
-    // ── Question bank ─────────────────────────────────────────
-    const QUESTIONS = [
-      // ── Naruto ──
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Naruto's signature jutsu?",
-        answers: ["Rasengan", "Shadow Clone Jutsu", "Chidori", "Substitution Jutsu"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Who is Naruto's primary mentor?",
-        answers: ["Kakashi Hatake", "Iruka Umino", "Jiraiya", "Minato Namikaze"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which tailed beast is sealed inside Naruto?",
-        answers: ["Eight-Tails", "Seven-Tails", "One-Tail", "Nine-Tails"],
-        correct: 3
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Sasuke's evolved Sharingan called?",
-        answers: ["Byakugan", "Mangekyō Sharingan", "Rinnegan", "Tenseigan"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which village is Naruto from?",
-        answers: ["Sand Village", "Mist Village", "Leaf Village", "Cloud Village"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Rock Lee's fighting style?",
-        answers: ["Genjutsu", "Ninjutsu", "Kenjutsu", "Taijutsu only"],
-        correct: 3
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Who ultimately defeated Itachi Uchiha?",
-        answers: ["Naruto", "Kakashi", "Sasuke", "Obito"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Sakura's specialty in battle?",
-        answers: ["Water style ninjutsu", "Medical ninjutsu", "Fire style ninjutsu", "Illusion techniques"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which clan does Neji Hyuga belong to?",
-        answers: ["Uchiha", "Nara", "Hyuga", "Akimichi"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is the Akatsuki's primary goal?",
-        answers: ["Destroy Konoha", "Kill the Hokages", "Collect all tailed beasts", "Rule the world"],
-        correct: 2
-      },
+    // ── Constants ─────────────────────────────────────────────
+    const TIMER_SECS  = 15;
+    const MAX_LIVES   = 3;
+    const Q_COUNT     = 20;
+    const ANSWER_LETTERS = ['A', 'B', 'C', 'D'];
 
-      // ── Inuyasha ──
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is the Shikon Jewel also known as?",
-        answers: ["Sacred Stone", "Demon Pearl", "Spirit Gem", "Jewel of Four Souls"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Who accidentally shattered the Shikon Jewel into fragments?",
-        answers: ["Inuyasha", "Sango", "Miroku", "Kagome"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is Inuyasha's signature demon-slaying sword?",
-        answers: ["Tenseiga", "Toukijin", "Tessaiga", "Bakusaiga"],
-        correct: 2
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What magic word forces Inuyasha to sit?",
-        answers: ['"Down!"', '"Heel!"', '"Stop!"', '"Sit!" (Osuwari)'],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Who is Inuyasha's older full-demon brother?",
-        answers: ["Naraku", "Bankotsu", "Koga", "Sesshomaru"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What exactly is Naraku?",
-        answers: ["A pure demon lord", "A wolf demon alpha", "A human sorcerer", "A half-demon formed from many demons"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What dangerous power is hidden in Miroku's right hand?",
-        answers: ["Hiraikotsu", "Rosary beads", "Wind Tunnel", "A sacred scroll"],
-        correct: 2
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Where is Kagome originally from?",
-        answers: ["Feudal Japan", "Spirit World", "China", "Modern Japan"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is Sango's signature weapon?",
-        answers: ["Katana", "Sacred bow", "Battle staff", "Hiraikotsu (giant boomerang)"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What kind of demon is Shippo?",
-        answers: ["Wolf demon", "Tanuki demon", "A human child", "Young fox demon"],
-        correct: 3
-      },
-
-      // ── Star Wars ──
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What Sith name did Anakin Skywalker take?",
-        answers: ["Darth Maul", "Darth Plagueis", "Darth Tyranus", "Darth Vader"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What color is Mace Windu's lightsaber?",
-        answers: ["Blue", "Green", "Red", "Purple"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What species is Yoda?",
-        answers: ["Rodian", "Jedi", "Goblin", "Unknown (unnamed species)"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is the Millennium Falcon's most famous feat?",
-        answers: ["Never breaking down", "Fastest ship in the Republic", "Has a cloaking device", "Kessel Run in 12 parsecs"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: 'Who famously said "I am your father"?',
-        answers: ["Darth Sidious", "Obi-Wan Kenobi", "Yoda", "Darth Vader"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What planet is Han Solo from?",
-        answers: ["Tatooine", "Coruscant", "Mandalore", "Corellia"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is Princess Leia's home planet?",
-        answers: ["Naboo", "Coruscant", "Tatooine", "Alderaan"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is the Force-sensitive child in The Mandalorian called?",
-        answers: ["Yaddle", "Yoda", "Wookiee", "Grogu (Baby Yoda)"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "Who trained Obi-Wan Kenobi as a Padawan?",
-        answers: ["Yoda", "Mace Windu", "Count Dooku", "Qui-Gon Jinn"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "How does R2-D2 primarily communicate?",
-        answers: ["Binary code", "English subtitles", "Holographic messages", "Beeps and whistles"],
-        correct: 3
-      },
+    const SERIES_META = [
+      { id:'all',      label:'All Series',   icon:'🎯', color:'#e87ca0', count: TRIVIA_QUESTIONS.length },
+      { id:'naruto',   label:'Naruto',        icon:'🍥', color:'#f97316', count: TRIVIA_QUESTIONS.filter(q=>q.series==='naruto').length },
+      { id:'inuyasha', label:'Inuyasha',      icon:'⚔️', color:'#9333ea', count: TRIVIA_QUESTIONS.filter(q=>q.series==='inuyasha').length },
+      { id:'starwars', label:'Star Wars',     icon:'✨', color:'#eab308', count: TRIVIA_QUESTIONS.filter(q=>q.series==='starwars').length },
     ];
 
     // ── State ─────────────────────────────────────────────────
-    let activeFilter = 'all';
-    let deck = [];
-    let deckIdx = 0;
-    let scoreCorrect = 0;
-    let streak = 0;
+    let lives        = MAX_LIVES;
+    let score        = 0;
+    let deck         = [];
+    let deckIdx      = 0;
+    let timerVal     = TIMER_SECS;
+    let timerInterval = null;
+    let activeSeries = 'all';
+    let answering    = false;
 
     // ── Helpers ───────────────────────────────────────────────
     function shuffle(arr) {
@@ -474,75 +132,104 @@
 
     function gradeInfo(correct, total) {
       const pct = total === 0 ? 0 : correct / total;
-      if (pct >= 0.9) return { emoji: '🏆', title: 'Legendary!',     sub: "Naruto would be proud of you, Brandon." };
-      if (pct >= 0.7) return { emoji: '⭐', title: 'Nice work!',      sub: "Solid nerd credentials — Jiraiya approves." };
-      if (pct >= 0.5) return { emoji: '👍', title: 'Not bad!',        sub: "Worth a rewatch. Even Rock Lee had to keep training." };
-      return               { emoji: '🌱', title: 'Keep at it!',      sub: "The force is still with you, always." };
+      if (pct >= 0.9) return { emoji:'🏆', title:'Legendary!',    sub:'Naruto would be proud of you, Brandon.',              grad:'linear-gradient(135deg,#fef9c3,#fde68a)' };
+      if (pct >= 0.7) return { emoji:'⭐', title:'Nice work!',     sub:'Solid nerd credentials — Jiraiya approves.',          grad:'linear-gradient(135deg,#dbeafe,#bfdbfe)' };
+      if (pct >= 0.5) return { emoji:'👍', title:'Not bad!',       sub:'Worth a rewatch. Even Rock Lee had to keep training.', grad:'linear-gradient(135deg,#dcfce7,#bbf7d0)' };
+      return               { emoji:'🌱', title:'Keep at it!',    sub:'The force is still with you, always.',                grad:'linear-gradient(135deg,#fce7f3,#ede9fe)' };
     }
 
-    // ── Personal best ─────────────────────────────────────────
-    function bestKey() { return `bran_trivia_best_${activeFilter}`; }
-
-    function loadBest() {
-      try { return JSON.parse(localStorage.getItem(bestKey())); } catch { return null; }
+    function heartsHTML() {
+      return Array.from({ length: MAX_LIVES }, (_, i) =>
+        `<span class="heart${i >= lives ? ' lost' : ''}" aria-hidden="true">${i < lives ? '❤️' : '🤍'}</span>`
+      ).join('');
     }
 
-    function saveBest(correct, total) {
-      const prev = loadBest();
-      const prevPct = prev ? prev.correct / prev.total : -1;
-      const newPct  = total > 0 ? correct / total : 0;
-      if (newPct >= prevPct) {
-        try { localStorage.setItem(bestKey(), JSON.stringify({ correct, total })); } catch {}
-      }
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
     }
 
-    function updateBestDisplay() {
-      const b = loadBest();
-      document.getElementById('best-display').textContent = b ? `${b.correct}/${b.total}` : '—';
-    }
+    // ── Build deck ─────────────────────────────────────────────
+    function buildDeck(filter) {
+      const pool = filter === 'all'
+        ? TRIVIA_QUESTIONS
+        : TRIVIA_QUESTIONS.filter(q => q.series === filter);
 
-    // ── Build deck ────────────────────────────────────────────
-    function buildDeck() {
-      const pool = activeFilter === 'all'
-        ? QUESTIONS
-        : QUESTIONS.filter(q => q.series === activeFilter);
-      deck = shuffle(pool).map(q => {
-        const paired = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
+      deck = shuffle(pool).slice(0, Q_COUNT).map(q => {
+        const paired   = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
         const shuffled = shuffle(paired);
         return { ...q, shuffledAnswers: shuffled };
       });
-      deckIdx = 0;
-      scoreCorrect = 0;
-      streak = 0;
-      updateScore();
-      updateBestDisplay();
     }
 
-    // ── Score display ─────────────────────────────────────────
-    function updateScore() {
-      document.getElementById('score-correct').textContent = scoreCorrect;
-      document.getElementById('score-total').textContent   = deckIdx;
+    // ── Start game ─────────────────────────────────────────────
+    function startGame(filter) {
+      activeSeries = filter;
+      lives        = MAX_LIVES;
+      score        = 0;
+      deckIdx      = 0;
+      buildDeck(filter);
+      renderQuestion();
     }
 
-    // ── Render question ───────────────────────────────────────
+    // ── Start screen ───────────────────────────────────────────
+    function renderStart() {
+      stopTimer();
+      answering = false;
+      const wrap = document.getElementById('question-wrap');
+      wrap.innerHTML = `
+        <div class="start-card">
+          <h2>Pick a Series</h2>
+          <p class="start-subtitle">${Q_COUNT} questions · ${MAX_LIVES} lives · ${TIMER_SECS} sec each</p>
+          <div class="series-picker" role="group" aria-label="Choose series">
+            ${SERIES_META.map(s => `
+              <button class="series-card" style="--series-color:${s.color}"
+                      data-series="${s.id}" aria-label="Play ${s.label}">
+                <span class="series-card-icon" aria-hidden="true">${s.icon}</span>
+                <span class="series-card-name">${s.label}</span>
+                <span class="series-card-count">${Math.min(s.count, Q_COUNT)} questions</span>
+              </button>`).join('')}
+          </div>
+        </div>`;
+
+      wrap.querySelectorAll('.series-card').forEach(btn => {
+        btn.addEventListener('click', () => startGame(btn.dataset.series));
+      });
+    }
+
+    // ── Timer bar helpers ──────────────────────────────────────
+    function updateTimerBar() {
+      const inner = document.getElementById('timer-inner');
+      if (!inner) return;
+      const pct = (timerVal / TIMER_SECS * 100).toFixed(1);
+      inner.style.width = pct + '%';
+      inner.className = 'progress-bar-inner' +
+        (timerVal <= 4 ? ' timer-urgent' : timerVal <= 8 ? ' timer-warn' : '');
+    }
+
+    // ── Render question ────────────────────────────────────────
     function renderQuestion() {
+      stopTimer();
+      answering = false;
+      timerVal  = TIMER_SECS;
+
       const wrap = document.getElementById('question-wrap');
       const q    = deck[deckIdx];
-      const progress = ((deckIdx / deck.length) * 100).toFixed(1);
-      const streakHtml = streak >= 2
-        ? `<span class="streak-badge">🔥 ${streak} in a row</span>`
-        : '';
 
       wrap.innerHTML = `
-        <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
-          <div class="progress-bar" role="progressbar"
-               aria-valuenow="${deckIdx}" aria-valuemin="0" aria-valuemax="${deck.length}"
-               aria-label="Question progress">
-            <div class="progress-bar-inner" style="width:${progress}%"></div>
+        <div class="question-card" role="region"
+             aria-label="Question ${deckIdx + 1} of ${deck.length}"
+             style="--series-color:${q.seriesColor}">
+          <div class="question-series-header"></div>
+          <div class="progress-bar" role="timer" aria-label="Time remaining">
+            <div class="progress-bar-inner" id="timer-inner" style="width:100%"></div>
+          </div>
+          <div class="game-header">
+            <div class="lives" aria-label="${lives} lives remaining">${heartsHTML()}</div>
+            <div class="q-counter">Q ${deckIdx + 1} / ${deck.length}</div>
+            <div class="score-badge" aria-label="Score: ${score}">⭐ ${score}</div>
           </div>
           <div class="question-body">
-            <div class="question-num">Question ${deckIdx + 1} of ${deck.length}</div>
-            ${streakHtml}
             <span class="question-series-badge"
                   style="--series-color:${q.seriesColor}">${q.seriesLabel}</span>
             <p class="question-text">${q.q}</p>
@@ -550,8 +237,9 @@
           <div class="answer-grid" role="group" aria-label="Answer choices">
             ${q.shuffledAnswers.map((a, i) => `
               <button class="answer-btn" data-idx="${i}"
-                      aria-label="Answer option: ${a.text}">
-                ${a.text}
+                      aria-label="${ANSWER_LETTERS[i]}: ${a.text}">
+                <span class="answer-letter" aria-hidden="true">${ANSWER_LETTERS[i]}</span>
+                <span>${a.text}</span>
               </button>`).join('')}
           </div>
         </div>`;
@@ -559,10 +247,42 @@
       wrap.querySelectorAll('.answer-btn').forEach(btn => {
         btn.addEventListener('click', () => handleAnswer(btn, q));
       });
+
+      startTimer(q);
     }
 
-    // ── Handle answer ─────────────────────────────────────────
+    // ── Timer ──────────────────────────────────────────────────
+    function startTimer(q) {
+      updateTimerBar();
+      timerInterval = setInterval(() => {
+        timerVal--;
+        updateTimerBar();
+        if (timerVal <= 0) {
+          stopTimer();
+          handleTimeout(q);
+        }
+      }, 1000);
+    }
+
+    function handleTimeout(q) {
+      if (answering) return;
+      answering = true;
+      const wrap    = document.getElementById('question-wrap');
+      const allBtns = wrap.querySelectorAll('.answer-btn');
+      allBtns.forEach(b => b.disabled = true);
+      allBtns.forEach((b, i) => {
+        if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
+      });
+      lives--;
+      advanceAfterAnswer(wrap);
+    }
+
+    // ── Handle answer ──────────────────────────────────────────
     function handleAnswer(btn, q) {
+      if (answering) return;
+      answering = true;
+      stopTimer();
+
       const wrap    = document.getElementById('question-wrap');
       const allBtns = wrap.querySelectorAll('.answer-btn');
       const idx     = parseInt(btn.dataset.idx, 10);
@@ -572,70 +292,86 @@
 
       if (correct) {
         btn.classList.add('correct');
-        scoreCorrect++;
-        streak++;
+        score++;
       } else {
         btn.classList.add('wrong');
-        streak = 0;
         allBtns.forEach((b, i) => {
           if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
         });
+        lives--;
       }
 
-      deckIdx++;
-      updateScore();
-
-      setTimeout(() => {
-        if (deckIdx < deck.length) {
-          renderQuestion();
-        } else {
-          renderResults();
-        }
-      }, 900);
+      advanceAfterAnswer(wrap);
     }
 
-    // ── Results ───────────────────────────────────────────────
-    function renderResults() {
-      const wrap  = document.getElementById('question-wrap');
-      const total = deck.length;
-      const g     = gradeInfo(scoreCorrect, total);
-      const pct   = total > 0 ? Math.round((scoreCorrect / total) * 100) : 0;
+    function advanceAfterAnswer(wrap) {
+      // Update hearts immediately
+      const livesEl = wrap.querySelector('.lives');
+      if (livesEl) livesEl.innerHTML = heartsHTML();
+      const scoreEl = wrap.querySelector('.score-badge');
+      if (scoreEl) scoreEl.textContent = `⭐ ${score}`;
 
-      saveBest(scoreCorrect, total);
-      updateBestDisplay();
+      deckIdx++;
+      setTimeout(() => {
+        if (lives <= 0)            renderGameOver();
+        else if (deckIdx >= deck.length) renderResults();
+        else                             renderQuestion();
+      }, 950);
+    }
 
+    // ── Game over ──────────────────────────────────────────────
+    function renderGameOver() {
+      stopTimer();
+      const wrap = document.getElementById('question-wrap');
       wrap.innerHTML = `
-        <div class="results-card">
+        <div class="results-card" style="--results-grad:linear-gradient(135deg,#fce7f3,#ffe4e6)">
+          <div class="results-grade" aria-hidden="true">💔</div>
+          <div class="results-title">Game Over</div>
+          <div class="results-subtitle">
+            You got <strong>${score} out of ${deckIdx}</strong> before running out of lives.
+          </div>
+          <div class="results-buttons">
+            <button class="results-again-btn" id="play-again">Try Again</button>
+            <button class="results-back-btn" id="back-start">Change Series</button>
+          </div>
+        </div>`;
+      document.getElementById('play-again').addEventListener('click', () => startGame(activeSeries));
+      document.getElementById('back-start').addEventListener('click', renderStart);
+    }
+
+    // ── Results ────────────────────────────────────────────────
+    function renderResults() {
+      stopTimer();
+      const wrap = document.getElementById('question-wrap');
+      const g    = gradeInfo(score, Q_COUNT);
+      wrap.innerHTML = `
+        <div class="results-card" style="--results-grad:${g.grad}">
           <div class="results-grade" aria-hidden="true">${g.emoji}</div>
-          <div class="results-pct">${pct}%</div>
           <div class="results-title">${g.title}</div>
           <div class="results-subtitle">
-            You got <strong>${scoreCorrect} out of ${total}</strong> — ${g.sub}
+            You got <strong>${score} out of ${Q_COUNT}</strong> — ${g.sub}
           </div>
-          <button class="results-again-btn" id="play-again">Play Again</button>
+          <div class="results-buttons">
+            <button class="results-again-btn" id="play-again">Play Again</button>
+            <button class="results-back-btn" id="back-start">Change Series</button>
+          </div>
         </div>`;
-
-      document.getElementById('play-again').addEventListener('click', () => {
-        buildDeck();
-        renderQuestion();
-      });
+      document.getElementById('play-again').addEventListener('click', () => startGame(activeSeries));
+      document.getElementById('back-start').addEventListener('click', renderStart);
     }
 
-    // ── Filter ────────────────────────────────────────────────
-    document.querySelectorAll('.trivia-filter__btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.trivia-filter__btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeFilter = btn.dataset.filter;
-        streak = 0;
-        buildDeck();
-        renderQuestion();
-      });
+    // ── Keyboard shortcuts (1-4) ───────────────────────────────
+    document.addEventListener('keydown', e => {
+      const keyMap = { '1':0, '2':1, '3':2, '4':3 };
+      const idx = keyMap[e.key];
+      if (idx === undefined || answering) return;
+      const wrap = document.getElementById('question-wrap');
+      const btns = wrap.querySelectorAll('.answer-btn:not(:disabled)');
+      if (btns[idx]) btns[idx].click();
     });
 
-    // ── Init ──────────────────────────────────────────────────
-    buildDeck();
-    renderQuestion();
+    // ── Init ───────────────────────────────────────────────────
+    renderStart();
   </script>
 </body>
 </html>

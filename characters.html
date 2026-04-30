@@ -79,6 +79,8 @@
     </section>
   </main>
 
+  <div id="shippo-animations" aria-hidden="true"></div>
+
   <footer role="contentinfo">
     <div class="container">
       <p>Characters and quotes belong to their respective creators and studios.</p>
@@ -106,6 +108,10 @@
       <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
       <span class="bottom-nav__label">Trivia</span>
     </a>
+    <a href="fidget-games.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__label">Fidgets</span>
+    </a>
     <a href="memorial.html" class="bottom-nav__item">
       <span class="bottom-nav__icon" aria-hidden="true">💜</span>
       <span class="bottom-nav__label">Mom</span>
@@ -127,11 +133,12 @@
       { series:'naruto',   name:'Sakura Haruno',    role:'Medical Ninja · Team 7',                    avatar:'🌸', imgSearch:'Sakura Haruno',    gifQuery:'sakura haruno punch',          quote:"Having the courage to keep going makes you stronger." },
       // Inuyasha (Jikan API)
       { series:'inuyasha', name:'Inuyasha',         role:'Half-Demon · Wielder of Tessaiga',           avatar:'⚔️', imgSearch:'Inuyasha',         gifQuery:'inuyasha wind scar',           quote:"Keh! Don't you dare underestimate me." },
-      { series:'inuyasha', name:'Kagome Higurashi', avatar:'🏹', role:'Time-Traveling Priestess · Shard Detector',  imgSearch:'Kagome Higurashi', gifQuery:'kagome higurashi arrow',       quote:"No matter how far away you are, my heart is always with you." },
+      { series:'inuyasha', name:'Kagome Higurashi', role:'Time-Traveling Priestess · Shard Detector',  avatar:'🏹', imgSearch:'Kagome Higurashi', gifQuery:'kagome higurashi arrow',       quote:"No matter how far away you are, my heart is always with you." },
       { series:'inuyasha', name:'Sesshomaru',       role:'Demon Lord of the Western Lands',            avatar:'🌙', imgSearch:'Sesshoumaru',      gifQuery:'sesshomaru sword inuyasha',    quote:"This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?" },
       { series:'inuyasha', name:'Kikyo',            role:'Undead Priestess · Guardian of the Jewel',  avatar:'🌺', imgSearch:'Kikyou',           gifQuery:'kikyo inuyasha anime',         quote:"To die was the only freedom open to me. Yet here I stand — between two worlds." },
       { series:'inuyasha', name:'Miroku',           role:'Buddhist Monk · Wind Tunnel Bearer',         avatar:'☯️', imgSearch:'Miroku',           gifQuery:'miroku wind tunnel inuyasha',  quote:"Every life is precious. Even those filled with darkness have the chance to find light." },
       { series:'inuyasha', name:'Sango',            role:'Demon Slayer · Wielder of Hiraikotsu',       avatar:'🛡️', imgSearch:'Sango',            gifQuery:'sango boomerang inuyasha',     quote:"I will protect the people I love, even if it costs me everything." },
+      { series:'inuyasha', name:'Shippo',           role:'Young Fox Demon · Inuyasha\'s Ward',         avatar:'🦊', imgSearch:'Shippo Inuyasha',   gifQuery:'shippo inuyasha kitsune',      quote:"Even the smallest fox can help the ones they care about!" },
       // Star Wars (Wikipedia API)
       { series:'starwars', name:'Yoda',             role:'Jedi Grand Master · Dagobah Exile',          avatar:'🌿', imgSearch:'Yoda',             gifQuery:'yoda star wars',               quote:"Do or do not. There is no try." },
       { series:'starwars', name:'Darth Vader',      role:'Dark Lord of the Sith · Emperor\'s Hand',   avatar:'🖤', imgSearch:'Darth Vader',      gifQuery:'darth vader lightsaber',       quote:"I find your lack of faith disturbing." },
@@ -416,6 +423,151 @@
       }
     }
 
+    // ── Shippo Animation Manager ──────────────────────────────
+    const ShippoAnimationManager = {
+      shippoImageUrl: null,
+      isInitialized: false,
+      animationInterval: null,
+
+      async init() {
+        try {
+          const shippoCharIdx = CHARACTERS.findIndex(c => c.name === 'Shippo');
+          console.log('Shippo index:', shippoCharIdx);
+          if (shippoCharIdx === -1) return;
+
+          const shippoChar = CHARACTERS[shippoCharIdx];
+          console.log('Shippo character:', shippoChar);
+          this.shippoImageUrl = await fetchCharImage(shippoChar);
+          console.log('Shippo image URL:', this.shippoImageUrl || '(using emoji fallback)');
+
+          // Start animations regardless of image availability (will use emoji fallback if needed)
+          this.isInitialized = true;
+          console.log('Shippo initialized, starting animations');
+          this.startRandomSchedule();
+        } catch (e) {
+          console.error('Shippo init error:', e);
+        }
+      },
+
+      startRandomSchedule() {
+        console.log('startRandomSchedule called');
+        const spawnRandomAnimation = () => {
+          console.log('Spawning animation');
+          if (Math.random() > 0.4) {
+            this.createRunningAnimation();
+          } else {
+            this.createPoppingAnimation();
+          }
+        };
+
+        // Initial delay before first animation
+        setTimeout(spawnRandomAnimation, 2000 + Math.random() * 3000);
+
+        // Set up interval for subsequent animations (every 3-9 seconds)
+        this.animationInterval = setInterval(() => {
+          spawnRandomAnimation();
+        }, 3000 + Math.random() * 6000);
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+          if (this.animationInterval) clearInterval(this.animationInterval);
+        });
+      },
+
+      createRunningAnimation() {
+        const container = document.getElementById('shippo-animations');
+        console.log('Creating running animation, container:', container);
+        if (!container) {
+          console.log('No animation container found');
+          return;
+        }
+
+        const animEl = document.createElement('div');
+        animEl.className = 'shippo-anim';
+
+        const isLeftToRight = Math.random() > 0.5;
+        const topPos = Math.random() * (window.innerHeight * 0.6) + window.innerHeight * 0.2;
+        const duration = 3 + Math.random() * 2;
+        const rotation = Math.random() * 360;
+
+        // Use SVG animation image (cheerleader version for energy!)
+        const imageUrl = 'shippo-cheerleader.svg';
+        animEl.style.cssText = [
+          `background-image: url('${imageUrl}')`,
+          `top: ${topPos}px`,
+          `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
+          `--run-end: ${window.innerWidth + 180}`,
+          `--duration: ${duration}s`,
+          `--initial-rotation: ${rotation}deg`,
+        ].join(';');
+
+        animEl.className = isLeftToRight ? 'shippo-anim running' : 'shippo-anim running-reverse';
+
+        container.appendChild(animEl);
+
+        // Add particle trail effect
+        this.createTrail(animEl, isLeftToRight, topPos, duration);
+
+        setTimeout(() => {
+          animEl.remove();
+        }, (duration + 0.5) * 1000);
+      },
+
+      createTrail(shippoEl, isLeftToRight, topPos, duration) {
+        const container = document.getElementById('shippo-animations');
+        if (!container) return;
+
+        const interval = setInterval(() => {
+          const rect = shippoEl.getBoundingClientRect();
+          if (rect.left < -100 || rect.left > window.innerWidth + 100) {
+            clearInterval(interval);
+            return;
+          }
+
+          const particle = document.createElement('div');
+          particle.className = 'shippo-trail';
+          particle.style.cssText = [
+            `left: ${rect.left}px`,
+            `top: ${rect.top + rect.height / 2}px`,
+          ].join(';');
+          container.appendChild(particle);
+
+          setTimeout(() => particle.remove(), 600);
+        }, 80);
+      },
+
+      createPoppingAnimation() {
+        const container = document.getElementById('shippo-animations');
+        console.log('Creating popping animation, container:', container);
+        if (!container) return;
+
+        const corners = [
+          { x: 20, y: 20 },                                    // top-left
+          { x: window.innerWidth - 100, y: 20 },              // top-right
+          { x: 20, y: window.innerHeight - 100 },             // bottom-left
+          { x: window.innerWidth - 100, y: window.innerHeight - 100 } // bottom-right
+        ];
+
+        const corner = corners[Math.floor(Math.random() * corners.length)];
+        const rotation = Math.random() * 360;
+
+        const animEl = document.createElement('div');
+        animEl.className = 'shippo-anim popping';
+        animEl.style.cssText = [
+          `background-image: url('shippo-wave.svg')`,
+          `left: ${corner.x}px`,
+          `top: ${corner.y}px`,
+          `--initial-rotation: ${rotation}deg`,
+        ].join(';');
+
+        container.appendChild(animEl);
+
+        setTimeout(() => {
+          animEl.remove();
+        }, 2200); // Total animation time: 0.4s pop-in + 1.5s wait + 0.5s pop-out + buffer
+      }
+    };
+
     // ── Init ──────────────────────────────────────────────────
     createStars();
 
@@ -431,7 +583,11 @@
       btn.appendChild(badge);
     });
 
-    renderCards('all');
+    ShippoAnimationManager.init().then(() => {
+      renderCards('all');
+    }).catch(() => {
+      renderCards('all');
+    });
   </script>
 </body>
 </html>

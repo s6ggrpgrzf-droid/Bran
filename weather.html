@@ -114,6 +114,24 @@
             <div class="wx-updated" id="wx-updated"></div>
           </div>
 
+          <!-- Live Radar -->
+          <div class="weather-radar">
+            <div class="radar-header">
+              <h3 class="wx-section-title">Live Radar</h3>
+              <a href="https://news9.com/weather/radar" class="radar-link" target="_blank" rel="noopener noreferrer">View on News 9</a>
+            </div>
+            <div class="radar-container">
+              <iframe
+                src="https://www.wunderground.com/wundermap?lat=35.0111&lon=-97.0967&zoom=8&type=WunderMap_radar"
+                width="100%"
+                height="400"
+                frameborder="0"
+                title="Live weather radar for McCloud, Oklahoma"
+                style="border-radius: 8px; margin-top: 12px;">
+              </iframe>
+            </div>
+          </div>
+
           <!-- 7-day forecast -->
           <h3 class="wx-section-title">7-Day Forecast</h3>
           <div class="forecast-scroll" id="forecast-scroll" role="list"
@@ -134,7 +152,7 @@
 
   <footer role="contentinfo">
     <div class="container">
-      <p>Weather data from <a href="https://www.weather.gov" target="_blank" rel="noopener noreferrer">National Weather Service</a>. Updated every 30 min. Keeping an eye on home for you, Brandon.</p>
+      <p>Weather data from <a href="https://www.weather.gov" target="_blank" rel="noopener noreferrer">National Weather Service</a> & <a href="https://news9.com/weather" target="_blank" rel="noopener noreferrer">News 9</a>. Updated every 30 min. Keeping an eye on home for you, Brandon.</p>
     </div>
   </footer>
 
@@ -158,6 +176,10 @@
     <a href="trivia.html" class="bottom-nav__item">
       <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
       <span class="bottom-nav__label">Trivia</span>
+    </a>
+    <a href="fidget-games.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__label">Fidgets</span>
     </a>
     <a href="memorial.html" class="bottom-nav__item">
       <span class="bottom-nav__icon" aria-hidden="true">💜</span>
