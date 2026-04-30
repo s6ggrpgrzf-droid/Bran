@@ -9,6 +9,83 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .trivia-intro {
+      text-align: center;
+      padding: 1rem 1.25rem 0.25rem;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      max-width: 520px;
+      margin: 0 auto 1.1rem;
+    }
+    .trivia-score-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .trivia-score-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+    }
+    .trivia-score-label {
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+    .trivia-best-score {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 0.2rem 0.65rem;
+      white-space: nowrap;
+    }
+    .question-num {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--color-text-muted, #8b7490);
+      margin-bottom: 0.5rem;
+    }
+    .streak-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #f97316, #fbbf24);
+      color: #fff;
+      border-radius: 20px;
+      padding: 0.2rem 0.65rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.35);
+      animation: streakPop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes streakPop {
+      from { transform: scale(0.7); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .results-pct {
+      font-family: 'Nunito', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: var(--gradient-main, linear-gradient(135deg,#e87ca0,#a78bfa));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin: 0.25rem 0 0.1rem;
+    }
+  </style>
 </head>
 <body>
   <div id="bg-stars" aria-hidden="true"></div>
@@ -31,6 +108,9 @@
       <div class="container">
         <h2 id="trivia-heading" class="sr-only">Trivia Quiz</h2>
 
+        <!-- Intro -->
+        <p class="trivia-intro">Test your knowledge across three legendary universes. Questions shuffle every round — see if you can beat your best score!</p>
+
         <!-- Filter -->
         <div class="trivia-filter" role="group" aria-label="Filter by series">
           <button class="trivia-filter__btn active"
@@ -49,10 +129,19 @@
 
         <!-- Score -->
         <div class="trivia-hero">
-          <div class="trivia-score" id="score-display" aria-live="polite">
-            <span id="score-correct">0</span>
-            <span>/</span>
-            <span id="score-total">0</span>
+          <div class="trivia-score-wrap" aria-live="polite">
+            <div class="trivia-score-col">
+              <div class="trivia-score-label">Score</div>
+              <div class="trivia-score" id="score-display">
+                <span id="score-correct">0</span>
+                <span>/</span>
+                <span id="score-total">0</span>
+              </div>
+            </div>
+            <div class="trivia-score-col">
+              <div class="trivia-score-label">Best</div>
+              <div class="trivia-best-score" id="best-display">—</div>
+            </div>
           </div>
         </div>
 
@@ -371,6 +460,7 @@
     let deck = [];
     let deckIdx = 0;
     let scoreCorrect = 0;
+    let streak = 0;
 
     // ── Helpers ───────────────────────────────────────────────
     function shuffle(arr) {
@@ -384,10 +474,31 @@
 
     function gradeInfo(correct, total) {
       const pct = total === 0 ? 0 : correct / total;
-      if (pct >= 0.9) return { emoji: '🏆', title: 'Legendary!',    sub: "You really know your stuff." };
-      if (pct >= 0.7) return { emoji: '⭐', title: 'Nice work!',     sub: "Solid nerd credentials." };
-      if (pct >= 0.5) return { emoji: '👍', title: 'Not bad!',       sub: "Worth a rewatch, maybe?" };
-      return               { emoji: '🌱', title: 'Keep studying!', sub: "The force will guide you." };
+      if (pct >= 0.9) return { emoji: '🏆', title: 'Legendary!',     sub: "Naruto would be proud of you, Brandon." };
+      if (pct >= 0.7) return { emoji: '⭐', title: 'Nice work!',      sub: "Solid nerd credentials — Jiraiya approves." };
+      if (pct >= 0.5) return { emoji: '👍', title: 'Not bad!',        sub: "Worth a rewatch. Even Rock Lee had to keep training." };
+      return               { emoji: '🌱', title: 'Keep at it!',      sub: "The force is still with you, always." };
+    }
+
+    // ── Personal best ─────────────────────────────────────────
+    function bestKey() { return `bran_trivia_best_${activeFilter}`; }
+
+    function loadBest() {
+      try { return JSON.parse(localStorage.getItem(bestKey())); } catch { return null; }
+    }
+
+    function saveBest(correct, total) {
+      const prev = loadBest();
+      const prevPct = prev ? prev.correct / prev.total : -1;
+      const newPct  = total > 0 ? correct / total : 0;
+      if (newPct >= prevPct) {
+        try { localStorage.setItem(bestKey(), JSON.stringify({ correct, total })); } catch {}
+      }
+    }
+
+    function updateBestDisplay() {
+      const b = loadBest();
+      document.getElementById('best-display').textContent = b ? `${b.correct}/${b.total}` : '—';
     }
 
     // ── Build deck ────────────────────────────────────────────
@@ -396,14 +507,15 @@
         ? QUESTIONS
         : QUESTIONS.filter(q => q.series === activeFilter);
       deck = shuffle(pool).map(q => {
-        // Shuffle answers while tracking which index is correct
         const paired = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
         const shuffled = shuffle(paired);
         return { ...q, shuffledAnswers: shuffled };
       });
       deckIdx = 0;
       scoreCorrect = 0;
+      streak = 0;
       updateScore();
+      updateBestDisplay();
     }
 
     // ── Score display ─────────────────────────────────────────
@@ -417,6 +529,9 @@
       const wrap = document.getElementById('question-wrap');
       const q    = deck[deckIdx];
       const progress = ((deckIdx / deck.length) * 100).toFixed(1);
+      const streakHtml = streak >= 2
+        ? `<span class="streak-badge">🔥 ${streak} in a row</span>`
+        : '';
 
       wrap.innerHTML = `
         <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
@@ -426,6 +541,8 @@
             <div class="progress-bar-inner" style="width:${progress}%"></div>
           </div>
           <div class="question-body">
+            <div class="question-num">Question ${deckIdx + 1} of ${deck.length}</div>
+            ${streakHtml}
             <span class="question-series-badge"
                   style="--series-color:${q.seriesColor}">${q.seriesLabel}</span>
             <p class="question-text">${q.q}</p>
@@ -456,9 +573,10 @@
       if (correct) {
         btn.classList.add('correct');
         scoreCorrect++;
+        streak++;
       } else {
         btn.classList.add('wrong');
-        // Reveal the right answer
+        streak = 0;
         allBtns.forEach((b, i) => {
           if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
         });
@@ -481,10 +599,15 @@
       const wrap  = document.getElementById('question-wrap');
       const total = deck.length;
       const g     = gradeInfo(scoreCorrect, total);
+      const pct   = total > 0 ? Math.round((scoreCorrect / total) * 100) : 0;
+
+      saveBest(scoreCorrect, total);
+      updateBestDisplay();
 
       wrap.innerHTML = `
         <div class="results-card">
           <div class="results-grade" aria-hidden="true">${g.emoji}</div>
+          <div class="results-pct">${pct}%</div>
           <div class="results-title">${g.title}</div>
           <div class="results-subtitle">
             You got <strong>${scoreCorrect} out of ${total}</strong> — ${g.sub}
@@ -504,6 +627,7 @@
         document.querySelectorAll('.trivia-filter__btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         activeFilter = btn.dataset.filter;
+        streak = 0;
         buildDeck();
         renderQuestion();
       });
