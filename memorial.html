@@ -243,17 +243,17 @@
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 0.4rem;
-      padding: 1rem;
+      gap: 0.5rem;
+      padding: 1.1rem;
       text-align: center;
     }
-    .mem-photo-fb span { font-size: 1.8rem; }
+    .mem-photo-fb span { font-size: 2.2rem; }
     .mem-photo-fb p {
       font-family: 'Nunito', sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      color: rgba(196,181,253,0.5);
-      line-height: 1.4;
+      color: rgba(196,181,253,0.82);
+      line-height: 1.45;
     }
 
     /* ── Traits ────────────────────────────────────────────── */
@@ -328,6 +328,25 @@
       opacity: 0.07;
       line-height: 1;
       pointer-events: none;
+    }
+
+    /* ── Section divider ───────────────────────────────────── */
+    .mem-divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+      margin: 1.75rem 0;
+    }
+
+    /* ── Scroll-reveal ─────────────────────────────────────── */
+    .mem-card {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .mem-card.revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* ── Footer ────────────────────────────────────────────── */
@@ -456,6 +475,8 @@
         <div class="mem-trait" role="listitem"><div class="mem-trait-icon">☀️</div><div class="mem-trait-label">Sunshine</div></div>
       </div>
 
+      <hr class="mem-divider" aria-hidden="true">
+
       <!-- Her story -->
       <div class="mem-card">
         <h3>Who She Was</h3>
@@ -469,6 +490,8 @@
           But what no record captures is the laugh. The spotless white Nikes. The coffee that was permanently in her hand. The way everything she wore was just right — classy, fancy, always her. The way she loved the beach and the way sunlight made her feel free. The way she adored Cholly and Nacho. The way she loved Brandon and Paris more than anything this world has to offer.
         </p>
       </div>
+
+      <hr class="mem-divider" aria-hidden="true">
 
       <!-- For Brandon -->
       <div class="mem-card mem-card--brandon">
@@ -516,6 +539,10 @@
       <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
       <span class="bottom-nav__label">Trivia</span>
     </a>
+    <a href="fidget-games.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__label">Fidgets</span>
+    </a>
     <a href="memorial.html" class="bottom-nav__item active" aria-current="page">
       <span class="bottom-nav__icon" aria-hidden="true">💜</span>
       <span class="bottom-nav__label">Mom</span>
@@ -524,6 +551,24 @@
 
   <script>
     'use strict';
+
+    // ── Scroll-reveal for story cards ────────────────────────
+    (function () {
+      const cards = document.querySelectorAll('.mem-card');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.classList.add('revealed');
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        cards.forEach(c => io.observe(c));
+      } else {
+        cards.forEach(c => c.classList.add('revealed'));
+      }
+    })();
 
     // ── Purple sparkles ───────────────────────────────────────
     (function () {

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A calm space for self-care tips and daily mood tracking.">
+  <meta name="description" content="A calm space for self-care, breathing, and daily mood tracking — built for Brandon.">
   <title>Brandon — Mental Wellness</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="wellness-page">
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header role="banner">
@@ -20,8 +20,11 @@
     <div class="container">
       <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
       <h1>Brandon</h1>
-      <p class="tagline">✨ Your wellness corner, Brandon ✨</p>
+      <p id="hero-greeting" class="hero-greeting" aria-live="polite">
+        <span class="greeting-text">✨ Your wellness corner ✨</span>
+      </p>
       <nav aria-label="Page sections">
+        <a href="#quick-reset">🌬️ Reset</a>
         <a href="#self-care">🌸 Self-Care</a>
         <a href="#wisdom">⚡ Wisdom</a>
         <a href="#mood-tracker">🌙 Mood</a>
@@ -31,60 +34,113 @@
 
   <main id="main-content">
 
+    <!-- ── QUICK RESET ── -->
+    <section id="quick-reset" aria-labelledby="reset-heading">
+      <div class="container">
+        <h2 id="reset-heading">Quick Reset</h2>
+        <p class="section-intro">Pick one. Sixty seconds is enough.</p>
+        <div class="reset-bar">
+          <button type="button" class="reset-card" data-reset="breath">
+            <span class="reset-icon" aria-hidden="true">🌬️</span>
+            <span class="reset-label">60s Breath</span>
+            <span class="reset-sub">Box breathing — 4·4·4·4</span>
+          </button>
+          <button type="button" class="reset-card" data-reset="walk">
+            <span class="reset-icon" aria-hidden="true">🚶</span>
+            <span class="reset-label">5-min Walk</span>
+            <span class="reset-sub">Stand up, stretch your legs</span>
+          </button>
+          <button type="button" class="reset-card" data-reset="water">
+            <span class="reset-icon" aria-hidden="true">💧</span>
+            <span class="reset-label">Water Sip</span>
+            <span class="reset-sub" id="water-count">Tap when you drink</span>
+          </button>
+          <button type="button" class="reset-card" data-reset="dump">
+            <span class="reset-icon" aria-hidden="true">📋</span>
+            <span class="reset-label">Brain Dump</span>
+            <span class="reset-sub">Empty your head</span>
+          </button>
+        </div>
+
+        <!-- Inline brain-dump panel (toggled by the button above) -->
+        <div id="dump-panel" class="dump-panel" hidden>
+          <label for="dump-input" class="dump-label">What's swirling? Write it down — it leaves your head when it lands here.</label>
+          <textarea id="dump-input" rows="3" maxlength="500" placeholder="Anything. Tasks, worries, half-thoughts…"></textarea>
+          <div class="dump-row">
+            <button type="button" id="dump-save" class="btn-soft">Save</button>
+            <button type="button" id="dump-toggle-recent" class="btn-link" aria-expanded="false">Show recent</button>
+          </div>
+          <ul id="dump-recent" class="dump-recent" hidden></ul>
+        </div>
+      </div>
+    </section>
+
     <!-- ── SELF-CARE TIPS ── -->
     <section id="self-care" aria-labelledby="self-care-heading">
       <div class="container">
         <h2 id="self-care-heading">Self-Care at Work</h2>
         <p class="section-intro">Small resets, right at your desk.</p>
+
+        <article id="tip-featured" class="tip-featured" aria-live="polite">
+          <!-- Filled by app.js: rotates per visit -->
+        </article>
+
         <div class="card-grid" role="list">
 
-          <article class="tip-card" role="listitem">
+          <article class="tip-card" data-tip-id="breathing" role="listitem">
             <div class="tip-icon" aria-hidden="true">🌬️</div>
             <h3>Desk Breathing</h3>
             <p>Feeling overwhelmed mid-task? Inhale 4 counts, hold 4, exhale 4, hold 4. Two quiet rounds at your desk is enough to drop your stress response and clear your head.</p>
           </article>
 
-          <article class="tip-card" role="listitem">
+          <article class="tip-card" data-tip-id="walk" role="listitem">
             <div class="tip-icon" aria-hidden="true">🚶</div>
             <h3>Take a Walk Break</h3>
             <p>Step away from your screen for 5–10 minutes — down the hall, outside, anywhere. Movement breaks the tension loop and you come back with a clearer perspective.</p>
           </article>
 
-          <article class="tip-card" role="listitem">
+          <article class="tip-card" data-tip-id="water" role="listitem">
             <div class="tip-icon" aria-hidden="true">💧</div>
             <h3>Keep Water Nearby</h3>
             <p>Dehydration quietly amplifies stress and brain fog. Keep a water bottle at your desk and take a sip whenever you switch tasks — it's a tiny reset that adds up.</p>
           </article>
 
-          <article class="tip-card" role="listitem">
+          <article class="tip-card" data-tip-id="stretch" role="listitem">
             <div class="tip-icon" aria-hidden="true">🤸</div>
             <h3>Stretch It Out</h3>
             <p>Tension hides in your neck, shoulders, and jaw. Roll your shoulders back, tilt your head side to side, and unclench your jaw — you can do it all without leaving your chair.</p>
           </article>
 
-          <article class="tip-card" role="listitem">
-            <div class="tip-icon" aria-hidden="true">📋</div>
-            <h3>Brain Dump</h3>
-            <p>When your mind is spinning with tasks, write every single thing down — sticky note, app, anything. Getting it out of your head and onto paper stops the loop and lets you focus.</p>
-          </article>
+          <details class="more-tips">
+            <summary><span>Show 4 more tips</span></summary>
+            <div class="card-grid card-grid--inner" role="list">
 
-          <article class="tip-card" role="listitem">
-            <div class="tip-icon" aria-hidden="true">🧹</div>
-            <h3>Clear Your Desk</h3>
-            <p>A cluttered workspace is a background stressor. Take two minutes to clear what's in front of you. A tidy surface signals your brain that things are under control.</p>
-          </article>
+              <article class="tip-card" data-tip-id="brain-dump" role="listitem">
+                <div class="tip-icon" aria-hidden="true">📋</div>
+                <h3>Brain Dump</h3>
+                <p>When your mind is spinning with tasks, write every single thing down — sticky note, app, anything. Getting it out of your head and onto paper stops the loop and lets you focus.</p>
+              </article>
 
-          <article class="tip-card" role="listitem">
-            <div class="tip-icon" aria-hidden="true">🫂</div>
-            <h3>Connect With Someone</h3>
-            <p>A quick hello to a coworker or a short text to a friend can shift your whole mood. You don't need to talk about anything heavy — connection itself is the reset.</p>
-          </article>
+              <article class="tip-card" data-tip-id="clear-desk" role="listitem">
+                <div class="tip-icon" aria-hidden="true">🧹</div>
+                <h3>Clear Your Desk</h3>
+                <p>A cluttered workspace is a background stressor. Take two minutes to clear what's in front of you. A tidy surface signals your brain that things are under control.</p>
+              </article>
 
-          <article class="tip-card" role="listitem">
-            <div class="tip-icon" aria-hidden="true">✍️</div>
-            <h3>Three Wins at Lunch</h3>
-            <p>At lunch, jot down three things that went well this morning — a task finished, a good interaction, anything. Noticing progress rewires how your afternoon feels before it starts.</p>
-          </article>
+              <article class="tip-card" data-tip-id="connect" role="listitem">
+                <div class="tip-icon" aria-hidden="true">🫂</div>
+                <h3>Connect With Someone</h3>
+                <p>A quick hello to a coworker or a short text to a friend can shift your whole mood. You don't need to talk about anything heavy — connection itself is the reset.</p>
+              </article>
+
+              <article class="tip-card" data-tip-id="three-wins" role="listitem">
+                <div class="tip-icon" aria-hidden="true">✍️</div>
+                <h3>Three Wins at Lunch</h3>
+                <p>At lunch, jot down three things that went well this morning — a task finished, a good interaction, anything. Noticing progress rewires how your afternoon feels before it starts.</p>
+              </article>
+
+            </div>
+          </details>
 
         </div>
       </div>
@@ -95,42 +151,90 @@
       <div class="container">
         <h2 id="wisdom-heading">Words from Other Worlds</h2>
         <p class="section-intro">Wisdom carried across dimensions.</p>
+
+        <article id="wisdom-featured" class="wisdom-featured" aria-live="polite">
+          <!-- Filled by app.js: deterministic by date -->
+        </article>
+
+        <div class="wisdom-filter" role="tablist" aria-label="Filter quotes by series">
+          <button type="button" class="filter-chip is-active" data-filter="all"  role="tab" aria-selected="true">All</button>
+          <button type="button" class="filter-chip" data-filter="naruto"   role="tab" aria-selected="false">🍥 Naruto</button>
+          <button type="button" class="filter-chip" data-filter="inuyasha" role="tab" aria-selected="false">🏹 Inuyasha</button>
+          <button type="button" class="filter-chip" data-filter="starwars" role="tab" aria-selected="false">✨ Star Wars</button>
+        </div>
+
         <div class="wisdom-scroll" role="list" aria-label="Anime wisdom quotes">
 
-          <article class="wisdom-card wisdom-naruto" role="listitem">
+          <article class="wisdom-card wisdom-naruto" data-series="naruto" role="listitem">
             <div class="wisdom-badge">🍥 Naruto</div>
             <p class="wisdom-quote">"I'm not gonna run away, I never go back on my word! That's my nindo — my ninja way!"</p>
             <p class="wisdom-cite">— Naruto Uzumaki</p>
           </article>
 
-          <article class="wisdom-card wisdom-naruto" role="listitem">
+          <article class="wisdom-card wisdom-naruto" data-series="naruto" role="listitem">
             <div class="wisdom-badge">📜 Naruto</div>
             <p class="wisdom-quote">"Never give up. Hardships will only make you stronger."</p>
             <p class="wisdom-cite">— Jiraiya</p>
           </article>
 
-          <article class="wisdom-card wisdom-inuyasha" role="listitem">
+          <article class="wisdom-card wisdom-naruto" data-series="naruto" role="listitem">
+            <div class="wisdom-badge">🍂 Naruto</div>
+            <p class="wisdom-quote">"You don't have to be perfect. You just have to keep moving forward — one breath at a time."</p>
+            <p class="wisdom-cite">— Itachi Uchiha</p>
+          </article>
+
+          <article class="wisdom-card wisdom-naruto" data-series="naruto" role="listitem">
+            <div class="wisdom-badge">⚡ Naruto</div>
+            <p class="wisdom-quote">"In the ninja world, those who break the rules are scum. But those who abandon their friends are worse than scum."</p>
+            <p class="wisdom-cite">— Kakashi Hatake</p>
+          </article>
+
+          <article class="wisdom-card wisdom-inuyasha" data-series="inuyasha" role="listitem">
             <div class="wisdom-badge">🏹 Inuyasha</div>
             <p class="wisdom-quote">"No matter how far away you are, my heart is always with you."</p>
             <p class="wisdom-cite">— Kagome Higurashi</p>
           </article>
 
-          <article class="wisdom-card wisdom-inuyasha" role="listitem">
+          <article class="wisdom-card wisdom-inuyasha" data-series="inuyasha" role="listitem">
             <div class="wisdom-badge">🌙 Inuyasha</div>
             <p class="wisdom-quote">"There is no such thing as true strength without something to protect."</p>
             <p class="wisdom-cite">— Sesshomaru</p>
           </article>
 
-          <article class="wisdom-card wisdom-starwars" role="listitem">
+          <article class="wisdom-card wisdom-inuyasha" data-series="inuyasha" role="listitem">
+            <div class="wisdom-badge">📿 Inuyasha</div>
+            <p class="wisdom-quote">"Even the smallest light cuts through the darkest night. Carry yours, and others will see by it."</p>
+            <p class="wisdom-cite">— Miroku</p>
+          </article>
+
+          <article class="wisdom-card wisdom-inuyasha" data-series="inuyasha" role="listitem">
+            <div class="wisdom-badge">🍵 Inuyasha</div>
+            <p class="wisdom-quote">"Grief is love with nowhere to go — it's not a wound to heal, but a memory to keep."</p>
+            <p class="wisdom-cite">— Kaede</p>
+          </article>
+
+          <article class="wisdom-card wisdom-starwars" data-series="starwars" role="listitem">
             <div class="wisdom-badge">✨ Star Wars</div>
             <p class="wisdom-quote">"Do or do not. There is no try."</p>
             <p class="wisdom-cite">— Master Yoda</p>
           </article>
 
-          <article class="wisdom-card wisdom-starwars" role="listitem">
+          <article class="wisdom-card wisdom-starwars" data-series="starwars" role="listitem">
             <div class="wisdom-badge">🔵 Star Wars</div>
             <p class="wisdom-quote">"Your focus determines your reality."</p>
             <p class="wisdom-cite">— Obi-Wan Kenobi</p>
+          </article>
+
+          <article class="wisdom-card wisdom-starwars" data-series="starwars" role="listitem">
+            <div class="wisdom-badge">🌟 Star Wars</div>
+            <p class="wisdom-quote">"Hope is like the sun. If you only believe it when you see it, you'll never make it through the night."</p>
+            <p class="wisdom-cite">— Leia Organa</p>
+          </article>
+
+          <article class="wisdom-card wisdom-starwars" data-series="starwars" role="listitem">
+            <div class="wisdom-badge">🌅 Star Wars</div>
+            <p class="wisdom-quote">"We're what they grow beyond. That is the true burden of all masters — and the gift."</p>
+            <p class="wisdom-cite">— Yoda</p>
           </article>
 
         </div>
@@ -143,27 +247,63 @@
         <h2 id="mood-heading">Daily Mood Tracker</h2>
         <p class="section-intro">How's your day going?</p>
 
-        <form id="mood-form" novalidate aria-label="Log today's mood">
-          <fieldset>
-            <legend>How are you feeling today?</legend>
-            <div class="mood-options" role="group" aria-label="Mood selection">
-              <!-- Built dynamically by app.js -->
-            </div>
-          </fieldset>
-
-          <label for="mood-note">Add a note <span class="optional">(optional)</span></label>
-          <textarea id="mood-note" name="note" rows="3"
-                    placeholder="What's on your mind?"
-                    maxlength="300"
-                    aria-describedby="note-hint"></textarea>
-          <span id="note-hint" class="hint">Max 300 characters</span>
-
-          <button type="submit">Log Mood</button>
-        </form>
-
-        <div id="mood-history" aria-live="polite" aria-label="Mood history">
-          <!-- Rendered by app.js -->
+        <div class="mood-stats" aria-label="Mood stats">
+          <div class="mood-stat">
+            <span class="stat-value" id="stat-streak">0</span>
+            <span class="stat-label">day streak</span>
+          </div>
+          <div class="mood-stat">
+            <span class="stat-value" id="stat-total">0</span>
+            <span class="stat-label">entries logged</span>
+          </div>
+          <div class="mood-stat mood-stat--chart">
+            <span class="stat-label">last 7 days</span>
+            <div id="weekly-chart" class="weekly-chart" aria-hidden="true"></div>
+          </div>
         </div>
+
+        <div class="mood-grid">
+          <form id="mood-form" novalidate aria-label="Log today's mood">
+            <fieldset>
+              <legend>How are you feeling today?</legend>
+              <div class="mood-options" role="group" aria-label="Mood selection">
+                <!-- Built dynamically by app.js -->
+              </div>
+              <div id="form-error" class="form-error" role="alert" hidden></div>
+              <p id="mood-encouragement" class="mood-encouragement" aria-live="polite"></p>
+            </fieldset>
+
+            <label for="mood-note">Add a note <span class="optional">(optional)</span></label>
+            <textarea id="mood-note" name="note" rows="3"
+                      placeholder="What's on your mind?"
+                      maxlength="300"
+                      aria-describedby="note-hint"></textarea>
+            <span id="note-hint" class="hint">Max 300 characters</span>
+
+            <button type="submit">Log Mood</button>
+          </form>
+
+          <div id="mood-history" aria-live="polite" aria-label="Mood history">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── A QUIET LINE FOR MOM ── -->
+    <section id="for-mom" aria-labelledby="mom-heading">
+      <div class="container">
+        <article class="mom-card">
+          <div class="mom-photo" aria-hidden="true">
+            <img src="photos/tracy-1.jpg" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <span class="mom-photo-fallback" style="display:none;">💜</span>
+          </div>
+          <div class="mom-text">
+            <h2 id="mom-heading" class="mom-heading">Carrying her with you</h2>
+            <p>Whenever today gets heavy, Brandon — she's here. One breath at a time, just like she'd say.</p>
+            <a class="mom-link" href="memorial.html">Visit Mom's page <span aria-hidden="true">→</span></a>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -174,6 +314,24 @@
       <p>Made with ❤️ by James — for his favorite person, Brandon 💜</p>
     </div>
   </footer>
+
+  <!-- 60s breath overlay (built/shown by app.js) -->
+  <div id="breath-overlay" class="breath-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="breath-title">
+    <div class="breath-stage">
+      <div class="breath-ring" aria-hidden="true"></div>
+      <h2 id="breath-title" class="breath-title">Breathe</h2>
+      <p id="breath-phase" class="breath-phase">Get ready…</p>
+      <p id="breath-timer" class="breath-timer">60s</p>
+      <button type="button" id="breath-close" class="breath-close" aria-label="Close">Done</button>
+    </div>
+  </div>
+
+  <!-- Walk countdown chip (shown by app.js) -->
+  <div id="walk-chip" class="walk-chip" hidden role="status" aria-live="polite">
+    <span class="walk-chip-icon" aria-hidden="true">🚶</span>
+    <span id="walk-chip-time" class="walk-chip-time">5:00</span>
+    <button type="button" id="walk-chip-cancel" class="walk-chip-cancel" aria-label="Cancel walk timer">✕</button>
+  </div>
 
   <script defer src="app.js"></script>
 
@@ -197,6 +355,10 @@
     <a href="trivia.html" class="bottom-nav__item">
       <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
       <span class="bottom-nav__label">Trivia</span>
+    </a>
+    <a href="fidget-games.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__label">Fidgets</span>
     </a>
     <a href="memorial.html" class="bottom-nav__item">
       <span class="bottom-nav__icon" aria-hidden="true">💜</span>
