@@ -75,7 +75,7 @@
     </a>
   </nav>
 
-  <script src="trivia-questions.js"></script>
+  <script src="trivia-questions.js?v=2"></script>
   <script>
     'use strict';
 
@@ -170,6 +170,7 @@
       score        = 0;
       deckIdx      = 0;
       buildDeck(filter);
+      if (deck.length === 0) { renderStart(); return; }
       renderQuestion();
     }
 
