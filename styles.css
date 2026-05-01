@@ -1641,6 +1641,7 @@ main {
 }
 
 .question-card {
+  position: relative;
   background: var(--color-surface);
   border: 1.5px solid var(--color-border);
   border-radius: 20px;
@@ -1757,6 +1758,137 @@ main {
   80%       { transform: translateX(4px); }
 }
 
+/* ── Series tint overlay ────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.6s ease;
+}
+body.series-tinted::before {
+  background: radial-gradient(ellipse at 50% 40%,
+    color-mix(in srgb, var(--series-tint) 10%, transparent) 0%,
+    transparent 70%);
+}
+
+/* ── Confetti particles ──────────────────────────────────── */
+.trivia-particle {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  animation: particleFly 0.75s ease-out forwards;
+}
+@keyframes particleFly {
+  0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+}
+
+/* ── Score +1 bump ───────────────────────────────────────── */
+.score-bump {
+  position: fixed;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #22c55e;
+  pointer-events: none;
+  z-index: 9999;
+  animation: scoreBump 0.8s ease-out forwards;
+}
+@keyframes scoreBump {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-60px) scale(1.2); }
+}
+
+/* ── Streak badge ────────────────────────────────────────── */
+.streak-badge {
+  display: inline-block;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  background: var(--gradient-main);
+  color: #fff;
+  margin-bottom: 0.5rem;
+  animation: streakPop 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes streakPop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  20%  { opacity: 1; transform: scale(1.1); }
+  35%  { transform: scale(1); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(0.8); }
+}
+
+/* ── Wrong card flash ────────────────────────────────────── */
+@keyframes cardFlashRed {
+  0%, 100% { box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+  25%      { box-shadow: 0 0 0 4px rgba(239,68,68,0.5), 0 4px 24px rgba(0,0,0,0.07); }
+  65%      { box-shadow: 0 0 0 2px rgba(239,68,68,0.25), 0 4px 24px rgba(0,0,0,0.07); }
+}
+.question-card.card-flash-wrong {
+  animation: cardFlashRed 0.55s ease forwards;
+}
+
+/* ── Progress bar pulse ──────────────────────────────────── */
+@keyframes progressPulse {
+  0%   { filter: brightness(1); }
+  50%  { filter: brightness(1.45) drop-shadow(0 0 5px rgba(232,124,160,0.85)); }
+  100% { filter: brightness(1); }
+}
+.progress-bar-inner.pulsing {
+  animation: progressPulse 0.6s ease;
+}
+
+/* ── Answer button ripple ────────────────────────────────── */
+.answer-btn { position: relative; overflow: hidden; }
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(167,139,250,0.35);
+  transform: scale(0);
+  pointer-events: none;
+  animation: rippleExpand 0.5s ease-out forwards;
+}
+@keyframes rippleExpand {
+  to { transform: scale(3); opacity: 0; }
+}
+
+/* ── Answer toast overlay ────────────────────────────────── */
+.answer-toast {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  border-radius: 18px;
+  pointer-events: none;
+  animation: toastFlash 0.65s ease forwards;
+  z-index: 10;
+}
+.answer-toast.correct-toast {
+  background: rgba(34,197,94,0.15);
+  color: #15803d;
+}
+.answer-toast.wrong-toast {
+  background: rgba(239,68,68,0.12);
+  color: #b91c1c;
+}
+@keyframes toastFlash {
+  0%   { opacity: 0; transform: scale(0.85); }
+  25%  { opacity: 1; transform: scale(1); }
+  70%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.04); }
+}
+
 /* Results screen */
 .results-card {
   background: var(--color-surface);
@@ -1771,6 +1903,13 @@ main {
   font-size: 4rem;
   line-height: 1;
   margin-bottom: 0.5rem;
+  display: inline-block;
+  animation: gradeEntrance 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes gradeEntrance {
+  0%   { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  65%  { transform: scale(1.2) rotate(8deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
 }
 .results-title {
   font-family: 'Nunito', sans-serif;

@@ -371,6 +371,7 @@
     let deck = [];
     let deckIdx = 0;
     let scoreCorrect = 0;
+    let streak = 0;
 
     // ── Helpers ───────────────────────────────────────────────
     function shuffle(arr) {
@@ -390,19 +391,118 @@
       return               { emoji: '🌱', title: 'Keep studying!', sub: "The force will guide you." };
     }
 
+    // ── Visual effect helpers ─────────────────────────────────
+    const PARTICLE_COLORS = ['#e87ca0','#a78bfa','#eab308','#7dd3fc','#f97316','#22c55e'];
+
+    function spawnParticles(btn) {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'trivia-particle';
+        const angle = (i / 18) * 360 + Math.random() * 20;
+        const dist  = 55 + Math.random() * 75;
+        const rad   = angle * Math.PI / 180;
+        p.style.cssText = [
+          `left:${cx}px`, `top:${cy}px`,
+          `background:${PARTICLE_COLORS[i % PARTICLE_COLORS.length]}`,
+          `--dx:${(Math.cos(rad) * dist).toFixed(1)}px`,
+          `--dy:${(Math.sin(rad) * dist).toFixed(1)}px`,
+          `width:${5 + Math.random() * 6}px`,
+          `height:${5 + Math.random() * 6}px`,
+        ].join(';');
+        document.body.appendChild(p);
+        p.addEventListener('animationend', () => p.remove());
+      }
+    }
+
+    function showScoreBump() {
+      const el   = document.getElementById('score-display');
+      const rect = el.getBoundingClientRect();
+      const bump = document.createElement('div');
+      bump.className   = 'score-bump';
+      bump.textContent = '+1';
+      bump.style.cssText = `left:${rect.right + 8}px;top:${rect.top}px`;
+      document.body.appendChild(bump);
+      bump.addEventListener('animationend', () => bump.remove());
+    }
+
+    function showStreak(n) {
+      const hero = document.querySelector('.trivia-hero');
+      const old  = hero.querySelector('.streak-badge');
+      if (old) old.remove();
+      const label = n >= 5 ? `${n} in a row! 💥`
+                  : n >= 4 ? `${n} in a row! 🔥`
+                  : n >= 3 ? `${n} in a row! ⚡`
+                  :          `${n} in a row! ✨`;
+      const badge = document.createElement('div');
+      badge.className   = 'streak-badge';
+      badge.textContent = label;
+      hero.insertBefore(badge, hero.firstChild);
+      badge.addEventListener('animationend', () => badge.remove());
+    }
+
+    function showToast(card, correct) {
+      const toast = document.createElement('div');
+      toast.className   = `answer-toast ${correct ? 'correct-toast' : 'wrong-toast'}`;
+      toast.textContent = correct ? 'Correct! ✓' : 'Wrong! ✗';
+      card.appendChild(toast);
+      toast.addEventListener('animationend', () => toast.remove());
+    }
+
+    function addRipple(btn, e) {
+      const rect   = btn.getBoundingClientRect();
+      const size   = Math.max(rect.width, rect.height);
+      const x      = e.clientX - rect.left - size / 2;
+      const y      = e.clientY - rect.top  - size / 2;
+      const ripple = document.createElement('span');
+      ripple.className   = 'ripple';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    function startCelebration() {
+      let count = 0;
+      const id = setInterval(() => {
+        for (let i = 0; i < 10; i++) {
+          const p     = document.createElement('div');
+          p.className = 'trivia-particle';
+          const angle = Math.random() * 360;
+          const dist  = 70 + Math.random() * 110;
+          const rad   = angle * Math.PI / 180;
+          const x     = Math.random() * window.innerWidth;
+          const y     = Math.random() * window.innerHeight * 0.55;
+          p.style.cssText = [
+            `left:${x}px`, `top:${y}px`,
+            `background:${PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)]}`,
+            `--dx:${(Math.cos(rad) * dist).toFixed(1)}px`,
+            `--dy:${(Math.sin(rad) * dist).toFixed(1)}px`,
+            `width:${6 + Math.random() * 7}px`,
+            `height:${6 + Math.random() * 7}px`,
+          ].join(';');
+          document.body.appendChild(p);
+          p.addEventListener('animationend', () => p.remove());
+        }
+        if (++count >= 9) clearInterval(id);
+      }, 320);
+    }
+
     // ── Build deck ────────────────────────────────────────────
     function buildDeck() {
       const pool = activeFilter === 'all'
         ? QUESTIONS
         : QUESTIONS.filter(q => q.series === activeFilter);
       deck = shuffle(pool).map(q => {
-        // Shuffle answers while tracking which index is correct
         const paired = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
         const shuffled = shuffle(paired);
         return { ...q, shuffledAnswers: shuffled };
       });
       deckIdx = 0;
       scoreCorrect = 0;
+      streak = 0;
+      document.body.classList.remove('series-tinted');
       updateScore();
     }
 
@@ -417,6 +517,9 @@
       const wrap = document.getElementById('question-wrap');
       const q    = deck[deckIdx];
       const progress = ((deckIdx / deck.length) * 100).toFixed(1);
+
+      document.body.style.setProperty('--series-tint', q.seriesColor);
+      document.body.classList.add('series-tinted');
 
       wrap.innerHTML = `
         <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
@@ -440,13 +543,17 @@
         </div>`;
 
       wrap.querySelectorAll('.answer-btn').forEach(btn => {
-        btn.addEventListener('click', () => handleAnswer(btn, q));
+        btn.addEventListener('click', e => {
+          addRipple(btn, e);
+          handleAnswer(btn, q);
+        });
       });
     }
 
     // ── Handle answer ─────────────────────────────────────────
     function handleAnswer(btn, q) {
       const wrap    = document.getElementById('question-wrap');
+      const card    = wrap.querySelector('.question-card');
       const allBtns = wrap.querySelectorAll('.answer-btn');
       const idx     = parseInt(btn.dataset.idx, 10);
       const correct = q.shuffledAnswers[idx].isCorrect;
@@ -456,13 +563,32 @@
       if (correct) {
         btn.classList.add('correct');
         scoreCorrect++;
+        streak++;
+        spawnParticles(btn);
+        showScoreBump();
+        if (streak >= 2) showStreak(streak);
       } else {
         btn.classList.add('wrong');
-        // Reveal the right answer
+        streak = 0;
         allBtns.forEach((b, i) => {
           if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
         });
+        if (card) {
+          card.classList.add('card-flash-wrong');
+          setTimeout(() => card.classList.remove('card-flash-wrong'), 560);
+        }
       }
+
+      if (card) showToast(card, correct);
+
+      // Pulse progress bar on next tick so the width transition has started
+      setTimeout(() => {
+        const bar = wrap.querySelector('.progress-bar-inner');
+        if (bar) {
+          bar.classList.add('pulsing');
+          setTimeout(() => bar.classList.remove('pulsing'), 620);
+        }
+      }, 50);
 
       deckIdx++;
       updateScore();
@@ -482,6 +608,9 @@
       const total = deck.length;
       const g     = gradeInfo(scoreCorrect, total);
 
+      streak = 0;
+      document.body.classList.remove('series-tinted');
+
       wrap.innerHTML = `
         <div class="results-card">
           <div class="results-grade" aria-hidden="true">${g.emoji}</div>
@@ -491,6 +620,8 @@
           </div>
           <button class="results-again-btn" id="play-again">Play Again</button>
         </div>`;
+
+      if (total > 0 && scoreCorrect / total >= 0.7) startCelebration();
 
       document.getElementById('play-again').addEventListener('click', () => {
         buildDeck();
