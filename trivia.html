@@ -45,6 +45,9 @@
           <button class="trivia-filter__btn"
                   style="--series-color:#eab308"
                   data-filter="starwars">Star Wars ✨</button>
+          <button class="trivia-filter__btn"
+                  style="--series-color:#06b6d4"
+                  data-filter="lyrics">Music 🎵</button>
         </div>
 
         <!-- Score -->
@@ -364,6 +367,98 @@
         answers: ["Binary code", "English subtitles", "Holographic messages", "Beeps and whistles"],
         correct: 3
       },
+
+      // ── Music Lyrics ──
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'I wanna change the world\nOnly love can change the world\nBut what do I know?',
+        q: 'This opening hook belongs to which beloved Inuyasha theme song?',
+        answers: ['"Every Heart" by BoA', '"My Will" by Dream', '"Change the World" by V6', '"Fukai Mori" by Do As Infinity'],
+        correct: 2
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Korah! Matah! Korah! Rahtahmah!\nKorah! Rahtahmah! Yoodhah!',
+        q: 'This dramatic choral chant is from "Duel of the Fates." In which Star Wars film does it first appear?',
+        answers: ['A New Hope', 'The Empire Strikes Back', 'Return of the Jedi', 'The Phantom Menace'],
+        correct: 3
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Blue bird... blue bird...\nWhy won\'t you fly away with me?',
+        q: '"Blue Bird" by Ikimono-gakari is which opening of Naruto Shippuden?',
+        answers: ['1st opening', '2nd opening', '3rd opening', '5th opening'],
+        correct: 2
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Haruka kanata — far beyond the horizon\ncalling me forward, ever forward',
+        q: '"Haruka Kanata" by Asian Kung-Fu Generation was which opening of the original Naruto series?',
+        answers: ['1st', '2nd', '3rd', '4th'],
+        correct: 1
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Fukai mori no oku ni...\n(Deep in the depths of the forest...)',
+        q: '"Fukai Mori" (Deep Forest) was Inuyasha\'s 2nd ending theme. Which group performed it?',
+        answers: ['V6', 'Dream', 'Every Little Thing', 'Do As Infinity'],
+        correct: 3
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Hero\'s come back!!\nnobodyknows — let\'s go!',
+        q: 'Who performed "Hero\'s Come Back!!," the very first Naruto Shippuden opening?',
+        answers: ['FLOW', 'KANA-BOON', 'nobodyknows+', 'Asian Kung-Fu Generation'],
+        correct: 2
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'GO! GO! GO!\nThe path of a ninja — never give up!',
+        q: 'FLOW\'s energetic "GO!!!" was which opening of the original Naruto series?',
+        answers: ['2nd', '3rd', '4th', '6th'],
+        correct: 2
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Silhouette... silhouette...\nstanding in the shadows searching for the light',
+        q: 'KANA-BOON\'s viral "Silhouette" was which Naruto Shippuden opening number?',
+        answers: ['6th', '10th', '13th', '16th'],
+        correct: 3
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'My will... watashi no kokoro\ncarrying on, one step at a time',
+        q: '"My Will" by Dream was which Inuyasha ending theme?',
+        answers: ['1st ending', '2nd ending', '3rd ending', '4th ending'],
+        correct: 0
+      },
+      {
+        series: 'lyrics',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        lyric: 'Sign — a sign just for you\nwritten in the wind, across the sky',
+        q: 'FLOW\'s "Sign" was which Naruto Shippuden opening?',
+        answers: ['4th', '6th', '8th', '10th'],
+        correct: 1
+      },
     ];
 
     // ── State ─────────────────────────────────────────────────
@@ -418,6 +513,13 @@
       const q    = deck[deckIdx];
       const progress = ((deckIdx / deck.length) * 100).toFixed(1);
 
+      const lyricHTML = q.lyric
+        ? `<div class="lyric-snippet" aria-label="Lyric snippet">
+             <span class="lyric-note" aria-hidden="true">♪</span>
+             <blockquote class="lyric-text">${q.lyric.replace(/\n/g, '<br>')}</blockquote>
+           </div>`
+        : '';
+
       wrap.innerHTML = `
         <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
           <div class="progress-bar" role="progressbar"
@@ -428,6 +530,7 @@
           <div class="question-body">
             <span class="question-series-badge"
                   style="--series-color:${q.seriesColor}">${q.seriesLabel}</span>
+            ${lyricHTML}
             <p class="question-text">${q.q}</p>
           </div>
           <div class="answer-grid" role="group" aria-label="Answer choices">

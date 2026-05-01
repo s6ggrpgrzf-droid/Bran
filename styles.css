@@ -1683,6 +1683,34 @@ main {
   margin-bottom: 0.75rem;
 }
 
+.lyric-snippet {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: linear-gradient(135deg, #ecfeff 0%, #f0f9ff 100%);
+  border-left: 3px solid #06b6d4;
+  border-radius: 0 12px 12px 0;
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1rem;
+}
+.lyric-note {
+  font-size: 1.3rem;
+  color: #06b6d4;
+  flex-shrink: 0;
+  line-height: 1.3;
+  user-select: none;
+}
+.lyric-text {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  font-weight: 600;
+  color: #0e7490;
+  line-height: 1.65;
+  margin: 0;
+  padding: 0;
+}
+
 .question-text {
   font-family: 'Nunito', sans-serif;
   font-size: 1.1rem;
