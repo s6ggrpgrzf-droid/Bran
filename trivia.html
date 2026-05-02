@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nerdy trivia from Naruto, Inuyasha, and Star Wars.">
+  <meta name="description" content="Nerdy trivia from Naruto, Inuyasha, Star Wars, and music lyrics across the decades.">
   <title>Brandon — Trivia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,9 @@
           <button class="trivia-filter__btn"
                   style="--series-color:#eab308"
                   data-filter="starwars">Star Wars ✨</button>
+          <button class="trivia-filter__btn"
+                  style="--series-color:#06b6d4"
+                  data-filter="music">Music 🎵</button>
         </div>
 
         <!-- Score -->
@@ -172,7 +175,7 @@
         series: 'naruto',
         seriesLabel: 'Naruto 🍥',
         seriesColor: '#f97316',
-        q: "Who ultimately defeated Itachi Uchiha?",
+        q: "Who did Itachi Uchiha face in his final battle?",
         answers: ["Naruto", "Kakashi", "Sasuke", "Obito"],
         correct: 2
       },
@@ -231,7 +234,7 @@
         seriesLabel: 'Inuyasha ⚔️',
         seriesColor: '#9333ea',
         q: "What magic word forces Inuyasha to sit?",
-        answers: ['"Down!"', '"Heel!"', '"Stop!"', '"Sit!" (Osuwari)'],
+        answers: ["Down", "Heel", "Stop", "Sit (Osuwari)"],
         correct: 3
       },
       {
@@ -305,7 +308,7 @@
         seriesLabel: 'Star Wars ✨',
         seriesColor: '#eab308',
         q: "What species is Yoda?",
-        answers: ["Rodian", "Jedi", "Goblin", "Unknown (unnamed species)"],
+        answers: ["Rodian", "Jedi", "Goblin", "Unknown species"],
         correct: 3
       },
       {
@@ -363,6 +366,120 @@
         q: "How does R2-D2 primarily communicate?",
         answers: ["Binary code", "English subtitles", "Holographic messages", "Beeps and whistles"],
         correct: 3
+      },
+
+      // ── Music ──
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Queen lyric: \"Is this the real life? Is this just ___?\"",
+        answers: ["a dream", "fantasy", "make-believe", "an illusion"],
+        correct: 1
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Beatles lyric: \"Hey Jude, don't make it ___\"",
+        answers: ["hard", "wrong", "bad", "sad"],
+        correct: 2
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Eagles lyric: \"Welcome to the Hotel California / Such a lovely ___\"",
+        answers: ["place", "spot", "town", "evening"],
+        correct: 0
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Journey lyric: \"Just a small town girl, livin' in a ___\"",
+        answers: ["dream world", "city light", "lonely world", "faraway town"],
+        correct: 2
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Bon Jovi lyric: \"Whoa, we're halfway there / Whoa-oh, livin' on a ___\"",
+        answers: ["dream", "wing", "memory", "prayer"],
+        correct: 3
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Nirvana lyric: \"With the lights out, it's less ___\"",
+        answers: ["dangerous", "frightening", "lonely", "stressful"],
+        correct: 0
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Radiohead lyric: \"But I'm a creep / I'm a ___\"",
+        answers: ["loser", "weirdo", "failure", "stranger"],
+        correct: 1
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the OutKast lyric: \"Shake it like a ___\"",
+        answers: ["salt shaker", "Polaroid picture", "money maker", "tambourine"],
+        correct: 1
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Linkin Park lyric: \"I tried so hard and got so far / But in the end, it ___\"",
+        answers: ["broke me down", "all fell apart", "doesn't even matter", "didn't really matter"],
+        correct: 2
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete The Killers lyric: \"It started out with a kiss / How did it end up like ___\"",
+        answers: ["this", "that", "this love", "war"],
+        correct: 0
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Adele lyric: \"Hello from the ___\"",
+        answers: ["darkness", "outside", "other side", "sidewalk"],
+        correct: 2
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete the Taylor Swift lyric: \"Cause the players gonna play, play, play, play, play / And the haters gonna ___\"",
+        answers: ["criticize", "talk, talk, talk", "judge me", "hate, hate, hate"],
+        correct: 3
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Complete The Weeknd lyric: \"I said, ooh, I'm blinded by the ___\"",
+        answers: ["lights", "love", "night", "stars"],
+        correct: 0
+      },
+      {
+        series: 'music',
+        seriesLabel: 'Music 🎵',
+        seriesColor: '#06b6d4',
+        q: "Which band recorded the alt-rock hit \"1979\"?",
+        answers: ["Pearl Jam", "Stone Temple Pilots", "Smashing Pumpkins", "Sonic Youth"],
+        correct: 2
       },
     ];
 
