@@ -932,54 +932,54 @@ const TRIVIA_QUESTIONS = [
     q: '"Hey, bartender, pour me a drink / Make it strong \'cause I don\'t wanna think…"',
     answers: ['I Had Some Help — Post Malone & Morgan Wallen','Pour Me a Drink — Post Malone','A Bar Song (Tipsy) — Shaboozey','Need a Favor — Jelly Roll'], correct: 1 },
 
-  // ── Alternative Lyrics (guess the song / complete the lyric) ──────────
+  // ── Alternative Lyrics (merged into Lyrics — guess the song from the lyric) ──
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: '"Here we are now, ___."',
-    answers: ['come and see us','remember this','entertain us','it\'s your turn'], correct: 2 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"Here we are now, entertain us…"',
+    answers: ['Come as You Are — Nirvana','Lithium — Nirvana','Smells Like Teen Spirit — Nirvana','In Bloom — Nirvana'], correct: 2 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: 'Who sang: "I\'m a creep, I\'m a weirdo. What the hell am I doing here?"',
-    answers: ['Nirvana','Oasis','Radiohead','The Cure'], correct: 2 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"I\'m a creep, I\'m a weirdo / What the hell am I doing here?"',
+    answers: ['Creep — Radiohead','Karma Police — Radiohead','Fake Plastic Trees — Radiohead','High and Dry — Radiohead'], correct: 0 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: '"Despite all my rage, I am still just a ___."',
-    answers: ['ghost in the machine','rat in a cage','slave on a stage','pawn in your game'], correct: 1 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"Despite all my rage, I am still just a rat in a cage…"',
+    answers: ['Zero — Smashing Pumpkins','Today — Smashing Pumpkins','Disarm — Smashing Pumpkins','Bullet With Butterfly Wings — Smashing Pumpkins'], correct: 3 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: 'Which band asks: "Do you have the time to listen to me whine?"',
-    answers: ['Weezer','Blink-182','The Offspring','Green Day'], correct: 3 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"Do you have the time to listen to me whine / About nothing and everything all at once?"',
+    answers: ['Basket Case — Green Day','Good Riddance — Green Day','When I Come Around — Green Day','Longview — Green Day'], correct: 0 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: '"That\'s me in the corner, ___."',
-    answers: ['standing all alone','losing my religion','watching from afar','fading away'], correct: 1 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"That\'s me in the corner / That\'s me in the spotlight / Losing my religion…"',
+    answers: ['Everybody Hurts — R.E.M.','Man on the Moon — R.E.M.','Losing My Religion — R.E.M.','Shiny Happy People — R.E.M.'], correct: 2 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: 'Which song begins: "Coming out of my cage and I\'ve been doing just fine"?',
-    answers: ['Somebody Told Me','Mr. Brightside','All These Things That I\'ve Done','Human'], correct: 1 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"Coming out of my cage / And I\'ve been doing just fine…"',
+    answers: ['Somebody Told Me — The Killers','Mr. Brightside — The Killers','Human — The Killers','All These Things That I\'ve Done — The Killers'], correct: 1 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: 'Who sang: "Is someone getting the best, the best, the best of you?"',
-    answers: ['Pearl Jam','Soundgarden','Foo Fighters','Alice in Chains'], correct: 2 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"Is someone getting the best, the best, the best of you?"',
+    answers: ['Best of You — Foo Fighters','Everlong — Foo Fighters','Learn to Fly — Foo Fighters','The Pretender — Foo Fighters'], correct: 0 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: '"And after all, you\'re my ___."',
-    answers: ['shining star','only hope','wonderwall','saving grace'], correct: 2 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"And after all / You\'re my wonderwall…"',
+    answers: ['Don\'t Look Back in Anger — Oasis','Champagne Supernova — Oasis','Live Forever — Oasis','Wonderwall — Oasis'], correct: 3 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: 'Which artist originally recorded: "I hurt myself today, to see if I still feel"?',
-    answers: ['Marilyn Manson','Nine Inch Nails','Johnny Cash','David Bowie'], correct: 1 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"I hurt myself today / To see if I still feel…"',
+    answers: ['Closer — Nine Inch Nails','Hurt — Nine Inch Nails','The Hand That Feeds — Nine Inch Nails','Head Like a Hole — Nine Inch Nails'], correct: 1 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: '"However far away, I will always ___ you."',
-    answers: ['find','love','miss','need'], correct: 1 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"However far away / I will always love you…"',
+    answers: ['Lovesong — The Cure','Boys Don\'t Cry — The Cure','Friday I\'m in Love — The Cure','Close to Me — The Cure'], correct: 0 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: 'Which Pearl Jam song contains: "I know someday you\'ll have a beautiful life"?',
-    answers: ['Alive','Jeremy','Black','Even Flow'], correct: 2 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"I know someday you\'ll have a beautiful life / I know you\'ll be a star…"',
+    answers: ['Alive — Pearl Jam','Jeremy — Pearl Jam','Black — Pearl Jam','Even Flow — Pearl Jam'], correct: 2 },
 
-  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
-    q: '"Soy un perdedor, I\'m a loser baby, so why don\'t you ___."',
-    answers: ['let me go','try again','kill me','call me'], correct: 2 },
+  { series:'lyrics', seriesLabel:'Lyrics 🎤', seriesColor:'#ec4899',
+    q: '"Soy un perdedor / I\'m a loser baby, so why don\'t you kill me?"',
+    answers: ['Where It\'s At — Beck','Loser — Beck','Devil\'s Haircut — Beck','Sexx Laws — Beck'], correct: 1 },
 
 ];
