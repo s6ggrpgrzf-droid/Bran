@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nerdy trivia from Naruto, Inuyasha, and Star Wars.">
+  <meta name="description" content="Nerdy trivia from Naruto, Inuyasha, and Star Wars — plus a current-music lyric guessing round.">
   <title>Brandon — Trivia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +45,9 @@
           <button class="trivia-filter__btn"
                   style="--series-color:#eab308"
                   data-filter="starwars">Star Wars ✨</button>
+          <button class="trivia-filter__btn"
+                  style="--series-color:#ec4899"
+                  data-filter="lyrics">Lyrics 🎵</button>
         </div>
 
         <!-- Score -->
@@ -363,6 +366,308 @@
         q: "How does R2-D2 primarily communicate?",
         answers: ["Binary code", "English subtitles", "Holographic messages", "Beeps and whistles"],
         correct: 3
+      },
+
+      // ── Lyrics 🎵 (current music) ──
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"That's that me, espresso…"`,
+        answers: ["Espresso — Sabrina Carpenter", "Houdini — Dua Lipa", "greedy — Tate McRae", "yes, and? — Ariana Grande"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Please, please, please / Don't prove I'm right…"`,
+        answers: ["Houdini — Dua Lipa", "Please Please Please — Sabrina Carpenter", "greedy — Tate McRae", "Birds of a Feather — Billie Eilish"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Every time you close your eyes / You'll taste me on your tongue…"`,
+        answers: ["Lunch — Billie Eilish", "Espresso — Sabrina Carpenter", "Taste — Sabrina Carpenter", "Apple — Charli XCX"],
+        correct: 2
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"It's me, hi, I'm the problem, it's me…"`,
+        answers: ["Cruel Summer — Taylor Swift", "Anti-Hero — Taylor Swift", "vampire — Olivia Rodrigo", "Flowers — Miley Cyrus"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"And it's new, the shape of your body / It's blue, the feeling I've got…"`,
+        answers: ["Anti-Hero — Taylor Swift", "Fortnight — Taylor Swift", "Cruel Summer — Taylor Swift", "vampire — Olivia Rodrigo"],
+        correct: 2
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I was a functioning alcoholic / 'Til nobody noticed my new aesthetic…"`,
+        answers: ["Cruel Summer — Taylor Swift", "Anti-Hero — Taylor Swift", "good 4 u — Olivia Rodrigo", "Fortnight — Taylor Swift"],
+        correct: 3
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Hate to give the satisfaction asking how you're doing now…"`,
+        answers: ["drivers license — Olivia Rodrigo", "vampire — Olivia Rodrigo", "Anti-Hero — Taylor Swift", "good 4 u — Olivia Rodrigo"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I got my driver's license last week / Just like we always talked about…"`,
+        answers: ["drivers license — Olivia Rodrigo", "Cruel Summer — Taylor Swift", "Birds of a Feather — Billie Eilish", "Saturn — SZA"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Well, good for you, I guess you moved on really easily…"`,
+        answers: ["good 4 u — Olivia Rodrigo", "vampire — Olivia Rodrigo", "drivers license — Olivia Rodrigo", "Anti-Hero — Taylor Swift"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"And when you wake up next to him in the middle of the night / With your head in your hands, you're nothing more than his wife…"`,
+        answers: ["HOT TO GO! — Chappell Roan", "Pink Pony Club — Chappell Roan", "Good Luck, Babe! — Chappell Roan", "Espresso — Sabrina Carpenter"],
+        correct: 2
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I'm gonna keep on dancin' at the Pink Pony Club…"`,
+        answers: ["Pink Pony Club — Chappell Roan", "HOT TO GO! — Chappell Roan", "Good Luck, Babe! — Chappell Roan", "Apple — Charli XCX"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"H-O-T-T-O-G-O / You can take me hot to go…"`,
+        answers: ["Good Luck, Babe! — Chappell Roan", "HOT TO GO! — Chappell Roan", "Pink Pony Club — Chappell Roan", "360 — Charli XCX"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I want you to stay / 'Til I'm in the grave…"`,
+        answers: ["Lunch — Billie Eilish", "Birds of a Feather — Billie Eilish", "Saturn — SZA", "Snooze — SZA"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I could eat that girl for lunch…"`,
+        answers: ["Birds of a Feather — Billie Eilish", "Lunch — Billie Eilish", "Apple — Charli XCX", "360 — Charli XCX"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Catch me or I go Houdini…"`,
+        answers: ["Houdini — Dua Lipa", "Training Season — Dua Lipa", "Espresso — Sabrina Carpenter", "greedy — Tate McRae"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Are you someone that I could give my heart to? / Or just the poison that I'm drawn to?"`,
+        answers: ["Houdini — Dua Lipa", "Training Season — Dua Lipa", "vampire — Olivia Rodrigo", "Anti-Hero — Taylor Swift"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"We can't be friends, but I'd like to just pretend…"`,
+        answers: ["yes, and? — Ariana Grande", "we can't be friends — Ariana Grande", "Saturn — SZA", "Birds of a Feather — Billie Eilish"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Now, I'm so done with caring what you think…"`,
+        answers: ["we can't be friends — Ariana Grande", "yes, and? — Ariana Grande", "Houdini — Dua Lipa", "Flowers — Miley Cyrus"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I can buy myself flowers / Write my name in the sand…"`,
+        answers: ["Flowers — Miley Cyrus", "Anti-Hero — Taylor Swift", "greedy — Tate McRae", "Save Your Tears — The Weeknd"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"If the world was ending / I'd wanna be next to you…"`,
+        answers: ["Beautiful Things — Benson Boone", "Lose Control — Teddy Swims", "Die With A Smile — Lady Gaga & Bruno Mars", "Too Sweet — Hozier"],
+        correct: 2
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I said, ooh, I'm blinded by the lights…"`,
+        answers: ["Save Your Tears — The Weeknd", "Blinding Lights — The Weeknd", "Houdini — Dua Lipa", "Snooze — SZA"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Save your tears for another day…"`,
+        answers: ["Blinding Lights — The Weeknd", "Save Your Tears — The Weeknd", "Lose Control — Teddy Swims", "Too Sweet — Hozier"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I'd rather be famous instead / Mm, I'd rather be me…"`,
+        answers: ["Agora Hills — Doja Cat", "Paint The Town Red — Doja Cat", "greedy — Tate McRae", "Houdini — Dua Lipa"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I just wanna show you off, show you off…"`,
+        answers: ["Paint The Town Red — Doja Cat", "Agora Hills — Doja Cat", "Water — Tyla", "Lunch — Billie Eilish"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I can't lose when I'm with you / Can't snooze, miss any moments with you…"`,
+        answers: ["Snooze — SZA", "Saturn — SZA", "Birds of a Feather — Billie Eilish", "we can't be friends — Ariana Grande"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"If there's a point to losing love, repeating pain…"`,
+        answers: ["Saturn — SZA", "Snooze — SZA", "vampire — Olivia Rodrigo", "Stick Season — Noah Kahan"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Make me sweat, make me hotter / Make me lose my breath, make me water…"`,
+        answers: ["Water — Tyla", "Houdini — Dua Lipa", "Agora Hills — Doja Cat", "Snooze — SZA"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"This ain't Texas (woo), ain't no hold 'em…"`,
+        answers: ["TEXAS HOLD 'EM — Beyoncé", "A Bar Song (Tipsy) — Shaboozey", "Fast Car — Luke Combs", "Last Night — Morgan Wallen"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"They not like us, they not like us, they not like us…"`,
+        answers: ["FE!N — Travis Scott", "Not Like Us — Kendrick Lamar", "MONACO — Bad Bunny", "Calm Down — Rema & Selena Gomez"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Fein, fein, fein, fein, fein, fein…"`,
+        answers: ["MONACO — Bad Bunny", "Not Like Us — Kendrick Lamar", "FE!N — Travis Scott", "Paint The Town Red — Doja Cat"],
+        correct: 2
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Baby, calm down, calm down…"`,
+        answers: ["Water — Tyla", "Calm Down — Rema & Selena Gomez", "Houdini — Dua Lipa", "Lose Control — Teddy Swims"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Yo siempre soñé con vivir en Mónaco…"`,
+        answers: ["MONACO — Bad Bunny", "Calm Down — Rema & Selena Gomez", "Water — Tyla", "FE!N — Travis Scott"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I think I'll take my whiskey neat / My coffee black and my bed at three…"`,
+        answers: ["Beautiful Things — Benson Boone", "Too Sweet — Hozier", "Lose Control — Teddy Swims", "Stick Season — Noah Kahan"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Please stay, I want you, I need you, oh God / Don't take these beautiful things that I've got…"`,
+        answers: ["Beautiful Things — Benson Boone", "Too Sweet — Hozier", "Lose Control — Teddy Swims", "Die With A Smile — Lady Gaga & Bruno Mars"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Got me losin' my, losin' my, losin' my mind…"`,
+        answers: ["Lose Control — Teddy Swims", "Too Sweet — Hozier", "Beautiful Things — Benson Boone", "Stick Season — Noah Kahan"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I would want myself / Baby, please, believe me…"`,
+        answers: ["exes — Tate McRae", "greedy — Tate McRae", "Espresso — Sabrina Carpenter", "Houdini — Dua Lipa"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"All my exes live in cities / 'Cause I'm hard to forget and they wanna be where I'm at…"`,
+        answers: ["greedy — Tate McRae", "exes — Tate McRae", "Cruel Summer — Taylor Swift", "Apple — Charli XCX"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I'm everywhere, I'm so Julia…"`,
+        answers: ["Apple — Charli XCX", "360 — Charli XCX", "HOT TO GO! — Chappell Roan", "Houdini — Dua Lipa"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I think the apple's rotten right to the core / From all the things passed down…"`,
+        answers: ["360 — Charli XCX", "Apple — Charli XCX", "Lunch — Billie Eilish", "Saturn — SZA"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"In five years maybe you'll like country songs / I'll miss your laugh, I hope I'm wrong…"`,
+        answers: ["That's So True — Gracie Abrams", "I Love You, I'm Sorry — Gracie Abrams", "drivers license — Olivia Rodrigo", "Anti-Hero — Taylor Swift"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Yeah, you're so true / Stickin' to her like that tattoo…"`,
+        answers: ["I Love You, I'm Sorry — Gracie Abrams", "That's So True — Gracie Abrams", "Cruel Summer — Taylor Swift", "exes — Tate McRae"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"And I love Vermont, but it's the season of the sticks…"`,
+        answers: ["Stick Season — Noah Kahan", "Fast Car — Luke Combs", "Heart Like A Truck — Lainey Wilson", "Too Sweet — Hozier"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"One, here comes the two to the three to the four / Tell 'em, 'Pour it up'…"`,
+        answers: ["Last Night — Morgan Wallen", "A Bar Song (Tipsy) — Shaboozey", "TEXAS HOLD 'EM — Beyoncé", "Pour Me a Drink — Post Malone"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I had some help / It ain't like I can make this kind of mess all by myself…"`,
+        answers: ["I Had Some Help — Post Malone & Morgan Wallen", "Last Night — Morgan Wallen", "Pour Me a Drink — Post Malone", "Need a Favor — Jelly Roll"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Last night, we let the liquor talk / I can't remember everything we said but we said it all…"`,
+        answers: ["I Had Some Help — Post Malone & Morgan Wallen", "I Remember Everything — Zach Bryan & Kacey Musgraves", "Last Night — Morgan Wallen", "Pour Me a Drink — Post Malone"],
+        correct: 2
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Rotgut whiskey's gonna ease my mind / Beach towel rests on the dryin' line…"`,
+        answers: ["Last Night — Morgan Wallen", "I Remember Everything — Zach Bryan & Kacey Musgraves", "Stick Season — Noah Kahan", "Fast Car — Luke Combs"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I got a heart like a truck / It's been drug through the mud…"`,
+        answers: ["Fast Car — Luke Combs", "Heart Like A Truck — Lainey Wilson", "TEXAS HOLD 'EM — Beyoncé", "A Bar Song (Tipsy) — Shaboozey"],
+        correct: 1
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"You got a fast car / I want a ticket to anywhere…"`,
+        answers: ["Fast Car — Luke Combs", "Last Night — Morgan Wallen", "Heart Like A Truck — Lainey Wilson", "Stick Season — Noah Kahan"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"I only talk to God when I need a favor…"`,
+        answers: ["Need a Favor — Jelly Roll", "Pour Me a Drink — Post Malone", "Last Night — Morgan Wallen", "Stick Season — Noah Kahan"],
+        correct: 0
+      },
+      {
+        series: 'lyrics', seriesLabel: 'Lyrics 🎵', seriesColor: '#ec4899',
+        q: `"Hey, bartender, pour me a drink / Make it strong 'cause I don't wanna think…"`,
+        answers: ["I Had Some Help — Post Malone & Morgan Wallen", "Pour Me a Drink — Post Malone", "A Bar Song (Tipsy) — Shaboozey", "Need a Favor — Jelly Roll"],
+        correct: 1
       },
     ];
 
