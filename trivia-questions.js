@@ -932,4 +932,54 @@ const TRIVIA_QUESTIONS = [
     q: '"Hey, bartender, pour me a drink / Make it strong \'cause I don\'t wanna think…"',
     answers: ['I Had Some Help — Post Malone & Morgan Wallen','Pour Me a Drink — Post Malone','A Bar Song (Tipsy) — Shaboozey','Need a Favor — Jelly Roll'], correct: 1 },
 
+  // ── Alternative Lyrics (guess the song / complete the lyric) ──────────
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: '"Here we are now, ___."',
+    answers: ['come and see us','remember this','entertain us','it\'s your turn'], correct: 2 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: 'Who sang: "I\'m a creep, I\'m a weirdo. What the hell am I doing here?"',
+    answers: ['Nirvana','Oasis','Radiohead','The Cure'], correct: 2 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: '"Despite all my rage, I am still just a ___."',
+    answers: ['ghost in the machine','rat in a cage','slave on a stage','pawn in your game'], correct: 1 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: 'Which band asks: "Do you have the time to listen to me whine?"',
+    answers: ['Weezer','Blink-182','The Offspring','Green Day'], correct: 3 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: '"That\'s me in the corner, ___."',
+    answers: ['standing all alone','losing my religion','watching from afar','fading away'], correct: 1 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: 'Which song begins: "Coming out of my cage and I\'ve been doing just fine"?',
+    answers: ['Somebody Told Me','Mr. Brightside','All These Things That I\'ve Done','Human'], correct: 1 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: 'Who sang: "Is someone getting the best, the best, the best of you?"',
+    answers: ['Pearl Jam','Soundgarden','Foo Fighters','Alice in Chains'], correct: 2 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: '"And after all, you\'re my ___."',
+    answers: ['shining star','only hope','wonderwall','saving grace'], correct: 2 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: 'Which artist originally recorded: "I hurt myself today, to see if I still feel"?',
+    answers: ['Marilyn Manson','Nine Inch Nails','Johnny Cash','David Bowie'], correct: 1 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: '"However far away, I will always ___ you."',
+    answers: ['find','love','miss','need'], correct: 1 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: 'Which Pearl Jam song contains: "I know someday you\'ll have a beautiful life"?',
+    answers: ['Alive','Jeremy','Black','Even Flow'], correct: 2 },
+
+  { series:'alternative', seriesLabel:'Alt Lyrics 🎸', seriesColor:'#06b6d4',
+    q: '"Soy un perdedor, I\'m a loser baby, so why don\'t you ___."',
+    answers: ['let me go','try again','kill me','call me'], correct: 2 },
+
 ];
