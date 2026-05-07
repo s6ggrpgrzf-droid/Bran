@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calming fidget toys and mini-games for focus and relaxation.">
+  <title>Brandon — Fidget Games</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="fidgets-page">
+  <div id="bg-stars" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header role="banner">
+    <div class="petals" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="container">
+      <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
+      <h1>Fidget Games</h1>
+      <p class="tagline">✨ Tap, squeeze, spin, breathe ✨</p>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Game 1: Bubble Pop (reworked) -->
+    <section id="bubble-section" aria-labelledby="bubble-heading">
+      <div class="container">
+        <h2 id="bubble-heading">Bubble Pop 🫧</h2>
+        <p class="section-intro">Pop the bubbles. Catch a rare golden one for a sparkle bonus.</p>
+        <div class="fidget-game-card">
+          <div id="bubble-game" class="fidget-game-container" role="application" aria-label="Bubble pop game"></div>
+          <div class="game-stats">
+            <p>Bubbles popped: <strong id="bubble-count">0</strong> · Best combo: <strong id="bubble-best-combo">0</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game 2: Spinner Wheel (reworked: drag-to-spin, labelled segments) -->
+    <section id="spinner-section" aria-labelledby="spinner-heading">
+      <div class="container">
+        <h2 id="spinner-heading">Spinner Wheel 🎡</h2>
+        <p class="section-intro">Drag in a circle, or just click. Faster flicks spin longer.</p>
+        <div class="fidget-game-card">
+          <div id="spinner-game" class="fidget-game-container" role="application" aria-label="Spinner wheel game">
+            <div id="spinner-wheel" class="spinner-wheel"></div>
+          </div>
+          <div class="game-stats">
+            <p>Times spun: <strong id="spinner-count">0</strong></p>
+            <p class="spinner-result-label">Landed on: <strong id="spinner-result">—</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game 3: Dot Tapper (reworked: 3x3, persisted high level, level-up confetti) -->
+    <section id="dot-section" aria-labelledby="dot-heading">
+      <div class="container">
+        <h2 id="dot-heading">Dot Tapper 🎯</h2>
+        <p class="section-intro">Watch the pattern, then repeat it. How long can you stretch your memory?</p>
+        <div class="fidget-game-card">
+          <div id="dot-tapper-game" class="fidget-game-container" role="application" aria-label="Dot tapper memory game">
+            <div class="dot-grid"></div>
+          </div>
+          <div class="game-stats">
+            <p class="dot-status" id="dot-status">Get ready…</p>
+            <p>Level: <strong id="dot-level">1</strong> · Best: <strong id="dot-best">1</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game 4: Stress Ball (reworked: heat-up tint, idle breathe) -->
+    <section id="stress-section" aria-labelledby="stress-heading">
+      <div class="container">
+        <h2 id="stress-heading">Stress Ball 💙</h2>
+        <p class="section-intro">Press and hold. The longer you squeeze, the bigger the release.</p>
+        <div class="fidget-game-card">
+          <div id="stress-ball-game" class="fidget-game-container" role="application" aria-label="Stress ball game">
+            <div id="stress-ball" class="stress-ball"></div>
+            <svg id="squeeze-ring" viewBox="0 0 100 100" aria-hidden="true">
+              <circle cx="50" cy="50" r="46" />
+            </svg>
+          </div>
+          <div class="game-stats">
+            <p>Squeezes: <strong id="stress-count">0</strong> · Time held: <strong id="stress-time">0</strong>s</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game 5: Zen Sand Garden (NEW) -->
+    <section id="sand-section" aria-labelledby="sand-heading">
+      <div class="container">
+        <h2 id="sand-heading">Zen Sand Garden 🪷</h2>
+        <p class="section-intro">Drag to rake patterns into the sand. Smooth it whenever you need a fresh start.</p>
+        <div class="fidget-game-card">
+          <div id="sand-game" class="fidget-game-container" role="application" aria-label="Zen sand garden">
+            <canvas id="sand-canvas" width="600" height="380"></canvas>
+          </div>
+          <div class="sand-controls">
+            <button type="button" id="sand-smooth" class="sand-btn">Smooth Sand</button>
+            <button type="button" id="sand-tool" class="sand-btn" data-tool="rake">Rake 🪮</button>
+          </div>
+          <div class="game-stats">
+            <p>Strokes drawn: <strong id="sand-strokes">0</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game 6: Pop-It Grid (NEW) -->
+    <section id="popit-section" aria-labelledby="popit-heading">
+      <div class="container">
+        <h2 id="popit-heading">Pop-It Grid 🌈</h2>
+        <p class="section-intro">Push each silicone bubble. Tap again to pop it back up. Pure satisfying repetition.</p>
+        <div class="fidget-game-card">
+          <div id="popit-game" class="fidget-game-container" role="application" aria-label="Pop-it bubble grid">
+            <div id="popit-grid" class="popit-grid"></div>
+          </div>
+          <div class="popit-controls">
+            <button type="button" id="popit-reset" class="sand-btn">Reset Pops</button>
+          </div>
+          <div class="game-stats">
+            <p>Total pops: <strong id="popit-count">0</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Game 7: Ripple Pond (NEW) -->
+    <section id="ripple-section" aria-labelledby="ripple-heading">
+      <div class="container">
+        <h2 id="ripple-heading">Ripple Pond 💧</h2>
+        <p class="section-intro">Tap the water and watch the ripples meet. No score, just stillness.</p>
+        <div class="fidget-game-card">
+          <div id="ripple-game" class="fidget-game-container" role="application" aria-label="Ripple pond">
+            <canvas id="ripple-canvas" width="600" height="380"></canvas>
+          </div>
+          <div class="game-stats">
+            <p>Ripples sent: <strong id="ripple-count">0</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container">
+      <p>Made with ❤️ for Brandon</p>
+    </div>
+  </footer>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <a href="index.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌸</span>
+      <span class="bottom-nav__label">Wellness</span>
+    </a>
+    <a href="characters.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">⭐</span>
+      <span class="bottom-nav__label">Characters</span>
+    </a>
+    <a href="breathing.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌬️</span>
+      <span class="bottom-nav__label">Breathing</span>
+    </a>
+    <a href="weather.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🌤️</span>
+      <span class="bottom-nav__label">Weather</span>
+    </a>
+    <a href="trivia.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">🎯</span>
+      <span class="bottom-nav__label">Trivia</span>
+    </a>
+    <a href="fidget-games.html" class="bottom-nav__item active" aria-current="page">
+      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__label">Fidgets</span>
+    </a>
+    <a href="memorial.html" class="bottom-nav__item">
+      <span class="bottom-nav__icon" aria-hidden="true">💜</span>
+      <span class="bottom-nav__label">Mom</span>
+    </a>
+  </nav>
+
+  <script>
+    'use strict';
+    (function createStars() {
+      const c = document.getElementById('bg-stars');
+      for (let i = 0; i < 55; i++) {
+        const s = document.createElement('div');
+        s.className = 'bg-star';
+        const sz = 1.5 + Math.random() * 3;
+        s.style.cssText = [
+          `left:${(Math.random()*100).toFixed(2)}%`,
+          `top:${(Math.random()*100).toFixed(2)}%`,
+          `width:${sz.toFixed(1)}px`, `height:${sz.toFixed(1)}px`,
+          `animation-delay:${(Math.random()*5).toFixed(2)}s`,
+          `animation-duration:${(1.5+Math.random()*3).toFixed(2)}s`,
+        ].join(';');
+        c.appendChild(s);
+      }
+    })();
+  </script>
+
+  <script src="fidget-games.js"></script>
+</body>
+</html>
