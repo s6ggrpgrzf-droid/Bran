@@ -9,6 +9,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .wx-greeting {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.6rem;
+    }
+    .wx-feels {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      margin-top: 0.35rem;
+      font-style: italic;
+    }
+    #wx-anime-quote {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(167,139,250,0.25);
+      border-left: 3px solid #a78bfa;
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 4px 20px rgba(167,139,250,0.12);
+    }
+    .wq-icon { font-size: 1.5rem; line-height: 1; flex-shrink: 0; margin-top: 0.1rem; }
+    .wq-quote {
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-style: italic;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.55;
+    }
+    .wq-char {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: rgba(167,139,250,0.75);
+      margin-top: 0.35rem;
+      letter-spacing: 0.04em;
+    }
+  </style>
 </head>
 <body class="weather-page">
   <div id="bg-stars" aria-hidden="true"></div>
@@ -22,7 +69,7 @@
     <div class="container">
       <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
       <h1>McCloud Weather</h1>
-      <p class="tagline">📍 McCloud, Oklahoma</p>
+      <p class="tagline">📍 McCloud, Oklahoma — Home Base</p>
     </div>
   </header>
 
@@ -54,15 +101,35 @@
           <!-- Hero: current conditions -->
           <div class="weather-hero wx-default" id="weather-hero" aria-live="polite">
             <button class="wx-refresh-btn" id="refresh-btn" aria-label="Refresh weather">↻</button>
+            <div class="wx-greeting" id="wx-greeting"></div>
             <div class="wx-emoji" id="wx-emoji" aria-hidden="true">🌤️</div>
             <div class="wx-temp" id="wx-temp">—°</div>
             <div class="wx-desc" id="wx-desc">—</div>
+            <div class="wx-feels" id="wx-feels"></div>
             <div class="wx-meta">
               <span id="wx-wind">—</span>
               <span aria-hidden="true">·</span>
               <span id="wx-period-name">—</span>
             </div>
             <div class="wx-updated" id="wx-updated"></div>
+          </div>
+
+          <!-- Live Radar -->
+          <div class="weather-radar">
+            <div class="radar-header">
+              <h3 class="wx-section-title">Live Radar</h3>
+              <a href="https://news9.com/weather/radar" class="radar-link" target="_blank" rel="noopener noreferrer">View on News 9</a>
+            </div>
+            <div class="radar-container">
+              <iframe
+                src="https://www.wunderground.com/wundermap?lat=35.0111&lon=-97.0967&zoom=8&type=WunderMap_radar"
+                width="100%"
+                height="400"
+                frameborder="0"
+                title="Live weather radar for McCloud, Oklahoma"
+                style="border-radius: 8px; margin-top: 12px;">
+              </iframe>
+            </div>
           </div>
 
           <!-- 7-day forecast -->
@@ -85,7 +152,7 @@
 
   <footer role="contentinfo">
     <div class="container">
-      <p>Weather data from <a href="https://www.weather.gov" target="_blank" rel="noopener noreferrer">National Weather Service</a>. Updated every 30 min.</p>
+      <p>Weather data from <a href="https://www.weather.gov" target="_blank" rel="noopener noreferrer">National Weather Service</a> & <a href="https://news9.com/weather" target="_blank" rel="noopener noreferrer">News 9</a>. Updated every 30 min. Keeping an eye on home for you, Brandon.</p>
     </div>
   </footer>
 
@@ -213,6 +280,27 @@
       return 'wx-default';
     }
 
+    // ── Greeting ──────────────────────────────────────────────
+    function timeGreeting() {
+      const h = new Date().getHours();
+      if (h >= 5  && h < 12) return 'Good morning, Brandon ☀️';
+      if (h >= 12 && h < 17) return 'Good afternoon, Brandon 🌿';
+      if (h >= 17 && h < 21) return 'Good evening, Brandon 🌙';
+      return 'Good night, Brandon 💜';
+    }
+
+    // ── Feels-like note ───────────────────────────────────────
+    function feelsNote(temp) {
+      if (temp >= 100) return "Extreme heat out there — stay indoors and hydrated!";
+      if (temp >= 90)  return "It's really hot today — stay cool and drink water.";
+      if (temp >= 80)  return "Warm one today — light layers and stay cool.";
+      if (temp >= 70)  return "Nice and comfortable — a good day to step outside.";
+      if (temp >= 60)  return "Mild weather — a light jacket wouldn't hurt.";
+      if (temp >= 45)  return "Getting chilly — grab a jacket before heading out.";
+      if (temp >= 32)  return "It's cold out there — bundle up, Brandon.";
+      return "Freezing temps — stay warm and stay safe.";
+    }
+
     // ── Render ────────────────────────────────────────────────
     function renderWeather({ periods, fetchedAt }) {
       const current = periods[0];
@@ -222,9 +310,11 @@
       const cls  = conditionClass(current.shortForecast, current.isDaytime);
       hero.className = `weather-hero ${cls}`;
 
+      document.getElementById('wx-greeting').textContent   = timeGreeting();
       document.getElementById('wx-emoji').textContent      = weatherEmoji(current.shortForecast, current.isDaytime);
       document.getElementById('wx-temp').textContent       = `${current.temperature}°F`;
       document.getElementById('wx-desc').textContent       = current.shortForecast;
+      document.getElementById('wx-feels').textContent      = feelsNote(current.temperature);
       document.getElementById('wx-wind').textContent       = `💨 ${current.windSpeed} ${current.windDirection}`;
       document.getElementById('wx-period-name').textContent = current.name;
 

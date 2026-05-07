@@ -9,6 +9,38 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    .char-role {
+      font-size: 0.72rem;
+      font-style: italic;
+      font-weight: 600;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+      margin: 0.1rem 0 0.3rem;
+      display: block;
+    }
+    .filter-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 0.05rem 0.4rem;
+      margin-left: 0.3rem;
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+    #char-count-label {
+      text-align: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.06em;
+      margin: 0.5rem 0 1.25rem;
+    }
+  </style>
 </head>
 <body class="characters-page">
   <div id="bg-stars" aria-hidden="true"></div>
@@ -30,7 +62,7 @@
     <section aria-labelledby="quotes-heading">
       <div class="container">
         <h2 id="quotes-heading">Iconic Quotes</h2>
-        <p class="section-intro">From ninja villages to feudal Japan to galaxies far, far away.</p>
+        <p class="section-intro">The voices that shaped Brandon's world — from ninja villages to feudal Japan to galaxies far, far away.</p>
 
         <div class="filter-bar" role="group" aria-label="Filter by series">
           <button class="filter-btn active" data-filter="all" aria-pressed="true">✨ All</button>
@@ -39,12 +71,15 @@
           <button class="filter-btn starwars-btn" data-filter="starwars" aria-pressed="false">🌌 Star Wars</button>
         </div>
 
+        <p id="char-count-label" aria-live="polite"></p>
         <div class="card-grid" id="quotes-grid" role="list" aria-live="polite">
           <!-- Rendered by script -->
         </div>
       </div>
     </section>
   </main>
+
+  <div id="shippo-animations" aria-hidden="true"></div>
 
   <footer role="contentinfo">
     <div class="container">
@@ -89,28 +124,29 @@
     // ── Character data ────────────────────────────────────────
     const CHARACTERS = [
       // Naruto (Jikan API)
-      { series:'naruto',   name:'Naruto Uzumaki',   avatar:'🍥', imgSearch:'Naruto Uzumaki',   gifQuery:'naruto uzumaki rasengan',      quote:"I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!" },
-      { series:'naruto',   name:'Itachi Uchiha',    avatar:'🌑', imgSearch:'Itachi Uchiha',    gifQuery:'itachi uchiha amaterasu',      quote:"Those who cannot acknowledge themselves will eventually fail." },
-      { series:'naruto',   name:'Rock Lee',         avatar:'🥋', imgSearch:'Rock Lee',         gifQuery:'rock lee eight gates',         quote:"A dropout will beat a genius through hard work." },
-      { series:'naruto',   name:'Kakashi Hatake',   avatar:'⚡', imgSearch:'Kakashi Hatake',   gifQuery:'kakashi hatake sharingan',     quote:"Those who break the rules are scum, but those who abandon their friends are worse than scum." },
-      { series:'naruto',   name:'Gaara',            avatar:'🏜️', imgSearch:'Gaara',            gifQuery:'gaara sand naruto',            quote:"I want to be needed by someone. Not as a tool, but as myself." },
-      { series:'naruto',   name:'Jiraiya',          avatar:'📜', imgSearch:'Jiraiya',          gifQuery:'jiraiya sage mode naruto',     quote:"Never give up. Hardships will only make you stronger." },
-      { series:'naruto',   name:'Sakura Haruno',    avatar:'🌸', imgSearch:'Sakura Haruno',    gifQuery:'sakura haruno punch',          quote:"Having the courage to keep going makes you stronger." },
+      { series:'naruto',   name:'Naruto Uzumaki',   role:'7th Hokage · Jinchūriki of the Nine-Tails', avatar:'🍥', imgSearch:'Naruto Uzumaki',   gifQuery:'naruto uzumaki rasengan',      quote:"I'm not gonna run away, I never go back on my word! That's my nindo: my ninja way!" },
+      { series:'naruto',   name:'Itachi Uchiha',    role:'ANBU Captain · Akatsuki',                   avatar:'🌑', imgSearch:'Itachi Uchiha',    gifQuery:'itachi uchiha amaterasu',      quote:"Those who cannot acknowledge themselves will eventually fail." },
+      { series:'naruto',   name:'Rock Lee',         role:'Taijutsu Specialist · Team Guy',             avatar:'🥋', imgSearch:'Rock Lee',         gifQuery:'rock lee eight gates',         quote:"A dropout will beat a genius through hard work." },
+      { series:'naruto',   name:'Kakashi Hatake',   role:'Copy Ninja · 6th Hokage',                   avatar:'⚡', imgSearch:'Kakashi Hatake',   gifQuery:'kakashi hatake sharingan',     quote:"Those who break the rules are scum, but those who abandon their friends are worse than scum." },
+      { series:'naruto',   name:'Gaara',            role:'5th Kazekage · Jinchūriki of Shukaku',      avatar:'🏜️', imgSearch:'Gaara',            gifQuery:'gaara sand naruto',            quote:"I want to be needed by someone. Not as a tool, but as myself." },
+      { series:'naruto',   name:'Jiraiya',          role:'Legendary Sannin · Sage of Mount Myōboku',  avatar:'📜', imgSearch:'Jiraiya',          gifQuery:'jiraiya sage mode naruto',     quote:"Never give up. Hardships will only make you stronger." },
+      { series:'naruto',   name:'Sakura Haruno',    role:'Medical Ninja · Team 7',                    avatar:'🌸', imgSearch:'Sakura Haruno',    gifQuery:'sakura haruno punch',          quote:"Having the courage to keep going makes you stronger." },
       // Inuyasha (Jikan API)
-      { series:'inuyasha', name:'Inuyasha',         avatar:'⚔️', imgSearch:'Inuyasha',         gifQuery:'inuyasha wind scar',           quote:"Keh! Don't you dare underestimate me." },
-      { series:'inuyasha', name:'Kagome Higurashi', avatar:'🏹', imgSearch:'Kagome Higurashi', gifQuery:'kagome higurashi arrow',       quote:"No matter how far away you are, my heart is always with you." },
-      { series:'inuyasha', name:'Sesshomaru',       avatar:'🌙', imgSearch:'Sesshoumaru',      gifQuery:'sesshomaru sword inuyasha',    quote:"This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?" },
-      { series:'inuyasha', name:'Kikyo',            avatar:'🌺', imgSearch:'Kikyou',           gifQuery:'kikyo inuyasha anime',         quote:"To die was the only freedom open to me. Yet here I stand — between two worlds." },
-      { series:'inuyasha', name:'Miroku',           avatar:'☯️', imgSearch:'Miroku',           gifQuery:'miroku wind tunnel inuyasha',  quote:"Every life is precious. Even those filled with darkness have the chance to find light." },
-      { series:'inuyasha', name:'Sango',            avatar:'🛡️', imgSearch:'Sango',            gifQuery:'sango boomerang inuyasha',     quote:"I will protect the people I love, even if it costs me everything." },
+      { series:'inuyasha', name:'Inuyasha',         role:'Half-Demon · Wielder of Tessaiga',           avatar:'⚔️', imgSearch:'Inuyasha',         gifQuery:'inuyasha wind scar',           quote:"Keh! Don't you dare underestimate me." },
+      { series:'inuyasha', name:'Kagome Higurashi', role:'Time-Traveling Priestess · Shard Detector',  avatar:'🏹', imgSearch:'Kagome Higurashi', gifQuery:'kagome higurashi arrow',       quote:"No matter how far away you are, my heart is always with you." },
+      { series:'inuyasha', name:'Sesshomaru',       role:'Demon Lord of the Western Lands',            avatar:'🌙', imgSearch:'Sesshoumaru',      gifQuery:'sesshomaru sword inuyasha',    quote:"This Sesshomaru needs no one. And yet… why does this feeling of emptiness remain?" },
+      { series:'inuyasha', name:'Kikyo',            role:'Undead Priestess · Guardian of the Jewel',  avatar:'🌺', imgSearch:'Kikyou',           gifQuery:'kikyo inuyasha anime',         quote:"To die was the only freedom open to me. Yet here I stand — between two worlds." },
+      { series:'inuyasha', name:'Miroku',           role:'Buddhist Monk · Wind Tunnel Bearer',         avatar:'☯️', imgSearch:'Miroku',           gifQuery:'miroku wind tunnel inuyasha',  quote:"Every life is precious. Even those filled with darkness have the chance to find light." },
+      { series:'inuyasha', name:'Sango',            role:'Demon Slayer · Wielder of Hiraikotsu',       avatar:'🛡️', imgSearch:'Sango',            gifQuery:'sango boomerang inuyasha',     quote:"I will protect the people I love, even if it costs me everything." },
+      { series:'inuyasha', name:'Shippo',           role:'Young Fox Demon · Inuyasha\'s Ward',         avatar:'🦊', imgSearch:'Shippo Inuyasha',   gifQuery:'shippo inuyasha kitsune',      quote:"Even the smallest fox can help the ones they care about!" },
       // Star Wars (Wikipedia API)
-      { series:'starwars', name:'Yoda',             avatar:'🌿', imgSearch:'Yoda',             gifQuery:'yoda star wars',               quote:"Do or do not. There is no try." },
-      { series:'starwars', name:'Darth Vader',      avatar:'🖤', imgSearch:'Darth Vader',      gifQuery:'darth vader lightsaber',       quote:"I find your lack of faith disturbing." },
-      { series:'starwars', name:'Obi-Wan Kenobi',   avatar:'🔵', imgSearch:'Obi-Wan Kenobi',   gifQuery:'obi wan kenobi',               quote:"In my experience, there is no such thing as luck." },
-      { series:'starwars', name:'Luke Skywalker',   avatar:'⭐', imgSearch:'Luke Skywalker',   gifQuery:'luke skywalker lightsaber',    quote:"I am a Jedi, like my father before me." },
-      { series:'starwars', name:'Princess Leia',    avatar:'👑', imgSearch:'Leia Organa',      gifQuery:'princess leia star wars',      quote:"Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night." },
-      { series:'starwars', name:'Han Solo',         avatar:'🚀', imgSearch:'Han Solo',         gifQuery:'han solo star wars',           quote:"Never tell me the odds!" },
-      { series:'starwars', name:'Qui-Gon Jinn',     avatar:'🌱', imgSearch:'Qui-Gon Jinn',     gifQuery:'qui gon jinn star wars',       quote:"Your focus determines your reality." },
+      { series:'starwars', name:'Yoda',             role:'Jedi Grand Master · Dagobah Exile',          avatar:'🌿', imgSearch:'Yoda',             gifQuery:'yoda star wars',               quote:"Do or do not. There is no try." },
+      { series:'starwars', name:'Darth Vader',      role:'Dark Lord of the Sith · Emperor\'s Hand',   avatar:'🖤', imgSearch:'Darth Vader',      gifQuery:'darth vader lightsaber',       quote:"I find your lack of faith disturbing." },
+      { series:'starwars', name:'Obi-Wan Kenobi',   role:'Jedi Master · General of the Republic',     avatar:'🔵', imgSearch:'Obi-Wan Kenobi',   gifQuery:'obi wan kenobi',               quote:"In my experience, there is no such thing as luck." },
+      { series:'starwars', name:'Luke Skywalker',   role:'Last Jedi · Hero of the Rebellion',          avatar:'⭐', imgSearch:'Luke Skywalker',   gifQuery:'luke skywalker lightsaber',    quote:"I am a Jedi, like my father before me." },
+      { series:'starwars', name:'Princess Leia',    role:'Senator of Alderaan · Rebel General',        avatar:'👑', imgSearch:'Leia Organa',      gifQuery:'princess leia star wars',      quote:"Hope is like the sun. If you only believe in it when you can see it, you'll never make it through the night." },
+      { series:'starwars', name:'Han Solo',         role:'Smuggler · General of the Resistance',       avatar:'🚀', imgSearch:'Han Solo',         gifQuery:'han solo star wars',           quote:"Never tell me the odds!" },
+      { series:'starwars', name:'Qui-Gon Jinn',     role:'Jedi Master · Maverick of the Council',      avatar:'🌱', imgSearch:'Qui-Gon Jinn',     gifQuery:'qui gon jinn star wars',       quote:"Your focus determines your reality." },
     ];
 
     const SERIES_LABELS = { naruto:'🍥 Naruto', inuyasha:'⚔️ Inuyasha', starwars:'🌌 Star Wars' };
@@ -328,6 +364,7 @@
               </div>
               <div class="card-body">
                 <div class="char-name">${escapeHtml(c.name)}</div>
+                ${c.role ? `<span class="char-role">${escapeHtml(c.role)}</span>` : ''}
                 <div class="char-series">${escapeHtml(SERIES_LABELS[c.series])}</div>
                 <blockquote>${escapeHtml(c.quote)}</blockquote>
                 <button class="scene-btn" data-idx="${globalIdx}">▶ Show Scene</button>
@@ -338,6 +375,17 @@
               </div>
             </article>`;
         }).join('');
+
+        // Update count label
+        const label = document.getElementById('char-count-label');
+        if (label) {
+          if (filter === 'all') {
+            label.textContent = `Showing all ${visible.length} characters`;
+          } else {
+            const seriesName = SERIES_LABELS[filter] || filter;
+            label.textContent = `Showing ${visible.length} ${seriesName} characters`;
+          }
+        }
 
         grid.classList.remove('fading');
         loadImages(visible);
@@ -375,9 +423,171 @@
       }
     }
 
+    // ── Shippo Animation Manager ──────────────────────────────
+    const ShippoAnimationManager = {
+      shippoImageUrl: null,
+      isInitialized: false,
+      animationInterval: null,
+
+      async init() {
+        try {
+          const shippoCharIdx = CHARACTERS.findIndex(c => c.name === 'Shippo');
+          console.log('Shippo index:', shippoCharIdx);
+          if (shippoCharIdx === -1) return;
+
+          const shippoChar = CHARACTERS[shippoCharIdx];
+          console.log('Shippo character:', shippoChar);
+          this.shippoImageUrl = await fetchCharImage(shippoChar);
+          console.log('Shippo image URL:', this.shippoImageUrl || '(using emoji fallback)');
+
+          // Start animations regardless of image availability (will use emoji fallback if needed)
+          this.isInitialized = true;
+          console.log('Shippo initialized, starting animations');
+          this.startRandomSchedule();
+        } catch (e) {
+          console.error('Shippo init error:', e);
+        }
+      },
+
+      startRandomSchedule() {
+        console.log('startRandomSchedule called');
+        const spawnRandomAnimation = () => {
+          console.log('Spawning animation');
+          if (Math.random() > 0.4) {
+            this.createRunningAnimation();
+          } else {
+            this.createPoppingAnimation();
+          }
+        };
+
+        // Initial delay before first animation
+        setTimeout(spawnRandomAnimation, 2000 + Math.random() * 3000);
+
+        // Set up interval for subsequent animations (every 3-9 seconds)
+        this.animationInterval = setInterval(() => {
+          spawnRandomAnimation();
+        }, 3000 + Math.random() * 6000);
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+          if (this.animationInterval) clearInterval(this.animationInterval);
+        });
+      },
+
+      createRunningAnimation() {
+        const container = document.getElementById('shippo-animations');
+        console.log('Creating running animation, container:', container);
+        if (!container) {
+          console.log('No animation container found');
+          return;
+        }
+
+        const animEl = document.createElement('div');
+        animEl.className = 'shippo-anim';
+
+        const isLeftToRight = Math.random() > 0.5;
+        const topPos = Math.random() * (window.innerHeight * 0.6) + window.innerHeight * 0.2;
+        const duration = 3 + Math.random() * 2;
+        const rotation = Math.random() * 360;
+
+        // Use SVG animation image (cheerleader version for energy!)
+        const imageUrl = 'shippo-cheerleader.svg';
+        animEl.style.cssText = [
+          `background-image: url('${imageUrl}')`,
+          `top: ${topPos}px`,
+          `left: ${isLeftToRight ? '-100px' : (window.innerWidth + 100) + 'px'}`,
+          `--run-end: ${window.innerWidth + 180}`,
+          `--duration: ${duration}s`,
+          `--initial-rotation: ${rotation}deg`,
+        ].join(';');
+
+        animEl.className = isLeftToRight ? 'shippo-anim running' : 'shippo-anim running-reverse';
+
+        container.appendChild(animEl);
+
+        // Add particle trail effect
+        this.createTrail(animEl, isLeftToRight, topPos, duration);
+
+        setTimeout(() => {
+          animEl.remove();
+        }, (duration + 0.5) * 1000);
+      },
+
+      createTrail(shippoEl, isLeftToRight, topPos, duration) {
+        const container = document.getElementById('shippo-animations');
+        if (!container) return;
+
+        const interval = setInterval(() => {
+          const rect = shippoEl.getBoundingClientRect();
+          if (rect.left < -100 || rect.left > window.innerWidth + 100) {
+            clearInterval(interval);
+            return;
+          }
+
+          const particle = document.createElement('div');
+          particle.className = 'shippo-trail';
+          particle.style.cssText = [
+            `left: ${rect.left}px`,
+            `top: ${rect.top + rect.height / 2}px`,
+          ].join(';');
+          container.appendChild(particle);
+
+          setTimeout(() => particle.remove(), 600);
+        }, 80);
+      },
+
+      createPoppingAnimation() {
+        const container = document.getElementById('shippo-animations');
+        console.log('Creating popping animation, container:', container);
+        if (!container) return;
+
+        const corners = [
+          { x: 20, y: 20 },                                    // top-left
+          { x: window.innerWidth - 100, y: 20 },              // top-right
+          { x: 20, y: window.innerHeight - 100 },             // bottom-left
+          { x: window.innerWidth - 100, y: window.innerHeight - 100 } // bottom-right
+        ];
+
+        const corner = corners[Math.floor(Math.random() * corners.length)];
+        const rotation = Math.random() * 360;
+
+        const animEl = document.createElement('div');
+        animEl.className = 'shippo-anim popping';
+        animEl.style.cssText = [
+          `background-image: url('shippo-wave.svg')`,
+          `left: ${corner.x}px`,
+          `top: ${corner.y}px`,
+          `--initial-rotation: ${rotation}deg`,
+        ].join(';');
+
+        container.appendChild(animEl);
+
+        setTimeout(() => {
+          animEl.remove();
+        }, 2200); // Total animation time: 0.4s pop-in + 1.5s wait + 0.5s pop-out + buffer
+      }
+    };
+
     // ── Init ──────────────────────────────────────────────────
     createStars();
-    renderCards('all');
+
+    // Add count badges to filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      const f = btn.dataset.filter;
+      const count = f === 'all'
+        ? CHARACTERS.length
+        : CHARACTERS.filter(c => c.series === f).length;
+      const badge = document.createElement('span');
+      badge.className = 'filter-count';
+      badge.textContent = count;
+      btn.appendChild(badge);
+    });
+
+    ShippoAnimationManager.init().then(() => {
+      renderCards('all');
+    }).catch(() => {
+      renderCards('all');
+    });
   </script>
 </body>
 </html>

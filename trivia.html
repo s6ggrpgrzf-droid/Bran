@@ -31,32 +31,7 @@
       <div class="container">
         <h2 id="trivia-heading" class="sr-only">Trivia Quiz</h2>
 
-        <!-- Filter -->
-        <div class="trivia-filter" role="group" aria-label="Filter by series">
-          <button class="trivia-filter__btn active"
-                  style="--series-color:#e87ca0"
-                  data-filter="all">All</button>
-          <button class="trivia-filter__btn"
-                  style="--series-color:#f97316"
-                  data-filter="naruto">Naruto 🍥</button>
-          <button class="trivia-filter__btn"
-                  style="--series-color:#9333ea"
-                  data-filter="inuyasha">Inuyasha ⚔️</button>
-          <button class="trivia-filter__btn"
-                  style="--series-color:#eab308"
-                  data-filter="starwars">Star Wars ✨</button>
-        </div>
-
-        <!-- Score -->
-        <div class="trivia-hero">
-          <div class="trivia-score" id="score-display" aria-live="polite">
-            <span id="score-correct">0</span>
-            <span>/</span>
-            <span id="score-total">0</span>
-          </div>
-        </div>
-
-        <!-- Question card -->
+        <!-- Game area -->
         <div id="question-wrap"></div>
 
       </div>
@@ -100,6 +75,7 @@
     </a>
   </nav>
 
+  <script src="trivia-questions.js?v=3"></script>
   <script>
     'use strict';
 
@@ -121,260 +97,31 @@
       }
     })();
 
-    // ── Question bank ─────────────────────────────────────────
-    const QUESTIONS = [
-      // ── Naruto ──
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Naruto's signature jutsu?",
-        answers: ["Rasengan", "Shadow Clone Jutsu", "Chidori", "Substitution Jutsu"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Who is Naruto's primary mentor?",
-        answers: ["Kakashi Hatake", "Iruka Umino", "Jiraiya", "Minato Namikaze"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which tailed beast is sealed inside Naruto?",
-        answers: ["Eight-Tails", "Seven-Tails", "One-Tail", "Nine-Tails"],
-        correct: 3
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Sasuke's evolved Sharingan called?",
-        answers: ["Byakugan", "Mangekyō Sharingan", "Rinnegan", "Tenseigan"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which village is Naruto from?",
-        answers: ["Sand Village", "Mist Village", "Leaf Village", "Cloud Village"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Rock Lee's fighting style?",
-        answers: ["Genjutsu", "Ninjutsu", "Kenjutsu", "Taijutsu only"],
-        correct: 3
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Who ultimately defeated Itachi Uchiha?",
-        answers: ["Naruto", "Kakashi", "Sasuke", "Obito"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is Sakura's specialty in battle?",
-        answers: ["Water style ninjutsu", "Medical ninjutsu", "Fire style ninjutsu", "Illusion techniques"],
-        correct: 1
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "Which clan does Neji Hyuga belong to?",
-        answers: ["Uchiha", "Nara", "Hyuga", "Akimichi"],
-        correct: 2
-      },
-      {
-        series: 'naruto',
-        seriesLabel: 'Naruto 🍥',
-        seriesColor: '#f97316',
-        q: "What is the Akatsuki's primary goal?",
-        answers: ["Destroy Konoha", "Kill the Hokages", "Collect all tailed beasts", "Rule the world"],
-        correct: 2
-      },
+    // ── Constants ─────────────────────────────────────────────
+    const TIMER_SECS  = 15;
+    const MAX_LIVES   = 3;
+    const Q_COUNT     = 20;
+    const ANSWER_LETTERS = ['A', 'B', 'C', 'D'];
 
-      // ── Inuyasha ──
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is the Shikon Jewel also known as?",
-        answers: ["Sacred Stone", "Demon Pearl", "Spirit Gem", "Jewel of Four Souls"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Who accidentally shattered the Shikon Jewel into fragments?",
-        answers: ["Inuyasha", "Sango", "Miroku", "Kagome"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is Inuyasha's signature demon-slaying sword?",
-        answers: ["Tenseiga", "Toukijin", "Tessaiga", "Bakusaiga"],
-        correct: 2
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What magic word forces Inuyasha to sit?",
-        answers: ['"Down!"', '"Heel!"', '"Stop!"', '"Sit!" (Osuwari)'],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Who is Inuyasha's older full-demon brother?",
-        answers: ["Naraku", "Bankotsu", "Koga", "Sesshomaru"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What exactly is Naraku?",
-        answers: ["A pure demon lord", "A wolf demon alpha", "A human sorcerer", "A half-demon formed from many demons"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What dangerous power is hidden in Miroku's right hand?",
-        answers: ["Hiraikotsu", "Rosary beads", "Wind Tunnel", "A sacred scroll"],
-        correct: 2
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "Where is Kagome originally from?",
-        answers: ["Feudal Japan", "Spirit World", "China", "Modern Japan"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What is Sango's signature weapon?",
-        answers: ["Katana", "Sacred bow", "Battle staff", "Hiraikotsu (giant boomerang)"],
-        correct: 3
-      },
-      {
-        series: 'inuyasha',
-        seriesLabel: 'Inuyasha ⚔️',
-        seriesColor: '#9333ea',
-        q: "What kind of demon is Shippo?",
-        answers: ["Wolf demon", "Tanuki demon", "A human child", "Young fox demon"],
-        correct: 3
-      },
-
-      // ── Star Wars ──
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What Sith name did Anakin Skywalker take?",
-        answers: ["Darth Maul", "Darth Plagueis", "Darth Tyranus", "Darth Vader"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What color is Mace Windu's lightsaber?",
-        answers: ["Blue", "Green", "Red", "Purple"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What species is Yoda?",
-        answers: ["Rodian", "Jedi", "Goblin", "Unknown (unnamed species)"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is the Millennium Falcon's most famous feat?",
-        answers: ["Never breaking down", "Fastest ship in the Republic", "Has a cloaking device", "Kessel Run in 12 parsecs"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: 'Who famously said "I am your father"?',
-        answers: ["Darth Sidious", "Obi-Wan Kenobi", "Yoda", "Darth Vader"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What planet is Han Solo from?",
-        answers: ["Tatooine", "Coruscant", "Mandalore", "Corellia"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is Princess Leia's home planet?",
-        answers: ["Naboo", "Coruscant", "Tatooine", "Alderaan"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "What is the Force-sensitive child in The Mandalorian called?",
-        answers: ["Yaddle", "Yoda", "Wookiee", "Grogu (Baby Yoda)"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "Who trained Obi-Wan Kenobi as a Padawan?",
-        answers: ["Yoda", "Mace Windu", "Count Dooku", "Qui-Gon Jinn"],
-        correct: 3
-      },
-      {
-        series: 'starwars',
-        seriesLabel: 'Star Wars ✨',
-        seriesColor: '#eab308',
-        q: "How does R2-D2 primarily communicate?",
-        answers: ["Binary code", "English subtitles", "Holographic messages", "Beeps and whistles"],
-        correct: 3
-      },
+    const SERIES_META = [
+      { id:'all',      label:'All Series',   icon:'🎯', color:'#e87ca0', count: TRIVIA_QUESTIONS.length },
+      { id:'naruto',   label:'Naruto',        icon:'🍥', color:'#f97316', count: TRIVIA_QUESTIONS.filter(q=>q.series==='naruto').length },
+      { id:'inuyasha', label:'Inuyasha',      icon:'⚔️', color:'#9333ea', count: TRIVIA_QUESTIONS.filter(q=>q.series==='inuyasha').length },
+      { id:'starwars', label:'Star Wars',     icon:'✨', color:'#eab308', count: TRIVIA_QUESTIONS.filter(q=>q.series==='starwars').length },
+      { id:'music',    label:'Music',         icon:'🎵', color:'#22d3ee', count: TRIVIA_QUESTIONS.filter(q=>q.series==='music').length },
+      { id:'lyrics',   label:'Lyrics',        icon:'🎤', color:'#ec4899', count: TRIVIA_QUESTIONS.filter(q=>q.series==='lyrics').length },
     ];
 
     // ── State ─────────────────────────────────────────────────
-    let activeFilter = 'all';
-    let deck = [];
-    let deckIdx = 0;
-    let scoreCorrect = 0;
+    let lives        = MAX_LIVES;
+    let score        = 0;
+    let deck         = [];
+    let deckIdx      = 0;
+    let timerVal     = TIMER_SECS;
+    let timerInterval = null;
+    let activeSeries = 'all';
+    let answering    = false;
+    let streak       = 0;
 
     // ── Helpers ───────────────────────────────────────────────
     function shuffle(arr) {
@@ -388,46 +135,206 @@
 
     function gradeInfo(correct, total) {
       const pct = total === 0 ? 0 : correct / total;
-      if (pct >= 0.9) return { emoji: '🏆', title: 'Legendary!',    sub: "You really know your stuff." };
-      if (pct >= 0.7) return { emoji: '⭐', title: 'Nice work!',     sub: "Solid nerd credentials." };
-      if (pct >= 0.5) return { emoji: '👍', title: 'Not bad!',       sub: "Worth a rewatch, maybe?" };
-      return               { emoji: '🌱', title: 'Keep studying!', sub: "The force will guide you." };
+      if (pct >= 0.9) return { emoji:'🏆', title:'Legendary!',    sub:'Naruto would be proud of you, Brandon.',              grad:'linear-gradient(135deg,#fef9c3,#fde68a)' };
+      if (pct >= 0.7) return { emoji:'⭐', title:'Nice work!',     sub:'Solid nerd credentials — Jiraiya approves.',          grad:'linear-gradient(135deg,#dbeafe,#bfdbfe)' };
+      if (pct >= 0.5) return { emoji:'👍', title:'Not bad!',       sub:'Worth a rewatch. Even Rock Lee had to keep training.', grad:'linear-gradient(135deg,#dcfce7,#bbf7d0)' };
+      return               { emoji:'🌱', title:'Keep at it!',    sub:'The force is still with you, always.',                grad:'linear-gradient(135deg,#fce7f3,#ede9fe)' };
     }
 
-    // ── Build deck ────────────────────────────────────────────
-    function buildDeck() {
-      const pool = activeFilter === 'all'
-        ? QUESTIONS
-        : QUESTIONS.filter(q => q.series === activeFilter);
-      deck = shuffle(pool).map(q => {
-        // Shuffle answers while tracking which index is correct
-        const paired = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
+    function heartsHTML() {
+      return Array.from({ length: MAX_LIVES }, (_, i) =>
+        `<span class="heart${i >= lives ? ' lost' : ''}" aria-hidden="true">${i < lives ? '❤️' : '🤍'}</span>`
+      ).join('');
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    // ── Visual effect helpers ─────────────────────────────────
+    const PARTICLE_COLORS = ['#e87ca0','#a78bfa','#eab308','#7dd3fc','#f97316','#22c55e'];
+
+    function spawnParticles(btn) {
+      const rect = btn.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      for (let i = 0; i < 18; i++) {
+        const p = document.createElement('div');
+        p.className = 'trivia-particle';
+        const angle = (i / 18) * 360 + Math.random() * 20;
+        const dist  = 55 + Math.random() * 75;
+        const rad   = angle * Math.PI / 180;
+        p.style.cssText = [
+          `left:${cx}px`, `top:${cy}px`,
+          `background:${PARTICLE_COLORS[i % PARTICLE_COLORS.length]}`,
+          `--dx:${(Math.cos(rad) * dist).toFixed(1)}px`,
+          `--dy:${(Math.sin(rad) * dist).toFixed(1)}px`,
+          `width:${5 + Math.random() * 6}px`,
+          `height:${5 + Math.random() * 6}px`,
+        ].join(';');
+        document.body.appendChild(p);
+        p.addEventListener('animationend', () => p.remove());
+      }
+    }
+
+    function showScoreBump() {
+      const el = document.querySelector('.score-badge') || document.getElementById('score-display');
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const bump = document.createElement('div');
+      bump.className   = 'score-bump';
+      bump.textContent = '+1';
+      bump.style.cssText = `left:${rect.right + 8}px;top:${rect.top}px`;
+      document.body.appendChild(bump);
+      bump.addEventListener('animationend', () => bump.remove());
+    }
+
+    function showStreak(n) {
+      const hero = document.querySelector('.trivia-hero');
+      if (!hero) return;
+      const old  = hero.querySelector('.streak-badge');
+      if (old) old.remove();
+      const label = n >= 5 ? `${n} in a row! 💥`
+                  : n >= 4 ? `${n} in a row! 🔥`
+                  : n >= 3 ? `${n} in a row! ⚡`
+                  :          `${n} in a row! ✨`;
+      const badge = document.createElement('div');
+      badge.className   = 'streak-badge';
+      badge.textContent = label;
+      hero.insertBefore(badge, hero.firstChild);
+      badge.addEventListener('animationend', () => badge.remove());
+    }
+
+    function showToast(card, correct) {
+      const toast = document.createElement('div');
+      toast.className   = `answer-toast ${correct ? 'correct-toast' : 'wrong-toast'}`;
+      toast.textContent = correct ? 'Correct! ✓' : 'Wrong! ✗';
+      card.appendChild(toast);
+      toast.addEventListener('animationend', () => toast.remove());
+    }
+
+    function addRipple(btn, e) {
+      const rect   = btn.getBoundingClientRect();
+      const size   = Math.max(rect.width, rect.height);
+      const x      = e.clientX - rect.left - size / 2;
+      const y      = e.clientY - rect.top  - size / 2;
+      const ripple = document.createElement('span');
+      ripple.className   = 'ripple';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px`;
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }
+
+    function startCelebration() {
+      let count = 0;
+      const id = setInterval(() => {
+        for (let i = 0; i < 10; i++) {
+          const p     = document.createElement('div');
+          p.className = 'trivia-particle';
+          const angle = Math.random() * 360;
+          const dist  = 70 + Math.random() * 110;
+          const rad   = angle * Math.PI / 180;
+          const x     = Math.random() * window.innerWidth;
+          const y     = Math.random() * window.innerHeight * 0.55;
+          p.style.cssText = [
+            `left:${x}px`, `top:${y}px`,
+            `background:${PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)]}`,
+            `--dx:${(Math.cos(rad) * dist).toFixed(1)}px`,
+            `--dy:${(Math.sin(rad) * dist).toFixed(1)}px`,
+            `width:${6 + Math.random() * 7}px`,
+            `height:${6 + Math.random() * 7}px`,
+          ].join(';');
+          document.body.appendChild(p);
+          p.addEventListener('animationend', () => p.remove());
+        }
+        if (++count >= 9) clearInterval(id);
+      }, 320);
+    }
+
+    // ── Build deck ─────────────────────────────────────────────
+    function buildDeck(filter) {
+      const pool = filter === 'all'
+        ? TRIVIA_QUESTIONS
+        : TRIVIA_QUESTIONS.filter(q => q.series === filter);
+
+      deck = shuffle(pool).slice(0, Q_COUNT).map(q => {
+        const paired   = q.answers.map((a, i) => ({ text: a, isCorrect: i === q.correct }));
         const shuffled = shuffle(paired);
         return { ...q, shuffledAnswers: shuffled };
       });
-      deckIdx = 0;
-      scoreCorrect = 0;
-      updateScore();
     }
 
-    // ── Score display ─────────────────────────────────────────
-    function updateScore() {
-      document.getElementById('score-correct').textContent = scoreCorrect;
-      document.getElementById('score-total').textContent   = deckIdx;
+    // ── Start game ─────────────────────────────────────────────
+    function startGame(filter) {
+      activeSeries = filter;
+      lives        = MAX_LIVES;
+      score        = 0;
+      deckIdx      = 0;
+      buildDeck(filter);
+      if (deck.length === 0) { renderStart(); return; }
+      renderQuestion();
     }
 
-    // ── Render question ───────────────────────────────────────
+    // ── Start screen ───────────────────────────────────────────
+    function renderStart() {
+      stopTimer();
+      answering = false;
+      const wrap = document.getElementById('question-wrap');
+      wrap.innerHTML = `
+        <div class="start-card">
+          <h2>Pick a Series</h2>
+          <p class="start-subtitle">${Q_COUNT} questions · ${MAX_LIVES} lives · ${TIMER_SECS} sec each</p>
+          <div class="series-picker" role="group" aria-label="Choose series">
+            ${SERIES_META.map(s => `
+              <button class="series-card" style="--series-color:${s.color}"
+                      data-series="${s.id}" aria-label="Play ${s.label}">
+                <span class="series-card-icon" aria-hidden="true">${s.icon}</span>
+                <span class="series-card-name">${s.label}</span>
+                <span class="series-card-count">${Math.min(s.count, Q_COUNT)} questions</span>
+              </button>`).join('')}
+          </div>
+        </div>`;
+
+      wrap.querySelectorAll('.series-card').forEach(btn => {
+        btn.addEventListener('click', () => startGame(btn.dataset.series));
+      });
+    }
+
+    // ── Timer bar helpers ──────────────────────────────────────
+    function updateTimerBar() {
+      const inner = document.getElementById('timer-inner');
+      if (!inner) return;
+      const pct = (timerVal / TIMER_SECS * 100).toFixed(1);
+      inner.style.width = pct + '%';
+      inner.className = 'progress-bar-inner' +
+        (timerVal <= 4 ? ' timer-urgent' : timerVal <= 8 ? ' timer-warn' : '');
+    }
+
+    // ── Render question ────────────────────────────────────────
     function renderQuestion() {
+      stopTimer();
+      answering = false;
+      timerVal  = TIMER_SECS;
+
       const wrap = document.getElementById('question-wrap');
       const q    = deck[deckIdx];
-      const progress = ((deckIdx / deck.length) * 100).toFixed(1);
+
+      document.body.style.setProperty('--series-tint', q.seriesColor);
+      document.body.classList.add('series-tinted');
 
       wrap.innerHTML = `
-        <div class="question-card" role="region" aria-label="Question ${deckIdx + 1} of ${deck.length}">
-          <div class="progress-bar" role="progressbar"
-               aria-valuenow="${deckIdx}" aria-valuemin="0" aria-valuemax="${deck.length}"
-               aria-label="Question progress">
-            <div class="progress-bar-inner" style="width:${progress}%"></div>
+        <div class="question-card" role="region"
+             aria-label="Question ${deckIdx + 1} of ${deck.length}"
+             style="--series-color:${q.seriesColor}">
+          <div class="question-series-header"></div>
+          <div class="progress-bar" role="timer" aria-label="Time remaining">
+            <div class="progress-bar-inner" id="timer-inner" style="width:100%"></div>
+          </div>
+          <div class="game-header">
+            <div class="lives" aria-label="${lives} lives remaining">${heartsHTML()}</div>
+            <div class="q-counter">Q ${deckIdx + 1} / ${deck.length}</div>
+            <div class="score-badge" aria-label="Score: ${score}">⭐ ${score}</div>
           </div>
           <div class="question-body">
             <span class="question-series-badge"
@@ -437,20 +344,57 @@
           <div class="answer-grid" role="group" aria-label="Answer choices">
             ${q.shuffledAnswers.map((a, i) => `
               <button class="answer-btn" data-idx="${i}"
-                      aria-label="Answer option: ${a.text}">
-                ${a.text}
+                      aria-label="${ANSWER_LETTERS[i]}: ${a.text}">
+                <span class="answer-letter" aria-hidden="true">${ANSWER_LETTERS[i]}</span>
+                <span>${a.text}</span>
               </button>`).join('')}
           </div>
         </div>`;
 
       wrap.querySelectorAll('.answer-btn').forEach(btn => {
-        btn.addEventListener('click', () => handleAnswer(btn, q));
+        btn.addEventListener('click', e => {
+          addRipple(btn, e);
+          handleAnswer(btn, q);
+        });
       });
+
+      startTimer(q);
     }
 
-    // ── Handle answer ─────────────────────────────────────────
-    function handleAnswer(btn, q) {
+    // ── Timer ──────────────────────────────────────────────────
+    function startTimer(q) {
+      updateTimerBar();
+      timerInterval = setInterval(() => {
+        timerVal--;
+        updateTimerBar();
+        if (timerVal <= 0) {
+          stopTimer();
+          handleTimeout(q);
+        }
+      }, 1000);
+    }
+
+    function handleTimeout(q) {
+      if (answering) return;
+      answering = true;
       const wrap    = document.getElementById('question-wrap');
+      const allBtns = wrap.querySelectorAll('.answer-btn');
+      allBtns.forEach(b => b.disabled = true);
+      allBtns.forEach((b, i) => {
+        if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
+      });
+      lives--;
+      advanceAfterAnswer(wrap);
+    }
+
+    // ── Handle answer ──────────────────────────────────────────
+    function handleAnswer(btn, q) {
+      if (answering) return;
+      answering = true;
+      stopTimer();
+
+      const wrap    = document.getElementById('question-wrap');
+      const card    = wrap.querySelector('.question-card');
       const allBtns = wrap.querySelectorAll('.answer-btn');
       const idx     = parseInt(btn.dataset.idx, 10);
       const correct = q.shuffledAnswers[idx].isCorrect;
@@ -459,63 +403,103 @@
 
       if (correct) {
         btn.classList.add('correct');
-        scoreCorrect++;
+        score++;
+        streak++;
+        spawnParticles(btn);
+        showScoreBump();
+        if (streak >= 2) showStreak(streak);
       } else {
         btn.classList.add('wrong');
-        // Reveal the right answer
+        streak = 0;
         allBtns.forEach((b, i) => {
           if (q.shuffledAnswers[i].isCorrect) b.classList.add('reveal-correct');
         });
+        lives--;
+        if (card) {
+          card.classList.add('card-flash-wrong');
+          setTimeout(() => card.classList.remove('card-flash-wrong'), 560);
+        }
       }
 
-      deckIdx++;
-      updateScore();
+      if (card) showToast(card, correct);
 
-      setTimeout(() => {
-        if (deckIdx < deck.length) {
-          renderQuestion();
-        } else {
-          renderResults();
-        }
-      }, 900);
+      advanceAfterAnswer(wrap);
     }
 
-    // ── Results ───────────────────────────────────────────────
-    function renderResults() {
-      const wrap  = document.getElementById('question-wrap');
-      const total = deck.length;
-      const g     = gradeInfo(scoreCorrect, total);
+    function advanceAfterAnswer(wrap) {
+      // Update hearts immediately
+      const livesEl = wrap.querySelector('.lives');
+      if (livesEl) livesEl.innerHTML = heartsHTML();
+      const scoreEl = wrap.querySelector('.score-badge');
+      if (scoreEl) scoreEl.textContent = `⭐ ${score}`;
 
+      deckIdx++;
+      setTimeout(() => {
+        if (lives <= 0)            renderGameOver();
+        else if (deckIdx >= deck.length) renderResults();
+        else                             renderQuestion();
+      }, 950);
+    }
+
+    // ── Game over ──────────────────────────────────────────────
+    function renderGameOver() {
+      stopTimer();
+      streak = 0;
+      document.body.classList.remove('series-tinted');
+      const wrap = document.getElementById('question-wrap');
       wrap.innerHTML = `
-        <div class="results-card">
+        <div class="results-card" style="--results-grad:linear-gradient(135deg,#fce7f3,#ffe4e6)">
+          <div class="results-grade" aria-hidden="true">💔</div>
+          <div class="results-title">Game Over</div>
+          <div class="results-subtitle">
+            You got <strong>${score} out of ${deckIdx}</strong> before running out of lives.
+          </div>
+          <div class="results-buttons">
+            <button class="results-again-btn" id="play-again">Try Again</button>
+            <button class="results-back-btn" id="back-start">Change Series</button>
+          </div>
+        </div>`;
+      document.getElementById('play-again').addEventListener('click', () => startGame(activeSeries));
+      document.getElementById('back-start').addEventListener('click', renderStart);
+    }
+
+    // ── Results ────────────────────────────────────────────────
+    function renderResults() {
+      stopTimer();
+      streak = 0;
+      document.body.classList.remove('series-tinted');
+      const wrap = document.getElementById('question-wrap');
+      const g    = gradeInfo(score, Q_COUNT);
+      wrap.innerHTML = `
+        <div class="results-card" style="--results-grad:${g.grad}">
           <div class="results-grade" aria-hidden="true">${g.emoji}</div>
           <div class="results-title">${g.title}</div>
           <div class="results-subtitle">
-            You got <strong>${scoreCorrect} out of ${total}</strong> — ${g.sub}
+            You got <strong>${score} out of ${Q_COUNT}</strong> — ${g.sub}
           </div>
-          <button class="results-again-btn" id="play-again">Play Again</button>
+          <div class="results-buttons">
+            <button class="results-again-btn" id="play-again">Play Again</button>
+            <button class="results-back-btn" id="back-start">Change Series</button>
+          </div>
         </div>`;
+      if (score / Q_COUNT >= 0.7) startCelebration();
 
-      document.getElementById('play-again').addEventListener('click', () => {
-        buildDeck();
-        renderQuestion();
-      });
+      document.getElementById('play-again').addEventListener('click', () => startGame(activeSeries));
+      document.getElementById('back-start').addEventListener('click', renderStart);
     }
 
-    // ── Filter ────────────────────────────────────────────────
-    document.querySelectorAll('.trivia-filter__btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.trivia-filter__btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeFilter = btn.dataset.filter;
-        buildDeck();
-        renderQuestion();
-      });
+    // ── Keyboard shortcuts (1-4) ───────────────────────────────
+    document.addEventListener('keydown', e => {
+      const keyMap = { '1':0, '2':1, '3':2, '4':3 };
+      const idx = keyMap[e.key];
+      if (idx === undefined || answering) return;
+      const wrap = document.getElementById('question-wrap');
+      const btns = wrap.querySelectorAll('.answer-btn:not(:disabled)');
+      if (btns[idx]) btns[idx].click();
     });
 
-    // ── Init ──────────────────────────────────────────────────
-    buildDeck();
-    renderQuestion();
+    // ── Init ───────────────────────────────────────────────────
+    renderStart();
   </script>
 </body>
 </html>
