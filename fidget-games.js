@@ -1779,6 +1779,222 @@ class RipplePondGame {
   }
 }
 
+/* ── Game 8: Galactic Slots (Star Wars) ──────────────────── */
+class SlotMachineGame {
+  static SYMBOLS = [
+    { glyph: '⚔️', name: 'JEDI MASTER',     glow: '#00d4ff', payout: 100, weight: 4, banner: 'rainbow', palette: 'cool'    },
+    { glyph: '🪐', name: 'IMPERIAL VICTORY', glow: '#ff3333', payout: 80,  weight: 3, banner: 'gold',    palette: 'gold'    },
+    { glyph: '🤖', name: 'RESCUE COMPLETE', glow: '#a78bfa', payout: 60,  weight: 4, banner: 'neon',    palette: 'neon'    },
+    { glyph: '🛸', name: 'REBEL ALLIANCE',  glow: '#fbbf24', payout: 40,  weight: 6, banner: 'gold',    palette: 'gold'    },
+    { glyph: '⭐', name: 'THE FORCE',       glow: '#ffe81f', payout: 200, weight: 1, banner: 'rainbow', palette: 'rainbow' },
+    { glyph: '💀', name: 'DARK SIDE',       glow: '#fb7185', payout: 30,  weight: 6, banner: 'neon',    palette: 'neon'    },
+    { glyph: '⚡', name: 'UNLIMITED POWER', glow: '#c084fc', payout: 50,  weight: 3, banner: 'rainbow', palette: 'rainbow' },
+  ];
+  static SYMBOL_HEIGHT = 84;  // px — matches CSS .slot-symbol height
+  static STRIP_LENGTH  = 32;  // symbols rendered per reel strip
+
+  constructor() {
+    this.root = document.getElementById('slot-game');
+    if (!this.root) return;
+    this.cabinet = this.root.querySelector('.slot-cabinet');
+    this.stripEls = Array.from(this.root.querySelectorAll('.slot-strip'));
+    this.reelEls  = Array.from(this.root.querySelectorAll('.slot-reel'));
+    this.lever    = document.getElementById('slot-lever');
+    this.statusEl = document.getElementById('slot-status');
+    this.spinning = false;
+
+    this.spins = 0;
+    this.jackpots = 0;
+    this.bestWin = 0;
+
+    // Build a weighted pool used to roll fair-ish landing symbols
+    this.pool = [];
+    SlotMachineGame.SYMBOLS.forEach((s, i) => {
+      for (let j = 0; j < s.weight; j++) this.pool.push(i);
+    });
+
+    this.init();
+  }
+
+  init() {
+    const stats = getFidgetStats();
+    this.spins    = stats.slotSpins ?? 0;
+    this.jackpots = stats.slotJackpots ?? 0;
+    this.bestWin  = stats.slotBestStreak ?? 0;
+    this.updateDisplay();
+
+    this.buildStrips();
+    this.buildStarfield();
+
+    if (this.lever) this.lever.addEventListener('click', () => this.spin());
+  }
+
+  buildStrips() {
+    this.stripEls.forEach((strip, reelIdx) => {
+      strip.innerHTML = '';
+      // Fill each strip with STRIP_LENGTH symbols from the pool, then ensure
+      // every symbol type appears at least once so any landing slot is reachable.
+      const symbolsForStrip = [];
+      for (let i = 0; i < SlotMachineGame.STRIP_LENGTH; i++) {
+        symbolsForStrip.push(this.pool[Math.floor(Math.random() * this.pool.length)]);
+      }
+      // Guarantee every symbol index appears in the strip
+      SlotMachineGame.SYMBOLS.forEach((_, idx) => {
+        if (!symbolsForStrip.includes(idx)) {
+          symbolsForStrip[Math.floor(Math.random() * symbolsForStrip.length)] = idx;
+        }
+      });
+      symbolsForStrip.forEach((symIdx) => {
+        const cell = document.createElement('div');
+        cell.className = 'slot-symbol';
+        cell.dataset.symbol = symIdx;
+        const sym = SlotMachineGame.SYMBOLS[symIdx];
+        cell.style.setProperty('--sym-glow', sym.glow);
+        cell.textContent = sym.glyph;
+        strip.appendChild(cell);
+      });
+      strip.dataset.symbols = symbolsForStrip.join(',');
+      // Initial position: random landing
+      const start = Math.floor(Math.random() * symbolsForStrip.length);
+      strip.style.transition = 'none';
+      strip.style.transform = `translateY(${-start * SlotMachineGame.SYMBOL_HEIGHT}px)`;
+      strip.dataset.landing = String(start);
+    });
+  }
+
+  buildStarfield() {
+    const container = this.root.querySelector('.slot-stars');
+    if (!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < 30; i++) {
+      const s = document.createElement('span');
+      s.className = 'slot-star';
+      const sz = 1 + Math.random() * 2.4;
+      s.style.cssText = [
+        `left:${(Math.random() * 100).toFixed(2)}%`,
+        `top:${(Math.random() * 100).toFixed(2)}%`,
+        `width:${sz.toFixed(1)}px`,
+        `height:${sz.toFixed(1)}px`,
+        `animation-delay:${(Math.random() * 5).toFixed(2)}s`,
+        `animation-duration:${(2 + Math.random() * 3).toFixed(2)}s`,
+      ].join(';');
+      container.appendChild(s);
+    }
+  }
+
+  pickSymbolIndex() {
+    return this.pool[Math.floor(Math.random() * this.pool.length)];
+  }
+
+  spin() {
+    if (this.spinning) return;
+    this.spinning = true;
+    this.cabinet.classList.add('spinning');
+    if (this.lever) this.lever.classList.add('pulled');
+    Sound.blip(120, 0.45, 'sawtooth', 0.04);
+    if (this.statusEl) this.statusEl.textContent = 'The reels stir…';
+
+    // Roll three landing symbols
+    const targets = [this.pickSymbolIndex(), this.pickSymbolIndex(), this.pickSymbolIndex()];
+
+    // Stop times stagger so reels lock left → middle → right
+    const stopMs = [1400, 2000, 2600];
+
+    this.stripEls.forEach((strip, reelIdx) => {
+      const symbols = strip.dataset.symbols.split(',').map(Number);
+      // Find an instance of the target near the bottom of the visible strip
+      let landingPos = symbols.indexOf(targets[reelIdx]);
+      if (landingPos < 0) landingPos = 0;
+      // Add full strip cycles so the reel actually appears to spin a few times
+      const cycles = 4 + reelIdx;  // each subsequent reel spins one extra cycle
+      const totalIndex = landingPos + cycles * symbols.length;
+      const totalY = -totalIndex * SlotMachineGame.SYMBOL_HEIGHT;
+      const durationS = (stopMs[reelIdx] / 1000).toFixed(2);
+
+      strip.style.transition = `transform ${durationS}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
+      // Force reflow before applying the new transform
+      void strip.offsetHeight;
+      strip.style.transform = `translateY(${totalY}px)`;
+
+      setTimeout(() => {
+        // Snap to a normalized position so further spins stay in range
+        strip.style.transition = 'none';
+        strip.style.transform = `translateY(${-landingPos * SlotMachineGame.SYMBOL_HEIGHT}px)`;
+        strip.dataset.landing = String(landingPos);
+        this.reelEls[reelIdx].classList.add('locked');
+        Sound.blip(420, 0.05, 'square', 0.06);
+        if (reelIdx === 2) {
+          setTimeout(() => this.evaluate(targets), 220);
+        }
+      }, stopMs[reelIdx]);
+    });
+
+    this.spins++;
+    updateStat('slotSpins', this.spins);
+    this.updateDisplay();
+  }
+
+  evaluate(targets) {
+    this.cabinet.classList.remove('spinning');
+    if (this.lever) this.lever.classList.remove('pulled');
+    this.reelEls.forEach(r => r.classList.remove('locked'));
+
+    const [a, b, c] = targets;
+    const sym = SlotMachineGame.SYMBOLS;
+    const cardEl = this.root.closest('.fidget-game-card');
+    const r = this.cabinet.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+
+    if (a === b && b === c) {
+      // Triple jackpot
+      const winSym = sym[a];
+      this.jackpots++;
+      const win = winSym.payout;
+      if (win > this.bestWin) this.bestWin = win;
+      updateStat('slotJackpots', this.jackpots);
+      updateStat('slotBestStreak', this.bestWin);
+
+      Arcade.banner(winSym.name + '!', winSym.banner);
+      Arcade.confetti(cx, cy, 28, winSym.palette);
+      if (cardEl) {
+        Arcade.confettiRain(cardEl, 50, winSym.palette);
+        Arcade.shake(cardEl, 'hard');
+      }
+      Arcade.popScore(cx, cy - 30, `+${win}`, winSym.glow);
+      Sound.jingle('jackpot');
+      // Glow the locked reels in the win colour briefly
+      this.reelEls.forEach(reel => {
+        reel.style.setProperty('--reel-win-glow', winSym.glow);
+        reel.classList.add('win-glow');
+        setTimeout(() => reel.classList.remove('win-glow'), 1400);
+      });
+      if (this.statusEl) this.statusEl.textContent = `★ ${winSym.name} — +${win}!`;
+    } else if (a === b || b === c || a === c) {
+      // Pair = near miss
+      Arcade.banner('ALMOST!', 'neon');
+      Arcade.popScore(cx, cy - 30, '+5', '#7dd3fc');
+      Sound.jingle('cha-ching');
+      if (this.statusEl) this.statusEl.textContent = 'So close — pair found.';
+    } else {
+      Sound.blip(220, 0.18, 'triangle', 0.04);
+      if (this.statusEl) this.statusEl.textContent = 'Try again — the Force is patient.';
+    }
+
+    this.updateDisplay();
+    this.spinning = false;
+  }
+
+  updateDisplay() {
+    const s = document.getElementById('slot-spins');
+    const j = document.getElementById('slot-jackpots');
+    const b = document.getElementById('slot-best');
+    if (s) s.textContent = this.spins;
+    if (j) j.textContent = this.jackpots;
+    if (b) b.textContent = this.bestWin;
+  }
+}
+
 /* ── Init ─────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   new BubbleGame('bubble-game');
@@ -1788,4 +2004,5 @@ document.addEventListener('DOMContentLoaded', () => {
   new SandGardenGame();
   new PopItGame();
   new RipplePondGame();
+  new SlotMachineGame();
 });

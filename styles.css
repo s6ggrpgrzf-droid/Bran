@@ -3170,6 +3170,199 @@ body.series-tinted::before {
   }
 }
 
+/* ── Game 8: Galactic Slots (Star Wars) ─────────────────────── */
+#slot-game {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  margin: 1.5rem auto;
+}
+
+.slot-cabinet {
+  position: relative;
+  padding: 1.6rem 1.25rem 1.4rem;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #0b0e1f 0%, #161e3a 60%, #0b0e1f 100%);
+  border: 2px solid rgba(255, 232, 31, 0.55);
+  box-shadow:
+    0 0 0 4px rgba(255, 232, 31, 0.10),
+    0 18px 38px rgba(0, 0, 0, 0.5),
+    inset 0 0 30px rgba(255, 232, 31, 0.10);
+  overflow: hidden;
+}
+
+.slot-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.slot-star {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0) 80%);
+  opacity: 0.35;
+  animation: bgStarTwinkle var(--d, 3s) ease-in-out infinite;
+}
+@keyframes bgStarTwinkle {
+  0%, 100% { opacity: 0.18; transform: scale(0.7); }
+  50%      { opacity: 0.95; transform: scale(1.4); }
+}
+
+.slot-title {
+  position: relative;
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: clamp(1.05rem, 3.4vw, 1.5rem);
+  letter-spacing: 0.3em;
+  color: #ffe81f;
+  text-shadow: 0 0 14px rgba(255, 232, 31, 0.7), 0 0 4px rgba(255, 232, 31, 0.85);
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #ffe81f 0%, #fde047 35%, #fff8b3 50%, #fde047 65%, #ffe81f 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: slotTitleHue 6s linear infinite;
+}
+@keyframes slotTitleHue {
+  to { background-position: 200% 0; }
+}
+
+.slot-reels {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  padding: 0.55rem;
+  margin: 0 auto 1rem;
+  max-width: 420px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.55);
+  box-shadow: inset 0 0 0 1px rgba(255, 232, 31, 0.35), inset 0 4px 16px rgba(0, 0, 0, 0.65);
+}
+
+.slot-reel {
+  position: relative;
+  width: 100%;
+  height: 84px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1a223f, #0a1226);
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.25), inset 0 6px 14px rgba(0, 0, 0, 0.7);
+  --reel-win-glow: transparent;
+}
+.slot-reel::before,
+.slot-reel::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 18px;
+  pointer-events: none;
+  z-index: 2;
+}
+.slot-reel::before {
+  top: 0;
+  background: linear-gradient(180deg, rgba(11, 14, 31, 0.95), transparent);
+}
+.slot-reel::after {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(11, 14, 31, 0.95), transparent);
+}
+.slot-reel.locked {
+  box-shadow: inset 0 0 0 1px rgba(255, 232, 31, 0.7), 0 0 14px rgba(255, 232, 31, 0.55), inset 0 6px 14px rgba(0, 0, 0, 0.7);
+}
+.slot-reel.win-glow {
+  animation: slotReelWin 0.4s ease-in-out 3;
+  box-shadow: inset 0 0 0 2px var(--reel-win-glow), 0 0 22px var(--reel-win-glow), inset 0 6px 14px rgba(0, 0, 0, 0.7);
+}
+@keyframes slotReelWin {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+
+.slot-strip {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+.slot-symbol {
+  flex: 0 0 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  user-select: none;
+  text-shadow: 0 0 14px var(--sym-glow, #fff), 0 0 4px var(--sym-glow, #fff);
+  filter: drop-shadow(0 0 6px var(--sym-glow, transparent));
+}
+
+.slot-result {
+  text-align: center;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: 0.05em;
+  color: #ffe81f;
+  text-shadow: 0 0 10px rgba(255, 232, 31, 0.55);
+  min-height: 1.2em;
+  margin-bottom: 0.85rem;
+  position: relative;
+  z-index: 1;
+}
+
+.slot-lever-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 auto;
+  padding: 0.7rem 1.6rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.18em;
+  color: #0b0e1f;
+  background: linear-gradient(180deg, #ffe81f, #c79e00);
+  border: 2px solid #fff8b3;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 3px rgba(255, 232, 31, 0.20),
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.20);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  position: relative;
+  z-index: 1;
+}
+.slot-lever-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 3px rgba(255, 232, 31, 0.35),
+    0 8px 22px rgba(0, 0, 0, 0.55),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.20);
+}
+.slot-lever-btn:disabled,
+.slot-cabinet.spinning .slot-lever-btn {
+  filter: brightness(0.8) grayscale(0.2);
+  cursor: not-allowed;
+}
+.slot-lever-knob {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, #ff3333 65%, #7c0000 100%);
+  box-shadow: 0 0 8px rgba(255, 51, 51, 0.85);
+  transition: transform 0.25s ease;
+}
+.slot-lever-btn.pulled .slot-lever-knob {
+  transform: rotate(-25deg) translate(-2px, 2px);
+}
 
 /* ── Responsive ─────────────────────────────────────────── */
 @media (max-width: 600px) {
@@ -3192,6 +3385,12 @@ body.series-tinted::before {
   #dot-tapper-game { width: 88vw; height: 88vw; max-width: 230px; max-height: 230px; }
   #stress-ball-game { width: 80vw; height: 80vw; max-width: 190px; max-height: 190px; }
   .spinner-label { font-size: 0.66rem; }
+  .slot-cabinet { padding: 1.2rem 0.75rem; }
+  .slot-reels { gap: 0.4rem; padding: 0.4rem; }
+  .slot-reel  { height: 76px; }
+  .slot-symbol { flex-basis: 76px; height: 76px; font-size: 1.7rem; }
+  .slot-title  { font-size: 1rem; letter-spacing: 0.22em; }
+  .slot-lever-btn { padding: 0.55rem 1.1rem; font-size: 0.88rem; letter-spacing: 0.14em; }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -4237,7 +4436,12 @@ body.no-scroll { overflow: hidden; }
   .spinner-tick.tick-flash,
   .dot-trace-line,
   .popit-cell.popit-line-flash,
-  .popit-cell.popit-pop-up {
+  .popit-cell.popit-pop-up,
+  .slot-title,
+  .slot-star,
+  .slot-reel.win-glow,
+  .slot-lever-btn,
+  .slot-lever-knob {
     animation: none !important;
     transition: none !important;
   }
