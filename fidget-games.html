@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=slot2">
+  <link rel="stylesheet" href="styles.css?v=slot3">
 </head>
 <body class="fidgets-page">
   <div id="bg-stars" aria-hidden="true"></div>
@@ -169,16 +169,46 @@
           <div id="slot-game" class="fidget-game-container" role="application" aria-label="Star Wars slot machine">
             <div class="slot-cabinet">
               <div class="slot-stars" aria-hidden="true"></div>
-              <div class="slot-title">✦ GALACTIC SLOTS ✦</div>
-              <div class="slot-reels">
-                <div class="slot-reel"   data-reel="0"><div class="slot-strip"></div></div>
-                <div class="slot-reel"   data-reel="1"><div class="slot-strip"></div></div>
-                <div class="slot-reel"   data-reel="2"><div class="slot-strip"></div></div>
+
+              <!-- Chrome rivets in the four corners -->
+              <span class="slot-rivet slot-rivet--tl" aria-hidden="true"></span>
+              <span class="slot-rivet slot-rivet--tr" aria-hidden="true"></span>
+              <span class="slot-rivet slot-rivet--bl" aria-hidden="true"></span>
+              <span class="slot-rivet slot-rivet--br" aria-hidden="true"></span>
+
+              <!-- LED-bulb ringed brand sign -->
+              <div class="slot-marquee">
+                <div class="slot-bulbs slot-bulbs--top" aria-hidden="true"></div>
+                <div class="slot-title">✦ GALACTIC SLOTS ✦</div>
+                <div class="slot-bulbs slot-bulbs--bottom" aria-hidden="true"></div>
               </div>
+
+              <!-- Reel face: 3 visible rows with a glowing payline through the middle -->
+              <div class="slot-face">
+                <div class="slot-reels">
+                  <div class="slot-reel" data-reel="0"><div class="slot-strip"></div></div>
+                  <div class="slot-reel" data-reel="1"><div class="slot-strip"></div></div>
+                  <div class="slot-reel" data-reel="2"><div class="slot-strip"></div></div>
+                </div>
+                <div class="slot-payline" aria-hidden="true"></div>
+              </div>
+
               <div class="slot-result" id="slot-status" aria-live="polite">May the spin be with you.</div>
+
+              <!-- Coin tray decoration + main spin button -->
+              <div class="slot-tray" aria-hidden="true">
+                <div class="slot-tray__slot"></div>
+              </div>
               <button type="button" id="slot-lever" class="slot-lever-btn">
                 <span class="slot-lever-knob" aria-hidden="true"></span>
-                <span class="slot-lever-text">PULL THE LEVER</span>
+                <span class="slot-lever-text">PULL TO SPIN</span>
+              </button>
+
+              <!-- Mounted side-lever arm — visual only, fires same spin -->
+              <button type="button" id="slot-arm" class="slot-arm" aria-label="Pull the side lever">
+                <span class="slot-arm__mount" aria-hidden="true"></span>
+                <span class="slot-arm__rod"   aria-hidden="true"></span>
+                <span class="slot-arm__ball"  aria-hidden="true"></span>
               </button>
             </div>
           </div>
@@ -250,6 +280,6 @@
 
   <div id="fx-layer" aria-hidden="true"></div>
 
-  <script src="fidget-games.js?v=slot2"></script>
+  <script src="fidget-games.js?v=slot3"></script>
 </body>
 </html>

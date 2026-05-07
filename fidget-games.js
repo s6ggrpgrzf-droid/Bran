@@ -58,7 +58,106 @@ const Sound = (() => {
     const seq = patterns[profile] || patterns['cha-ching'];
     seq.forEach((args, i) => setTimeout(() => blip(...args), i * 80));
   }
-  return { blip, jingle };
+
+  /** Continuous mechanical whirring used during the slot spin: layered
+      sawtooth + triangle with rapid amplitude wobble. Runs for `duration`
+      seconds, fading in and out so it doesn't click. */
+  function whirr(duration = 2.5) {
+    const c = ensureCtx();
+    if (!c) return;
+    const t = c.currentTime;
+    const stop = t + duration;
+
+    // Two oscillators tuned a perfect fifth apart for grain
+    const osc1 = c.createOscillator();
+    const osc2 = c.createOscillator();
+    osc1.type = 'sawtooth'; osc1.frequency.setValueAtTime(180, t);
+    osc2.type = 'triangle'; osc2.frequency.setValueAtTime(270, t);
+
+    // Fast LFO modulating amplitude → that "geared" mechanical chatter
+    const lfo = c.createOscillator();
+    lfo.type = 'square';
+    lfo.frequency.setValueAtTime(48, t);
+    const lfoGain = c.createGain();
+    lfoGain.gain.setValueAtTime(0.018, t);
+    lfo.connect(lfoGain);
+
+    const main = c.createGain();
+    lfoGain.connect(main.gain);   // additive modulation on top of base
+    main.gain.setValueAtTime(0, t);
+    main.gain.linearRampToValueAtTime(0.045, t + 0.10);
+    main.gain.setValueAtTime(0.045, stop - 0.18);
+    main.gain.linearRampToValueAtTime(0, stop);
+
+    osc1.connect(main);
+    osc2.connect(main);
+    main.connect(c.destination);
+    osc1.start(t); osc2.start(t); lfo.start(t);
+    osc1.stop(stop + 0.05); osc2.stop(stop + 0.05); lfo.stop(stop + 0.05);
+  }
+
+  /** Heavy mechanical reel-stop "thunk" — a percussive low sting with
+      a touch of metal harmonic. Drops in pitch instantly. */
+  function thunk() {
+    const c = ensureCtx();
+    if (!c) return;
+    const t = c.currentTime;
+
+    // Body: low square dropping fast
+    const body = c.createOscillator();
+    body.type = 'square';
+    body.frequency.setValueAtTime(170, t);
+    body.frequency.exponentialRampToValueAtTime(60, t + 0.10);
+    const bodyGain = c.createGain();
+    bodyGain.gain.setValueAtTime(0, t);
+    bodyGain.gain.linearRampToValueAtTime(0.12, t + 0.005);
+    bodyGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    body.connect(bodyGain).connect(c.destination);
+    body.start(t); body.stop(t + 0.20);
+
+    // Metallic ping on top
+    const ping = c.createOscillator();
+    ping.type = 'triangle';
+    ping.frequency.setValueAtTime(1100, t);
+    ping.frequency.exponentialRampToValueAtTime(560, t + 0.08);
+    const pingGain = c.createGain();
+    pingGain.gain.setValueAtTime(0, t);
+    pingGain.gain.linearRampToValueAtTime(0.05, t + 0.003);
+    pingGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.10);
+    ping.connect(pingGain).connect(c.destination);
+    ping.start(t); ping.stop(t + 0.12);
+  }
+
+  /** A single bell tone — clean sine with a soft attack and long tail. */
+  function bell(freq = 880, dur = 0.45, vol = 0.06) {
+    const c = ensureCtx();
+    if (!c) return;
+    const t = c.currentTime;
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, t);
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.linearRampToValueAtTime(vol, t + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(gain).connect(c.destination);
+    osc.start(t); osc.stop(t + dur + 0.05);
+  }
+
+  /** Cascading coin-drop — rapid pentatonic chime descending then returning
+      upward. Used on jackpots. Approximate scale: C5, D5, E5, G5, A5. */
+  function coinCascade() {
+    const notes = [1046, 1318, 1567, 1976, 2349, 1976, 1567, 1318, 1046];
+    notes.forEach((f, i) => setTimeout(() => bell(f, 0.30, 0.05), i * 70));
+  }
+
+  /** Classic win bell — three rising notes "ding-ding-ding". */
+  function winBell() {
+    const seq = [880, 1108, 1318];
+    seq.forEach((f, i) => setTimeout(() => bell(f, 0.35, 0.07), i * 130));
+  }
+
+  return { blip, jingle, whirr, thunk, bell, coinCascade, winBell };
 })();
 
 /* ── Arcade effects helper — score popups, banners, shake, confetti ─── */
@@ -1826,23 +1925,33 @@ class SlotMachineGame {
     this.buildStarfield();
 
     if (this.lever) this.lever.addEventListener('click', () => this.spin());
+    this.arm = document.getElementById('slot-arm');
+    if (this.arm) this.arm.addEventListener('click', () => {
+      this.arm.classList.add('pulled');
+      setTimeout(() => this.arm.classList.remove('pulled'), 600);
+      this.spin();
+    });
   }
 
   buildStrips() {
     this.stripEls.forEach((strip, reelIdx) => {
       strip.innerHTML = '';
-      // Fill each strip with STRIP_LENGTH symbols from the pool, then ensure
-      // every symbol type appears at least once so any landing slot is reachable.
+      // Generate STRIP_LENGTH random symbols, guarantee every symbol type
+      // appears at least once, then append the first two cells as clones at
+      // the end so any landing position has neighbours above and below for
+      // the 3-row viewport.
       const symbolsForStrip = [];
       for (let i = 0; i < SlotMachineGame.STRIP_LENGTH; i++) {
         symbolsForStrip.push(this.pool[Math.floor(Math.random() * this.pool.length)]);
       }
-      // Guarantee every symbol index appears in the strip
       SlotMachineGame.SYMBOLS.forEach((_, idx) => {
         if (!symbolsForStrip.includes(idx)) {
           symbolsForStrip[Math.floor(Math.random() * symbolsForStrip.length)] = idx;
         }
       });
+      // Append wrap-clones so center-row landing always has neighbours.
+      symbolsForStrip.push(symbolsForStrip[0], symbolsForStrip[1]);
+
       symbolsForStrip.forEach((symIdx) => {
         const cell = document.createElement('div');
         cell.className = 'slot-symbol';
@@ -1853,12 +1962,22 @@ class SlotMachineGame {
         strip.appendChild(cell);
       });
       strip.dataset.symbols = symbolsForStrip.join(',');
-      // Initial position: random landing — measured at spin time, set
-      // simply to 0 here so it's well-defined even before layout.
+      // Initial center-row landing on index 1 so neighbours render correctly.
       strip.style.transition = 'none';
       strip.style.transform = 'translateY(0px)';
-      strip.dataset.landing = '0';
+      strip.dataset.landing = '1';
     });
+  }
+
+  /** Find a non-edge index for the target symbol (1..STRIP_LENGTH).
+      Edge positions (0, STRIP_LENGTH+1) are skipped so the 3-row
+      viewport always has visible neighbours above and below. */
+  findLandingPos(symbols, target) {
+    const last = symbols.length - 1;
+    for (let i = 1; i < last; i++) {
+      if (symbols[i] === target) return i;
+    }
+    return Math.max(1, Math.min(symbols.indexOf(target), last - 1));
   }
 
   /** Read the actual rendered symbol-cell height. Falls back to 84 if
@@ -1899,11 +2018,20 @@ class SlotMachineGame {
     this.spinning = true;
     this.cabinet.classList.add('spinning');
     if (this.lever) this.lever.classList.add('pulled');
-    // Lever pull THUNK: a low percussive blip + a quick rising sweep into the spinning hum.
-    Sound.blip( 80, 0.12, 'square',   0.08);
-    Sound.blip(160, 0.10, 'sawtooth', 0.06);
-    setTimeout(() => Sound.blip(220, 0.55, 'sawtooth', 0.05), 110);
+
+    // Mechanical "ka-CHUNK" lever engagement: deep low thump immediately,
+    // followed 80ms later by the spring-release thud.
+    Sound.blip( 70, 0.14, 'square',   0.09);
+    Sound.blip(140, 0.06, 'sawtooth', 0.05);
+    setTimeout(() => {
+      Sound.blip(95,  0.08, 'square',   0.07);
+      Sound.blip(220, 0.05, 'triangle', 0.05);
+    }, 90);
     if (this.statusEl) this.statusEl.textContent = 'The reels stir…';
+
+    // Continuous mechanical whirring — a sawtooth + triangle ramping in
+    // for the duration of the longest reel spin, then ramping out.
+    Sound.whirr(2.7);
 
     // Roll three landing symbols
     const targets = [this.pickSymbolIndex(), this.pickSymbolIndex(), this.pickSymbolIndex()];
@@ -1913,22 +2041,21 @@ class SlotMachineGame {
 
     this.stripEls.forEach((strip, reelIdx) => {
       const symbols = strip.dataset.symbols.split(',').map(Number);
-      // Find any instance of the target in the strip
-      let landingPos = symbols.indexOf(targets[reelIdx]);
-      if (landingPos < 0) landingPos = 0;
+      const landingPos = this.findLandingPos(symbols, targets[reelIdx]);
 
       const H = this.cellHeight(strip);
       // Add full strip cycles so the reel actually appears to spin a few times
       const cycles = 4 + reelIdx;
       const totalIndex = landingPos + cycles * symbols.length;
-      const totalY = -totalIndex * H;
-      const landY  = -landingPos  * H;
+      // Position the landing index in the CENTER row of the 3-row viewport.
+      // Center-row formula: viewport y = H means strip.translateY(-(k-1)*H).
+      const totalY = -(totalIndex - 1) * H;
+      const landY  = -(landingPos - 1) * H;
       const durationS = (stopMs[reelIdx] / 1000).toFixed(2);
 
-      // Commit transition: none on the strip's current position, then in
-      // the next animation frame apply a fresh transition + target so the
-      // browser actually animates the change (rather than batching the
-      // transition + transform into a single non-animated update).
+      // Commit transition: none on current position, then in the next
+      // animation frame apply a fresh transition + target so the browser
+      // actually animates the change.
       strip.style.transition = 'none';
       void strip.offsetWidth;
 
@@ -1938,16 +2065,14 @@ class SlotMachineGame {
       });
 
       setTimeout(() => {
-        // Snap to a normalized position so further spins stay in range
+        // Snap to a normalized in-range position so further spins stay sane
         strip.style.transition = 'none';
         strip.style.transform = `translateY(${landY}px)`;
         strip.dataset.landing = String(landingPos);
         this.reelEls[reelIdx].classList.add('locked');
-        // Metallic CLUNK — three layered tones land at once
-        Sound.blip( 90, 0.06, 'square',   0.07);
-        Sound.blip(360, 0.07, 'square',   0.05);
-        Sound.blip(720, 0.04, 'triangle', 0.04);
-        // Spring the lever back at the first reel lock
+        // Heavy mechanical CLUNK — short low square thump + harmonic sting
+        Sound.thunk();
+        // Spring the lever back when the first reel locks
         if (reelIdx === 0 && this.lever) this.lever.classList.remove('pulled');
         if (reelIdx === 2) {
           setTimeout(() => this.evaluate(targets), 240);
@@ -1988,13 +2113,16 @@ class SlotMachineGame {
         Arcade.shake(cardEl, 'hard');
       }
       Arcade.popScore(cx, cy - 30, `+${win}`, winSym.glow);
-      Sound.jingle('jackpot');
+      // Authentic slot-win audio: classic ding-ding-ding bell, then a
+      // cascading coin-drop chime overlapping with it.
+      Sound.winBell();
+      setTimeout(() => Sound.coinCascade(), 260);
       // Sequential reel pulse — left → middle → right with a 180ms stagger
       this.reelEls.forEach((reel, i) => {
         reel.style.setProperty('--reel-win-glow', winSym.glow);
         setTimeout(() => {
           reel.classList.add('win-glow');
-          Sound.blip(440 + i * 110, 0.10, 'triangle', 0.05);
+          Sound.bell(880 + i * 220, 0.30, 0.06);
           setTimeout(() => reel.classList.remove('win-glow'), 1100);
         }, i * 180);
       });

@@ -3174,22 +3174,46 @@ body.series-tinted::before {
 #slot-game {
   display: block;
   width: 100%;
-  max-width: 620px;
+  max-width: 660px;
   margin: 1.5rem auto;
 }
 
+/* Real-machine cabinet: chrome bezel ringing a dark inner panel */
 .slot-cabinet {
   position: relative;
-  padding: 2rem 1.6rem 1.8rem;
-  border-radius: 22px;
-  background: linear-gradient(180deg, #0b0e1f 0%, #161e3a 60%, #0b0e1f 100%);
-  border: 2px solid rgba(255, 232, 31, 0.55);
+  padding: 2.4rem 4.5rem 2.2rem 1.8rem;  /* extra right padding for the side lever arm */
+  border-radius: 26px;
+  background:
+    linear-gradient(180deg, #0a0e1d 0%, #131a32 55%, #08101e 100%);
+  border: 6px solid;
+  border-image: linear-gradient(180deg, #f0f3f6 0%, #b3b9c2 25%, #5a6068 55%, #2c3036 80%, #b3b9c2 100%) 1;
   box-shadow:
-    0 0 0 4px rgba(255, 232, 31, 0.10),
-    0 22px 50px rgba(0, 0, 0, 0.55),
-    inset 0 0 38px rgba(255, 232, 31, 0.10);
+    0 0 0 2px #1a1f2a,
+    0 0 0 8px #2c3036,
+    0 26px 56px rgba(0, 0, 0, 0.65),
+    inset 0 0 60px rgba(255, 232, 31, 0.08);
   overflow: hidden;
 }
+
+/* Corner rivets (chrome bolts) */
+.slot-rivet {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 25%, #ffffff 0%, #cdd2da 35%, #4d525c 80%, #1a1d22 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.5),
+    0 1px 3px rgba(0, 0, 0, 0.7);
+  z-index: 4;
+  pointer-events: none;
+}
+.slot-rivet--tl { top: 14px;    left: 14px; }
+.slot-rivet--tr { top: 14px;    right: 56px; }
+.slot-rivet--bl { bottom: 14px; left: 14px; }
+.slot-rivet--br { bottom: 14px; right: 56px; }
 
 .slot-stars {
   position: absolute;
@@ -3210,6 +3234,69 @@ body.series-tinted::before {
   50%      { opacity: 0.95; transform: scale(1.4); }
 }
 
+/* Brand sign — title between two rows of LED bulbs */
+.slot-marquee {
+  position: relative;
+  margin: 0 auto 1.1rem;
+  padding: 0.55rem 1rem;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1a1100 0%, #2a1f00 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 232, 31, 0.55),
+    inset 0 0 18px rgba(255, 232, 31, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+.slot-bulbs {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+  gap: 0.2rem;
+  height: 9px;
+}
+.slot-bulbs::before,
+.slot-bulbs::after,
+.slot-bulbs span {
+  content: '';
+  flex: 0 0 9px;
+  height: 9px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, #ffffff 0%, #fff8b3 35%, #ffe81f 65%, #c79e00 100%);
+  box-shadow: 0 0 8px rgba(255, 232, 31, 0.85);
+  animation: slotBulbBlink 1.4s ease-in-out infinite;
+}
+/* Generate a row of 14 bulbs via repeated gradient/box-shadow trick.
+   We use a multi-shadow on a single ::before to draw all bulbs. */
+.slot-bulbs::before {
+  margin: 0;
+  background: transparent;
+  box-shadow:
+    9px 0 0 0    #ffe81f,
+    27px 0 0 0   #ffd54a,
+    45px 0 0 0   #ffe81f,
+    63px 0 0 0   #ffd54a,
+    81px 0 0 0   #ffe81f,
+    99px 0 0 0   #ffd54a,
+    117px 0 0 0  #ffe81f,
+    135px 0 0 0  #ffd54a,
+    153px 0 0 0  #ffe81f,
+    171px 0 0 0  #ffd54a,
+    189px 0 0 0  #ffe81f,
+    207px 0 0 0  #ffd54a,
+    225px 0 0 0  #ffe81f,
+    243px 0 0 0  #ffd54a;
+  filter: drop-shadow(0 0 4px rgba(255, 232, 31, 0.85));
+  animation: slotBulbBlink 1.6s ease-in-out infinite;
+}
+.slot-bulbs--bottom::before { animation-delay: 0.8s; }
+.slot-bulbs::after { display: none; }
+.slot-bulbs > span { display: none; }
+@keyframes slotBulbBlink {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
 .slot-title {
   position: relative;
   text-align: center;
@@ -3219,7 +3306,7 @@ body.series-tinted::before {
   letter-spacing: 0.32em;
   color: #ffe81f;
   text-shadow: 0 0 14px rgba(255, 232, 31, 0.7), 0 0 4px rgba(255, 232, 31, 0.85);
-  margin-bottom: 1.1rem;
+  padding: 0.4rem 0;
   background: linear-gradient(90deg, #ffe81f 0%, #fde047 35%, #fff8b3 50%, #fde047 65%, #ffe81f 100%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -3231,56 +3318,106 @@ body.series-tinted::before {
   to { background-position: 200% 0; }
 }
 
+/* Reel face — frames the 3-row reel display + payline overlay */
+.slot-face {
+  position: relative;
+  margin: 0 auto 1.1rem;
+  max-width: 540px;
+  border-radius: 16px;
+  padding: 0.85rem;
+  background:
+    linear-gradient(180deg, #050810 0%, #0a1024 50%, #050810 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 232, 31, 0.55),
+    inset 0 0 0 4px rgba(0, 0, 0, 0.7),
+    inset 0 6px 22px rgba(0, 0, 0, 0.85),
+    0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
 .slot-reels {
   position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.75rem;
-  padding: 0.75rem;
-  margin: 0 auto 1.1rem;
-  max-width: 540px;
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.55);
-  box-shadow: inset 0 0 0 1px rgba(255, 232, 31, 0.4), inset 0 4px 18px rgba(0, 0, 0, 0.7);
 }
 
 .slot-reel {
   position: relative;
   width: 100%;
-  height: 110px;
+  /* 3 rows × 96 px each */
+  height: 288px;
   overflow: hidden;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #1a223f, #0a1226);
-  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.25), inset 0 6px 18px rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #1a223f, #0a1226 50%, #1a223f);
+  box-shadow:
+    inset 0 0 0 1px rgba(125, 211, 252, 0.25),
+    inset 0 6px 18px rgba(0, 0, 0, 0.85),
+    inset 0 -6px 18px rgba(0, 0, 0, 0.85);
   --reel-win-glow: transparent;
 }
+/* Top + bottom shading to fade edge symbols (depth) */
 .slot-reel::before,
 .slot-reel::after {
   content: '';
   position: absolute;
   left: 0; right: 0;
-  height: 22px;
+  height: 60px;
   pointer-events: none;
   z-index: 2;
 }
 .slot-reel::before {
   top: 0;
-  background: linear-gradient(180deg, rgba(11, 14, 31, 0.95), transparent);
+  background: linear-gradient(180deg, rgba(5, 8, 16, 0.92), transparent);
 }
 .slot-reel::after {
   bottom: 0;
-  background: linear-gradient(0deg, rgba(11, 14, 31, 0.95), transparent);
+  background: linear-gradient(0deg, rgba(5, 8, 16, 0.92), transparent);
 }
 .slot-reel.locked {
-  box-shadow: inset 0 0 0 1px rgba(255, 232, 31, 0.7), 0 0 16px rgba(255, 232, 31, 0.6), inset 0 6px 18px rgba(0, 0, 0, 0.7);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 232, 31, 0.7),
+    0 0 16px rgba(255, 232, 31, 0.6),
+    inset 0 6px 18px rgba(0, 0, 0, 0.85),
+    inset 0 -6px 18px rgba(0, 0, 0, 0.85);
 }
 .slot-reel.win-glow {
   animation: slotReelWin 0.45s ease-in-out 3;
-  box-shadow: inset 0 0 0 2px var(--reel-win-glow), 0 0 28px var(--reel-win-glow), inset 0 6px 18px rgba(0, 0, 0, 0.7);
 }
 @keyframes slotReelWin {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.05); }
+  0%, 100% {
+    box-shadow:
+      inset 0 0 0 2px var(--reel-win-glow),
+      0 0 32px var(--reel-win-glow),
+      inset 0 6px 18px rgba(0, 0, 0, 0.85);
+    transform: scale(1.04);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 3px var(--reel-win-glow),
+      0 0 56px var(--reel-win-glow),
+      inset 0 6px 18px rgba(0, 0, 0, 0.85);
+    transform: scale(1.07);
+  }
+}
+
+/* Glowing PAYLINE running across the centre row of all three reels */
+.slot-payline {
+  position: absolute;
+  left: 0.85rem;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 96px;          /* same as one symbol cell */
+  border-top: 2px solid rgba(255, 232, 31, 0.8);
+  border-bottom: 2px solid rgba(255, 232, 31, 0.8);
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0 0 6px rgba(255, 232, 31, 0.65));
+  animation: slotPaylinePulse 2.4s ease-in-out infinite;
+}
+@keyframes slotPaylinePulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
 }
 
 .slot-strip {
@@ -3294,10 +3431,10 @@ body.series-tinted::before {
 .slot-symbol {
   display: block;
   width: 100%;
-  height: 110px;
-  line-height: 110px;
+  height: 96px;
+  line-height: 96px;
   text-align: center;
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   color: #fff;
   user-select: none;
   text-shadow: 0 0 18px var(--sym-glow, #ffffff), 0 0 6px var(--sym-glow, #ffffff);
@@ -3315,6 +3452,97 @@ body.series-tinted::before {
   margin-bottom: 1rem;
   position: relative;
   z-index: 1;
+}
+
+/* Coin tray panel beneath the result text */
+.slot-tray {
+  position: relative;
+  margin: 0.8rem auto 1rem;
+  max-width: 360px;
+  height: 38px;
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, #2a2e36 0%, #14171c 50%, #2a2e36 100%);
+  box-shadow:
+    inset 0 0 0 2px #5a6068,
+    inset 0 4px 14px rgba(0, 0, 0, 0.85),
+    0 4px 8px rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+.slot-tray__slot {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 6px;
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, #050608, #1a1d22);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.95),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Side lever arm — vertical rod with red ball, mounted on the right side of the cabinet */
+.slot-arm {
+  position: absolute;
+  top: 60px;
+  right: 6px;
+  width: 38px;
+  height: 200px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 5;
+  transform-origin: 50% 100%;
+  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.slot-arm:active,
+.slot-arm.pulled {
+  transform: rotate(70deg);
+}
+.slot-arm__mount {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, #f0f3f6 0%, #b3b9c2 35%, #5a6068 75%, #2c3036 100%);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7), inset 0 -3px 4px rgba(0, 0, 0, 0.4);
+}
+.slot-arm__rod {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 160px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #5a6068 0%, #cdd2da 35%, #f0f3f6 50%, #cdd2da 65%, #5a6068 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.slot-arm__ball {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 25%, #ffffff 0%, #ffe2e2 18%, #ff5050 55%, #c2261a 78%, #4a0707 100%);
+  box-shadow:
+    0 0 14px rgba(255, 80, 80, 0.85),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.4),
+    inset 2px 2px 3px rgba(255, 255, 255, 0.45);
+}
+.slot-arm:hover .slot-arm__ball {
+  filter: brightness(1.1);
 }
 
 /* Lever button — beefier, more arcade-y */
@@ -3404,13 +3632,28 @@ body.series-tinted::before {
   #dot-tapper-game { width: 88vw; height: 88vw; max-width: 230px; max-height: 230px; }
   #stress-ball-game { width: 80vw; height: 80vw; max-width: 190px; max-height: 190px; }
   .spinner-label { font-size: 0.66rem; }
-  .slot-cabinet { padding: 1.4rem 0.85rem 1.3rem; }
-  .slot-reels { gap: 0.5rem; padding: 0.5rem; }
-  .slot-reel  { height: 88px; }
-  .slot-symbol { height: 88px; line-height: 88px; font-size: 2.1rem; }
+  /* On phones, drop the side lever and shrink the cabinet */
+  .slot-cabinet { padding: 1.6rem 0.9rem 1.4rem; }
+  .slot-arm    { display: none; }
+  .slot-rivet--tr { right: 14px; }
+  .slot-rivet--br { right: 14px; }
+  .slot-face   { padding: 0.6rem; }
+  .slot-reels  { gap: 0.5rem; }
+  .slot-reel   { height: 228px; }                /* 3 rows × 76px */
+  .slot-symbol { height: 76px; line-height: 76px; font-size: 2.05rem; }
+  .slot-payline{ height: 76px; left: 0.6rem; right: 0.6rem; }
   .slot-title  { font-size: 1.15rem; letter-spacing: 0.24em; }
   .slot-lever-btn { padding: 0.65rem 1.2rem; font-size: 0.92rem; letter-spacing: 0.16em; }
   .slot-lever-knob { width: 18px; height: 18px; }
+  .slot-tray   { max-width: 280px; height: 32px; }
+  .slot-bulbs::before {
+    box-shadow:
+      9px 0 0 0   #ffe81f,  27px 0 0 0  #ffd54a,
+      45px 0 0 0  #ffe81f,  63px 0 0 0  #ffd54a,
+      81px 0 0 0  #ffe81f,  99px 0 0 0  #ffd54a,
+      117px 0 0 0 #ffe81f,  135px 0 0 0 #ffd54a,
+      153px 0 0 0 #ffe81f,  171px 0 0 0 #ffd54a;
+  }
 }
 
 /* ════════════════════════════════════════════════════════════
