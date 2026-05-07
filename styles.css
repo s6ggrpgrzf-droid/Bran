@@ -3426,7 +3426,11 @@ body.series-tinted::before {
   left: 0;
   width: 100%;
   display: block;
-  will-change: transform;
+  will-change: transform, filter;
+  transition: filter 0.18s ease;
+}
+.slot-strip.is-spinning {
+  filter: blur(2px) brightness(1.08);
 }
 .slot-symbol {
   display: block;

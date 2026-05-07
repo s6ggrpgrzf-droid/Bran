@@ -2027,8 +2027,9 @@ class SlotMachineGame {
       const landingPos = this.findLandingPos(symbols, targets[reelIdx]);
 
       const H = this.cellHeight(strip);
-      // Add full strip cycles so the reel actually appears to spin a few times
-      const cycles = 4 + reelIdx;
+      // Cycles tuned so each reel covers a believable distance for its
+      // duration (later reels spin longer, all about the same speed).
+      const cycles = 1 + reelIdx;
       const totalIndex = landingPos + cycles * symbols.length;
       // Position the landing index in the CENTER row of the 3-row viewport.
       // Center-row formula: viewport y = H means strip.translateY(-(k-1)*H).
@@ -2036,21 +2037,29 @@ class SlotMachineGame {
       const landY  = -(landingPos - 1) * H;
       const durationS = (stopMs[reelIdx] / 1000).toFixed(2);
 
-      // Commit transition: none on current position, then in the next
-      // animation frame apply a fresh transition + target so the browser
-      // actually animates the change.
+      // Reset transition + commit current position
       strip.style.transition = 'none';
       void strip.offsetWidth;
 
+      // Double-rAF: first frame commits the new transition value, second
+      // frame applies the target transform — this is the only reliable
+      // way across browsers to make the transition actually animate when
+      // the previous transition was 'none'.
       requestAnimationFrame(() => {
         strip.style.transition = `transform ${durationS}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
-        strip.style.transform = `translateY(${totalY}px)`;
+        // Motion blur during the spin so individual symbols stop looking
+        // like a snap-cut. Removed when the reel locks below.
+        strip.classList.add('is-spinning');
+        requestAnimationFrame(() => {
+          strip.style.transform = `translateY(${totalY}px)`;
+        });
       });
 
       setTimeout(() => {
         // Snap to a normalized in-range position so further spins stay sane
         strip.style.transition = 'none';
         strip.style.transform = `translateY(${landY}px)`;
+        strip.classList.remove('is-spinning');
         strip.dataset.landing = String(landingPos);
         this.reelEls[reelIdx].classList.add('locked');
         // Heavy mechanical CLUNK — short low square thump + harmonic sting
