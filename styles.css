@@ -3087,7 +3087,8 @@ body.series-tinted::before {
 /* ── Game 5: Zen Sand Garden ─────────────────────────────── */
 #sand-game {
   display: block;
-  width: min(600px, 96vw);
+  width: 100%;
+  max-width: 600px;
   margin: 1.5rem auto;
   border-radius: 14px;
   overflow: hidden;
@@ -3106,7 +3107,8 @@ body.series-tinted::before {
 /* ── Game 6: Pop-It Grid ─────────────────────────────────── */
 #popit-game {
   display: block;
-  width: min(360px, 92vw);
+  width: 100%;
+  max-width: 360px;
   margin: 1.5rem auto;
 }
 .popit-grid {
@@ -3141,11 +3143,12 @@ body.series-tinted::before {
 /* ── Game 7: Ripple Pond ─────────────────────────────────── */
 #ripple-game {
   display: block;
-  width: min(600px, 96vw);
+  width: 100%;
+  max-width: 600px;
   margin: 1.5rem auto;
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(125, 211, 252, 0.25), inset 0 0 0 1px rgba(255,255,255,0.5);
+  box-shadow: 0 8px 24px rgba(38, 70, 130, 0.45), inset 0 0 0 1px rgba(255,255,255,0.5);
 }
 #ripple-canvas {
   display: block;
@@ -3189,8 +3192,6 @@ body.series-tinted::before {
   #dot-tapper-game { width: 88vw; height: 88vw; max-width: 230px; max-height: 230px; }
   #stress-ball-game { width: 80vw; height: 80vw; max-width: 190px; max-height: 190px; }
   .spinner-label { font-size: 0.66rem; }
-  #sand-game, #ripple-game { width: 96vw; }
-  #popit-game { width: 92vw; max-width: 360px; }
 }
 
 /* ════════════════════════════════════════════════════════════

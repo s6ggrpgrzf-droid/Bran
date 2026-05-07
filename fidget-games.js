@@ -1099,36 +1099,130 @@ class SandGardenGame {
   smoothSand(silent) {
     const ctx = this.ctx;
     const w = this.cssW, h = this.cssH;
-    const grad = ctx.createLinearGradient(0, 0, 0, h);
-    grad.addColorStop(0, '#f6e7d6');
-    grad.addColorStop(1, '#e9d3b3');
-    ctx.fillStyle = grad;
+
+    // 1. Warm radial-vignette base
+    const base = ctx.createRadialGradient(w * 0.5, h * 0.35, w * 0.1, w * 0.5, h * 0.55, w * 0.85);
+    base.addColorStop(0, '#f8ecd6');
+    base.addColorStop(0.55, '#eddcb9');
+    base.addColorStop(1, '#cfb38a');
+    ctx.fillStyle = base;
     ctx.fillRect(0, 0, w, h);
 
-    // Subtle grain noise
-    const grainCount = Math.floor(w * h * 0.012);
-    for (let i = 0; i < grainCount; i++) {
-      const x = Math.random() * w;
-      const y = Math.random() * h;
-      const a = Math.random() * 0.07 + 0.02;
-      ctx.fillStyle = `rgba(120,90,60,${a.toFixed(3)})`;
-      ctx.fillRect(x, y, 1, 1);
+    // 2. Diagonal "sun" wash so the sand looks lit from upper-left
+    const sun = ctx.createLinearGradient(0, 0, w, h);
+    sun.addColorStop(0, 'rgba(255, 240, 200, 0.25)');
+    sun.addColorStop(0.6, 'rgba(255, 240, 200, 0)');
+    sun.addColorStop(1, 'rgba(80, 50, 20, 0.18)');
+    ctx.fillStyle = sun;
+    ctx.fillRect(0, 0, w, h);
+
+    // 3. Layered grain noise — three passes at varying density and tone
+    for (const [count, alpha, color] of [
+      [w * h * 0.020, 0.05, '110,80,50'],
+      [w * h * 0.012, 0.07, '60,40,20'],
+      [w * h * 0.010, 0.06, '255,235,200'],
+    ]) {
+      const n = Math.floor(count);
+      for (let i = 0; i < n; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const a = Math.random() * alpha + 0.02;
+        ctx.fillStyle = `rgba(${color},${a.toFixed(3)})`;
+        ctx.fillRect(x, y, 1, 1);
+      }
     }
 
-    // A couple of decorative stones
-    [
-      [w * 0.18, h * 0.78, 32],
-      [w * 0.82, h * 0.32, 24],
-      [w * 0.55, h * 0.7, 18],
-    ].forEach(([cx, cy, r]) => {
-      const g = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.2, cx, cy, r);
-      g.addColorStop(0, '#9aa0a6');
-      g.addColorStop(1, '#5b6066');
+    // 4. Bamboo border frame — slim warm-brown bands top & bottom with fibre lines
+    const frameH = Math.max(8, Math.round(h * 0.04));
+    [0, h - frameH].forEach(y => {
+      const fg = ctx.createLinearGradient(0, y, 0, y + frameH);
+      fg.addColorStop(0, '#8c6135');
+      fg.addColorStop(0.5, '#a07747');
+      fg.addColorStop(1, '#6a4724');
+      ctx.fillStyle = fg;
+      ctx.fillRect(0, y, w, frameH);
+      // Fibre lines
+      ctx.strokeStyle = 'rgba(50,30,15,0.4)';
+      ctx.lineWidth = 0.6;
+      for (let x = 0; x < w; x += 4 + Math.random() * 6) {
+        ctx.beginPath();
+        ctx.moveTo(x, y + 1);
+        ctx.lineTo(x + (Math.random() - 0.5) * 3, y + frameH - 1);
+        ctx.stroke();
+      }
+    });
+
+    // 5. Mossy patch — soft green blob lower right for color contrast
+    const mossR = Math.max(28, w * 0.10);
+    const mossX = w * 0.78, mossY = h * 0.74;
+    const moss = ctx.createRadialGradient(mossX, mossY, 0, mossX, mossY, mossR);
+    moss.addColorStop(0, 'rgba(120, 160, 90, 0.55)');
+    moss.addColorStop(0.6, 'rgba(110, 150, 85, 0.30)');
+    moss.addColorStop(1, 'rgba(110, 150, 85, 0)');
+    ctx.fillStyle = moss;
+    ctx.beginPath();
+    ctx.ellipse(mossX, mossY, mossR, mossR * 0.62, 0.3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 6. Decorative stones — five irregular shapes with proper highlights and contour shadow
+    const stones = [
+      [w * 0.18, h * 0.72, 30, 0.78,  0.20],
+      [w * 0.30, h * 0.68, 16, 0.85,  0.10],
+      [w * 0.78, h * 0.34, 24, 0.70, -0.15],
+      [w * 0.55, h * 0.62, 20, 0.92,  0.05],
+      [w * 0.66, h * 0.30, 12, 0.88,  0.45],
+    ];
+    stones.forEach(([cx, cy, r, ratio, tilt]) => {
+      // Cast shadow (drop)
+      ctx.fillStyle = 'rgba(60, 40, 20, 0.35)';
+      ctx.beginPath();
+      ctx.ellipse(cx + r * 0.18, cy + r * 0.36, r * 1.05, r * ratio * 0.5, tilt, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Main body
+      const g = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.4, r * 0.15, cx, cy, r * 1.05);
+      g.addColorStop(0, '#cdd2d8');
+      g.addColorStop(0.45, '#8a8e93');
+      g.addColorStop(1, '#3d4147');
       ctx.fillStyle = g;
       ctx.beginPath();
-      ctx.ellipse(cx, cy, r, r * 0.78, 0, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy, r, r * ratio, tilt, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Contour speckles for texture
+      for (let s = 0; s < 8; s++) {
+        const a = Math.random() * Math.PI * 2;
+        const rr = Math.random() * r * 0.7;
+        ctx.fillStyle = `rgba(20,20,30,${0.05 + Math.random() * 0.1})`;
+        ctx.fillRect(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * ratio, 1.5, 1.5);
+      }
+
+      // Highlight crescent
+      const hl = ctx.createRadialGradient(cx - r * 0.35, cy - r * 0.45, 0, cx - r * 0.35, cy - r * 0.45, r * 0.6);
+      hl.addColorStop(0, 'rgba(255,255,255,0.45)');
+      hl.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = hl;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, r, r * ratio, tilt, 0, Math.PI * 2);
       ctx.fill();
     });
+
+    // 7. Cherry-blossom petals scattered — 6–8 tiny pink dots
+    const petalCount = 7;
+    for (let i = 0; i < petalCount; i++) {
+      const px = Math.random() * w;
+      const py = h * 0.18 + Math.random() * h * 0.50;
+      const pr = 2.5 + Math.random() * 2.5;
+      ctx.fillStyle = `rgba(255, 192, 203, ${0.55 + Math.random() * 0.35})`;
+      ctx.beginPath();
+      ctx.ellipse(px, py, pr, pr * 0.68, Math.random() * Math.PI, 0, Math.PI * 2);
+      ctx.fill();
+      // Small darker pink centre
+      ctx.fillStyle = 'rgba(216, 95, 130, 0.45)';
+      ctx.beginPath();
+      ctx.arc(px, py, 0.7, 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     if (!silent) Sound.blip(220, 0.4, 'sine', 0.04);
   }
@@ -1182,25 +1276,35 @@ class SandGardenGame {
     const dy = b.y - a.y;
     const len = Math.hypot(dx, dy);
     if (len < 0.5) return;
-    const nx = -dy / len, ny = dx / len; // perpendicular
-    const tines = 5, spacing = 5;
+    const nx = -dy / len, ny = dx / len; // perpendicular unit vector
+    const spacing = 6;
     ctx.lineCap = 'round';
+    // Light direction is upper-left, so the highlight goes on the upper-left
+    // side of each groove and the shadow on the lower-right.
+    const lightOffset = 1.4;
     for (let i = -2; i <= 2; i++) {
       const ox = nx * i * spacing;
       const oy = ny * i * spacing;
-      // dark groove
-      ctx.strokeStyle = 'rgba(110, 80, 50, 0.55)';
-      ctx.lineWidth = 1.6;
+      // Outer soft shadow (groove depth)
+      ctx.strokeStyle = 'rgba(70, 45, 20, 0.22)';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(a.x + ox + nx * lightOffset, a.y + oy + ny * lightOffset);
+      ctx.lineTo(b.x + ox + nx * lightOffset, b.y + oy + ny * lightOffset);
+      ctx.stroke();
+      // Dark groove — main line
+      ctx.strokeStyle = 'rgba(95, 65, 35, 0.55)';
+      ctx.lineWidth = 1.8;
       ctx.beginPath();
       ctx.moveTo(a.x + ox, a.y + oy);
       ctx.lineTo(b.x + ox, b.y + oy);
       ctx.stroke();
-      // light highlight just beside it
-      ctx.strokeStyle = 'rgba(255, 244, 220, 0.45)';
-      ctx.lineWidth = 1;
+      // Bright highlight on the lit side
+      ctx.strokeStyle = 'rgba(255, 245, 220, 0.55)';
+      ctx.lineWidth = 0.9;
       ctx.beginPath();
-      ctx.moveTo(a.x + ox + 1, a.y + oy + 1);
-      ctx.lineTo(b.x + ox + 1, b.y + oy + 1);
+      ctx.moveTo(a.x + ox - nx * lightOffset, a.y + oy - ny * lightOffset);
+      ctx.lineTo(b.x + ox - nx * lightOffset, b.y + oy - ny * lightOffset);
       ctx.stroke();
     }
   }
@@ -1208,14 +1312,23 @@ class SandGardenGame {
   drawFinger(a, b) {
     const ctx = this.ctx;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = 'rgba(110, 80, 50, 0.55)';
-    ctx.lineWidth = 12;
+    // Wide soft shadow underneath
+    ctx.strokeStyle = 'rgba(70, 45, 20, 0.30)';
+    ctx.lineWidth = 16;
+    ctx.beginPath();
+    ctx.moveTo(a.x + 2, a.y + 2);
+    ctx.lineTo(b.x + 2, b.y + 2);
+    ctx.stroke();
+    // Main groove — darker centre
+    ctx.strokeStyle = 'rgba(95, 65, 35, 0.55)';
+    ctx.lineWidth = 10;
     ctx.beginPath();
     ctx.moveTo(a.x, a.y);
     ctx.lineTo(b.x, b.y);
     ctx.stroke();
-    ctx.strokeStyle = 'rgba(255, 244, 220, 0.5)';
-    ctx.lineWidth = 4;
+    // Sand-edge highlight
+    ctx.strokeStyle = 'rgba(255, 244, 220, 0.55)';
+    ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(a.x - 3, a.y - 3);
     ctx.lineTo(b.x - 3, b.y - 3);
@@ -1358,6 +1471,8 @@ class RipplePondGame {
     if (!this.canvas) return;
     this.ctx = this.canvas.getContext('2d');
     this.ripples = [];
+    this.lilies = [];
+    this.koi = [];
     this.count = 0;
     this.running = false;
     this.init();
@@ -1368,11 +1483,11 @@ class RipplePondGame {
     this.count = stats.rippleCount ?? 0;
     this.updateDisplay();
     this.fitCanvas();
-    requestAnimationFrame(() => this.fitCanvas());
-    window.addEventListener('resize', () => this.fitCanvas());
+    this.layoutScene();
+    requestAnimationFrame(() => { this.fitCanvas(); this.layoutScene(); });
+    window.addEventListener('resize', () => { this.fitCanvas(); this.layoutScene(); });
 
     this.canvas.addEventListener('pointerdown', (e) => this.addRipple(e));
-
     this.startLoop();
   }
 
@@ -1390,24 +1505,40 @@ class RipplePondGame {
     this.cssW = cssW; this.cssH = cssH;
   }
 
+  layoutScene() {
+    const w = this.cssW, h = this.cssH;
+    // Three lily pads — fixed positions, scale by canvas size, pinkish flowers
+    this.lilies = [
+      { x: w * 0.22, y: h * 0.72, r: Math.max(22, w * 0.07), flower: '#fce7f3' },
+      { x: w * 0.78, y: h * 0.30, r: Math.max(18, w * 0.06), flower: '#fbcfe8' },
+      { x: w * 0.55, y: h * 0.55, r: Math.max(20, w * 0.065), flower: '#f5d0fe' },
+    ].map(L => ({ ...L, pulse: 0, lastHit: 0 }));
+
+    // Two koi fish drifting at slow speed with phase offset
+    this.koi = [
+      { y: h * 0.45, dir:  1, speed: 14, phase: Math.random() * Math.PI * 2, size: Math.max(16, w * 0.05), color: '#fb923c' },
+      { y: h * 0.20, dir: -1, speed: 10, phase: Math.random() * Math.PI * 2, size: Math.max(14, w * 0.045), color: '#f87171' },
+    ];
+    this.koi.forEach(k => { k.x = k.dir > 0 ? -k.size : w + k.size; });
+  }
+
   addRipple(e) {
     e.preventDefault();
     const r = this.canvas.getBoundingClientRect();
     const x = e.clientX - r.left;
     const y = e.clientY - r.top;
-    const palette = ['#7dd3fc', '#a78bfa', '#e87ca0', '#22d3ee'];
-    this.ripples.push({
-      x, y,
-      t: 0,
-      maxR: 200 + Math.random() * 80,
-      color: palette[Math.floor(Math.random() * palette.length)],
-    });
+    const palette = ['#bae6fd', '#7dd3fc', '#a78bfa', '#22d3ee'];
+    const color = palette[Math.floor(Math.random() * palette.length)];
+    // Layered: 3 concentric ripples with different speeds for depth
+    this.ripples.push({ x, y, t: 0, maxR: 220 + Math.random() * 60, speed: 140, color, opacity: 1.0, width: 2.4 });
+    this.ripples.push({ x, y, t: -0.12, maxR: 170 + Math.random() * 40, speed: 110, color, opacity: 0.7, width: 1.5 });
+    this.ripples.push({ x, y, t: -0.24, maxR: 130 + Math.random() * 30, speed:  90, color, opacity: 0.5, width: 1.0 });
+
     this.count++;
     this.updateDisplay();
     updateStat('rippleCount', this.count);
-    Sound.blip(520 + Math.random() * 200, 0.18, 'sine', 0.04);
+    Sound.blip(520 + Math.random() * 200, 0.22, 'sine', 0.05);
 
-    // Three soft cyan sparkles at the tap point
     Arcade.confetti(e.clientX, e.clientY, 3, 'cool');
   }
 
@@ -1427,49 +1558,219 @@ class RipplePondGame {
   draw(dt) {
     const ctx = this.ctx;
     const w = this.cssW, h = this.cssH;
-    // Water background — soft cyan-purple gradient
-    const g = ctx.createLinearGradient(0, 0, 0, h);
-    g.addColorStop(0, '#bee9fb');
-    g.addColorStop(0.5, '#cfd9fb');
-    g.addColorStop(1, '#e7d6f5');
-    ctx.fillStyle = g;
+    const time = performance.now() / 1000;
+
+    // 1. Deep-water vertical gradient — midnight teal at top, darker bottom
+    const base = ctx.createLinearGradient(0, 0, 0, h);
+    base.addColorStop(0,    '#1e3a5f');
+    base.addColorStop(0.45, '#0f5f7a');
+    base.addColorStop(1,    '#0a3450');
+    ctx.fillStyle = base;
     ctx.fillRect(0, 0, w, h);
 
-    // Soft caustic shimmer
-    const time = performance.now() / 1000;
-    ctx.globalAlpha = 0.18;
+    // 2. Shimmering surface bands — horizontal sinusoidal stripes that shift
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 8; i++) {
+      const y = h * (i / 8) + Math.sin(time * 0.6 + i * 0.7) * 6;
+      const h2 = 4 + Math.sin(time * 0.9 + i) * 1.2;
+      const alpha = 0.05 + Math.abs(Math.sin(time * 0.5 + i * 0.4)) * 0.08;
+      ctx.fillStyle = `rgba(180, 230, 255, ${alpha.toFixed(3)})`;
+      ctx.fillRect(0, y, w, h2);
+    }
+    ctx.restore();
+
+    // 3. Soft caustic blobs drifting on the surface
+    ctx.save();
+    ctx.globalAlpha = 0.16;
+    ctx.globalCompositeOperation = 'lighter';
     for (let i = 0; i < 4; i++) {
-      ctx.fillStyle = i % 2 ? '#ffffff' : '#a78bfa';
-      const cx = (Math.sin(time * 0.4 + i) * 0.5 + 0.5) * w;
-      const cy = (Math.cos(time * 0.3 + i * 1.4) * 0.5 + 0.5) * h;
-      const rad = 80 + Math.sin(time + i) * 30;
+      const cx = (Math.sin(time * 0.32 + i * 1.7) * 0.5 + 0.5) * w;
+      const cy = (Math.cos(time * 0.27 + i * 2.1) * 0.5 + 0.5) * h;
+      const rad = 70 + Math.sin(time + i) * 26;
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rad);
+      grad.addColorStop(0, i % 2 ? '#ffffff' : '#a78bfa');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(cx, cy, rad, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.globalAlpha = 1;
+    ctx.restore();
 
-    // Ripples
+    // 4. Koi fish — drift across, slight vertical bob
+    this.koi.forEach(k => {
+      k.x += k.dir * k.speed * dt;
+      const fx = k.x;
+      const fy = k.y + Math.sin(time + k.phase) * 4;
+      // Wrap when off-canvas
+      if (k.dir > 0 && fx > w + k.size * 1.5) k.x = -k.size * 1.5;
+      if (k.dir < 0 && fx < -k.size * 1.5) k.x = w + k.size * 1.5;
+      this.drawKoi(fx, fy, k.size, k.dir, k.color, time + k.phase);
+    });
+
+    // 5. Lily pads — rendered before ripples but their "pulse" updates from ripple intersections
+    this.lilies.forEach(L => {
+      // Update pulse toward 0
+      L.pulse = Math.max(0, L.pulse - dt * 2.6);
+      this.drawLilyPad(L.x, L.y, L.r, L.flower, L.pulse);
+    });
+
+    // 6. Ripples — three layered rings per click, plus a faint inner highlight
     this.ripples = this.ripples.filter(rp => {
       rp.t += dt;
-      const r = rp.t * 140;
+      if (rp.t < 0) return true;  // delayed start
+      const r = rp.t * rp.speed;
       if (r > rp.maxR) return false;
-      const alpha = Math.max(0, 1 - r / rp.maxR);
-      ctx.lineWidth = 2.2;
+      const alpha = Math.max(0, (1 - r / rp.maxR)) * (rp.opacity ?? 1);
+
+      // Hit-test lily pads — bump their pulse if a ripple front is near
+      this.lilies.forEach(L => {
+        const d = Math.hypot(L.x - rp.x, L.y - rp.y);
+        if (Math.abs(d - r) < 6 && (time - (L.lastHit || 0)) > 0.18) {
+          L.pulse = 1;
+          L.lastHit = time;
+        }
+      });
+
+      ctx.lineWidth = rp.width || 2;
       ctx.strokeStyle = `${rp.color}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
       ctx.beginPath();
       ctx.arc(rp.x, rp.y, r, 0, Math.PI * 2);
       ctx.stroke();
-      // Inner softer ring
-      if (r > 14) {
-        ctx.strokeStyle = `rgba(255,255,255,${(alpha * 0.6).toFixed(3)})`;
-        ctx.lineWidth = 1;
+      if (r > 12) {
+        ctx.strokeStyle = `rgba(255,255,255,${(alpha * 0.55).toFixed(3)})`;
+        ctx.lineWidth = 0.9;
         ctx.beginPath();
-        ctx.arc(rp.x, rp.y, r - 8, 0, Math.PI * 2);
+        ctx.arc(rp.x, rp.y, r - 6, 0, Math.PI * 2);
         ctx.stroke();
       }
       return true;
     });
+  }
+
+  drawLilyPad(cx, cy, r, flowerColor, pulse) {
+    const ctx = this.ctx;
+    const lift = Math.sin(pulse * Math.PI) * 3;
+    const sx = 1 + pulse * 0.06;
+    const sy = 1 + pulse * 0.06;
+    // Drop shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.30)';
+    ctx.beginPath();
+    ctx.ellipse(cx + 3, cy + 5, r * 1.04 * sx, r * 0.62 * sy, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Pad body — radial gradient deep green to bright edge
+    const g = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.4 - lift, r * 0.1, cx, cy - lift, r);
+    g.addColorStop(0, '#5fb874');
+    g.addColorStop(0.55, '#2f7a4a');
+    g.addColorStop(1, '#0f3f28');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy - lift, r * sx, r * 0.62 * sy, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // The classic lily-pad "notch" — a wedge cut from the right edge
+    ctx.save();
+    ctx.fillStyle = '#0a3450';
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - lift);
+    ctx.lineTo(cx + r * 1.05 * sx, cy - lift - r * 0.15);
+    ctx.lineTo(cx + r * 1.05 * sx, cy - lift + r * 0.15);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // Vein lines
+    ctx.strokeStyle = 'rgba(15, 50, 30, 0.55)';
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < 5; i++) {
+      const a = -Math.PI * 0.45 + i * (Math.PI * 0.9 / 4);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy - lift);
+      ctx.lineTo(cx + Math.cos(a) * r * 0.95 * sx, cy - lift + Math.sin(a) * r * 0.58 * sy);
+      ctx.stroke();
+    }
+
+    // Pad highlight — soft rim
+    ctx.strokeStyle = 'rgba(180, 240, 200, 0.4)';
+    ctx.lineWidth = 1.1;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy - lift, r * sx * 0.96, r * 0.62 * sy * 0.96, 0, Math.PI * 1.05, Math.PI * 1.85);
+    ctx.stroke();
+
+    // Flower at the centre — five petals + golden core
+    const fr = r * 0.32;
+    for (let p = 0; p < 5; p++) {
+      const angle = (p / 5) * Math.PI * 2 - Math.PI / 2;
+      const px = cx + Math.cos(angle) * fr * 0.7;
+      const py = cy - lift + Math.sin(angle) * fr * 0.7;
+      const grad = ctx.createRadialGradient(px, py, 0, px, py, fr * 0.85);
+      grad.addColorStop(0, '#ffffff');
+      grad.addColorStop(0.7, flowerColor);
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.ellipse(px, py, fr * 0.55, fr * 0.32, angle, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    // Core
+    ctx.fillStyle = '#fbbf24';
+    ctx.beginPath();
+    ctx.arc(cx, cy - lift, fr * 0.28, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.75)';
+    ctx.beginPath();
+    ctx.arc(cx, cy - lift, fr * 0.16, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  drawKoi(cx, cy, size, dir, color, t) {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(dir, 1);
+    // Body shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.beginPath();
+    ctx.ellipse(2, 4, size, size * 0.42, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Body
+    const g = ctx.createLinearGradient(-size, 0, size, 0);
+    g.addColorStop(0, '#fff');
+    g.addColorStop(0.5, color);
+    g.addColorStop(1, '#7c2d12');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, size, size * 0.42, 0, 0, Math.PI * 2);
+    ctx.fill();
+    // Tail — wiggle with time
+    const wag = Math.sin(t * 4) * 0.55;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.85, 0);
+    ctx.quadraticCurveTo(-size * 1.45, -size * 0.5 + wag * size * 0.3, -size * 1.6, -size * 0.42 + wag * size * 0.3);
+    ctx.lineTo(-size * 1.55, size * 0.4 - wag * size * 0.3);
+    ctx.quadraticCurveTo(-size * 1.4, size * 0.45 - wag * size * 0.3, -size * 0.85, 0);
+    ctx.closePath();
+    ctx.fill();
+    // Top fin
+    ctx.fillStyle = `${color}cc`;
+    ctx.beginPath();
+    ctx.moveTo(-size * 0.2, -size * 0.35);
+    ctx.quadraticCurveTo(-size * 0.1, -size * 0.6, size * 0.1, -size * 0.35);
+    ctx.closePath();
+    ctx.fill();
+    // White spots
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath(); ctx.arc(size * 0.25, -size * 0.05, size * 0.1, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(-size * 0.1, size * 0.18, size * 0.07, 0, Math.PI * 2); ctx.fill();
+    // Eye
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(size * 0.55, -size * 0.05, size * 0.06, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.beginPath(); ctx.arc(size * 0.57, -size * 0.07, size * 0.022, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
   }
 
   updateDisplay() {
