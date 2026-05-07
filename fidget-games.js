@@ -701,6 +701,7 @@ class SandGardenGame {
     this.updateDisplay();
     this.fitCanvas();
     this.smoothSand();
+    requestAnimationFrame(() => { this.fitCanvas(); this.smoothSand(true); });
     window.addEventListener('resize', () => { this.fitCanvas(); this.smoothSand(true); });
 
     this.canvas.addEventListener('pointerdown', (e) => this.startStroke(e));
@@ -719,12 +720,14 @@ class SandGardenGame {
 
   fitCanvas() {
     const dpr = window.devicePixelRatio || 1;
-    const cssW = Math.min(600, this.canvas.parentElement.clientWidth - 8);
+    const parentW = this.canvas.parentElement?.clientWidth || 0;
+    const fallback = Math.min(600, (window.innerWidth || 600) * 0.92);
+    const cssW = Math.max(160, Math.min(600, parentW > 32 ? parentW : fallback));
     const cssH = Math.round(cssW * 0.62);
     this.canvas.style.width = cssW + 'px';
     this.canvas.style.height = cssH + 'px';
-    this.canvas.width = Math.round(cssW * dpr);
-    this.canvas.height = Math.round(cssH * dpr);
+    this.canvas.width = Math.max(1, Math.round(cssW * dpr));
+    this.canvas.height = Math.max(1, Math.round(cssH * dpr));
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.cssW = cssW; this.cssH = cssH;
   }
@@ -917,6 +920,7 @@ class RipplePondGame {
     this.count = stats.rippleCount ?? 0;
     this.updateDisplay();
     this.fitCanvas();
+    requestAnimationFrame(() => this.fitCanvas());
     window.addEventListener('resize', () => this.fitCanvas());
 
     this.canvas.addEventListener('pointerdown', (e) => this.addRipple(e));
@@ -926,12 +930,14 @@ class RipplePondGame {
 
   fitCanvas() {
     const dpr = window.devicePixelRatio || 1;
-    const cssW = Math.min(600, this.canvas.parentElement.clientWidth - 8);
+    const parentW = this.canvas.parentElement?.clientWidth || 0;
+    const fallback = Math.min(600, (window.innerWidth || 600) * 0.92);
+    const cssW = Math.max(160, Math.min(600, parentW > 32 ? parentW : fallback));
     const cssH = Math.round(cssW * 0.62);
     this.canvas.style.width = cssW + 'px';
     this.canvas.style.height = cssH + 'px';
-    this.canvas.width = Math.round(cssW * dpr);
-    this.canvas.height = Math.round(cssH * dpr);
+    this.canvas.width = Math.max(1, Math.round(cssW * dpr));
+    this.canvas.height = Math.max(1, Math.round(cssH * dpr));
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.cssW = cssW; this.cssH = cssH;
   }

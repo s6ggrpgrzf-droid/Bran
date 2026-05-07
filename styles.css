@@ -3086,7 +3086,9 @@ body.series-tinted::before {
 
 /* ── Game 5: Zen Sand Garden ─────────────────────────────── */
 #sand-game {
+  display: block;
   width: min(600px, 96vw);
+  margin: 1.5rem auto;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(180, 140, 90, 0.2), inset 0 0 0 1px rgba(255,255,255,0.5);
@@ -3095,6 +3097,7 @@ body.series-tinted::before {
   display: block;
   width: 100%;
   height: auto;
+  min-width: 0;
   background: #efe0c8;
   cursor: crosshair;
   touch-action: none;
@@ -3102,7 +3105,9 @@ body.series-tinted::before {
 
 /* ── Game 6: Pop-It Grid ─────────────────────────────────── */
 #popit-game {
+  display: block;
   width: min(360px, 92vw);
+  margin: 1.5rem auto;
 }
 .popit-grid {
   display: grid;
@@ -3135,7 +3140,9 @@ body.series-tinted::before {
 
 /* ── Game 7: Ripple Pond ─────────────────────────────────── */
 #ripple-game {
+  display: block;
   width: min(600px, 96vw);
+  margin: 1.5rem auto;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(125, 211, 252, 0.25), inset 0 0 0 1px rgba(255,255,255,0.5);
@@ -3144,8 +3151,20 @@ body.series-tinted::before {
   display: block;
   width: 100%;
   height: auto;
+  min-width: 0;
   cursor: pointer;
   touch-action: none;
+}
+
+/* color-mix() fallback for the pop-it cells: solid colour if color-mix unsupported */
+@supports not (background: color-mix(in srgb, red, blue)) {
+  .popit-cell {
+    background: radial-gradient(circle at 30% 25%, #ffffff 0%, var(--popit-color, #e87ca0) 70%, var(--popit-color, #e87ca0) 100%);
+  }
+  .popit-cell.popit-down {
+    background: radial-gradient(circle at 30% 70%, var(--popit-color, #e87ca0) 0%, var(--popit-color, #e87ca0) 100%);
+    filter: brightness(0.7);
+  }
 }
 
 
