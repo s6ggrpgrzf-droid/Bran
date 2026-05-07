@@ -59,42 +59,25 @@ const Sound = (() => {
     seq.forEach((args, i) => setTimeout(() => blip(...args), i * 80));
   }
 
-  /** Continuous mechanical whirring used during the slot spin: layered
-      sawtooth + triangle with rapid amplitude wobble. Runs for `duration`
-      seconds, fading in and out so it doesn't click. */
-  function whirr(duration = 2.5) {
-    const c = ensureCtx();
-    if (!c) return;
-    const t = c.currentTime;
-    const stop = t + duration;
-
-    // Two oscillators tuned a perfect fifth apart for grain
-    const osc1 = c.createOscillator();
-    const osc2 = c.createOscillator();
-    osc1.type = 'sawtooth'; osc1.frequency.setValueAtTime(180, t);
-    osc2.type = 'triangle'; osc2.frequency.setValueAtTime(270, t);
-
-    // Fast LFO modulating amplitude → that "geared" mechanical chatter
-    const lfo = c.createOscillator();
-    lfo.type = 'square';
-    lfo.frequency.setValueAtTime(48, t);
-    const lfoGain = c.createGain();
-    lfoGain.gain.setValueAtTime(0.018, t);
-    lfo.connect(lfoGain);
-
-    const main = c.createGain();
-    lfoGain.connect(main.gain);   // additive modulation on top of base
-    main.gain.setValueAtTime(0, t);
-    main.gain.linearRampToValueAtTime(0.045, t + 0.10);
-    main.gain.setValueAtTime(0.045, stop - 0.18);
-    main.gain.linearRampToValueAtTime(0, stop);
-
-    osc1.connect(main);
-    osc2.connect(main);
-    main.connect(c.destination);
-    osc1.start(t); osc2.start(t); lfo.start(t);
-    osc1.stop(stop + 0.05); osc2.stop(stop + 0.05); lfo.stop(stop + 0.05);
+  /** Authentic slot-reel sound: a stream of short percussive ticks that
+      decelerate as the reels slow down. Each tick is a soft click on a
+      slightly randomised pitch. Spacing starts at ~35 ms (fast spin) and
+      grows quadratically to ~280 ms (final wind-down). */
+  function reelTicks(duration = 2.6) {
+    let t = 0;
+    while (t < duration) {
+      const phase = t / duration;        // 0 → 1
+      const spacing = 0.035 + phase * phase * 0.245;
+      const ms = t * 1000;
+      setTimeout(() => {
+        // Tiny pitch variance keeps the train alive without buzzing.
+        blip(700 + Math.random() * 90, 0.015, 'square', 0.028);
+      }, ms);
+      t += spacing;
+    }
   }
+  /** Backwards-compatible alias — old name still works. */
+  const whirr = reelTicks;
 
   /** Heavy mechanical reel-stop "thunk" — a percussive low sting with
       a touch of metal harmonic. Drops in pitch instantly. */
@@ -157,7 +140,7 @@ const Sound = (() => {
     seq.forEach((f, i) => setTimeout(() => bell(f, 0.35, 0.07), i * 130));
   }
 
-  return { blip, jingle, whirr, thunk, bell, coinCascade, winBell };
+  return { blip, jingle, whirr, reelTicks, thunk, bell, coinCascade, winBell };
 })();
 
 /* ── Arcade effects helper — score popups, banners, shake, confetti ─── */
@@ -2029,9 +2012,9 @@ class SlotMachineGame {
     }, 90);
     if (this.statusEl) this.statusEl.textContent = 'The reels stir…';
 
-    // Continuous mechanical whirring — a sawtooth + triangle ramping in
-    // for the duration of the longest reel spin, then ramping out.
-    Sound.whirr(2.7);
+    // Slot-reel tick stream — fast clicking that slows as the reels
+    // decelerate, lining up roughly with the longest reel spin.
+    Sound.reelTicks(2.6);
 
     // Roll three landing symbols
     const targets = [this.pickSymbolIndex(), this.pickSymbolIndex(), this.pickSymbolIndex()];
