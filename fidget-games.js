@@ -1887,6 +1887,7 @@ class SlotMachineGame {
     this.spins = 0;
     this.jackpots = 0;
     this.bestWin = 0;
+    this.coins   = 0;
 
     // Build a weighted pool used to roll fair-ish landing symbols
     this.pool = [];
@@ -1902,6 +1903,7 @@ class SlotMachineGame {
     this.spins    = stats.slotSpins ?? 0;
     this.jackpots = stats.slotJackpots ?? 0;
     this.bestWin  = stats.slotBestStreak ?? 0;
+    this.coins    = stats.slotCoins ?? 0;
     this.updateDisplay();
 
     this.buildStrips();
@@ -2095,8 +2097,10 @@ class SlotMachineGame {
       this.jackpots++;
       const win = winSym.payout;
       if (win > this.bestWin) this.bestWin = win;
+      this.coins += win;
       updateStat('slotJackpots', this.jackpots);
       updateStat('slotBestStreak', this.bestWin);
+      updateStat('slotCoins', this.coins);
 
       Arcade.banner(`${winSym.glyph}  ${winSym.name}!  ${winSym.glyph}`, winSym.banner);
       Arcade.confetti(cx, cy, 32, winSym.palette);
@@ -2104,7 +2108,7 @@ class SlotMachineGame {
         Arcade.confettiRain(cardEl, 60, winSym.palette);
         Arcade.shake(cardEl, 'hard');
       }
-      Arcade.popScore(cx, cy - 30, `+${win}`, winSym.glow);
+      Arcade.popScore(cx, cy - 30, `+${win} 🪙`, winSym.glow);
       // Authentic slot-win audio: classic ding-ding-ding bell, then a
       // cascading coin-drop chime overlapping with it.
       Sound.winBell();
@@ -2118,19 +2122,21 @@ class SlotMachineGame {
           setTimeout(() => reel.classList.remove('win-glow'), 1100);
         }, i * 180);
       });
-      if (this.statusEl) this.statusEl.textContent = `${winSym.glyph} ${winSym.name} — +${win}!`;
+      if (this.statusEl) this.statusEl.textContent = `${winSym.glyph} ${winSym.name} — +${win} 🪙`;
     } else if (a === b || b === c || a === c) {
-      // Pair = near miss; pair payout = 10% of triple, min 5
+      // Pair = near miss; pair payout = 25% of triple, min 5.
       const pairSymIdx = (a === b) ? a : (b === c) ? b : a;
       const pairSym = sym[pairSymIdx];
-      const pairWin = Math.max(5, Math.round(pairSym.payout * 0.1));
+      const pairWin = Math.max(5, Math.round(pairSym.payout * 0.25));
       if (pairWin > this.bestWin) this.bestWin = pairWin;
+      this.coins += pairWin;
       updateStat('slotBestStreak', this.bestWin);
+      updateStat('slotCoins', this.coins);
 
       Arcade.banner(`${pairSym.glyph} ALMOST! ${pairSym.glyph}`, 'neon');
-      Arcade.popScore(cx, cy - 30, `+${pairWin}`, pairSym.glow);
+      Arcade.popScore(cx, cy - 30, `+${pairWin} 🪙`, pairSym.glow);
       Sound.jingle('cha-ching');
-      if (this.statusEl) this.statusEl.textContent = `So close — two ${pairSym.glyph} +${pairWin}.`;
+      if (this.statusEl) this.statusEl.textContent = `Two ${pairSym.glyph} matched — +${pairWin} 🪙`;
     } else {
       Sound.blip(220, 0.18, 'triangle', 0.04);
       if (this.statusEl) this.statusEl.textContent = 'Try again — the Force is patient.';
@@ -2144,9 +2150,11 @@ class SlotMachineGame {
     const s = document.getElementById('slot-spins');
     const j = document.getElementById('slot-jackpots');
     const b = document.getElementById('slot-best');
+    const c = document.getElementById('slot-coins');
     if (s) s.textContent = this.spins;
     if (j) j.textContent = this.jackpots;
     if (b) b.textContent = this.bestWin;
+    if (c) c.textContent = this.coins;
   }
 }
 
