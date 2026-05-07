@@ -1782,16 +1782,15 @@ class RipplePondGame {
 /* ── Game 8: Galactic Slots (Star Wars) ──────────────────── */
 class SlotMachineGame {
   static SYMBOLS = [
-    { glyph: '⚔️', name: 'JEDI MASTER',     glow: '#00d4ff', payout: 100, weight: 4, banner: 'rainbow', palette: 'cool'    },
+    { glyph: '⚔️', name: 'JEDI DUEL',        glow: '#00d4ff', payout: 100, weight: 4, banner: 'rainbow', palette: 'cool'    },
     { glyph: '🪐', name: 'IMPERIAL VICTORY', glow: '#ff3333', payout: 80,  weight: 3, banner: 'gold',    palette: 'gold'    },
-    { glyph: '🤖', name: 'RESCUE COMPLETE', glow: '#a78bfa', payout: 60,  weight: 4, banner: 'neon',    palette: 'neon'    },
-    { glyph: '🛸', name: 'REBEL ALLIANCE',  glow: '#fbbf24', payout: 40,  weight: 6, banner: 'gold',    palette: 'gold'    },
-    { glyph: '⭐', name: 'THE FORCE',       glow: '#ffe81f', payout: 200, weight: 1, banner: 'rainbow', palette: 'rainbow' },
-    { glyph: '💀', name: 'DARK SIDE',       glow: '#fb7185', payout: 30,  weight: 6, banner: 'neon',    palette: 'neon'    },
-    { glyph: '⚡', name: 'UNLIMITED POWER', glow: '#c084fc', payout: 50,  weight: 3, banner: 'rainbow', palette: 'rainbow' },
+    { glyph: '🤖', name: 'ASTROMECH UNIT',   glow: '#a78bfa', payout: 60,  weight: 4, banner: 'neon',    palette: 'neon'    },
+    { glyph: '🛸', name: 'REBEL ALLIANCE',   glow: '#fbbf24', payout: 40,  weight: 6, banner: 'gold',    palette: 'gold'    },
+    { glyph: '⭐', name: 'THE FORCE',        glow: '#ffe81f', payout: 250, weight: 1, banner: 'rainbow', palette: 'rainbow' },
+    { glyph: '💀', name: 'DARK SIDE',        glow: '#fb7185', payout: 30,  weight: 6, banner: 'neon',    palette: 'neon'    },
+    { glyph: '🚀', name: 'FALCON RUN',       glow: '#c084fc', payout: 70,  weight: 3, banner: 'rainbow', palette: 'rainbow' },
   ];
-  static SYMBOL_HEIGHT = 84;  // px — matches CSS .slot-symbol height
-  static STRIP_LENGTH  = 32;  // symbols rendered per reel strip
+  static STRIP_LENGTH = 32;  // symbols rendered per reel strip
 
   constructor() {
     this.root = document.getElementById('slot-game');
@@ -1900,7 +1899,10 @@ class SlotMachineGame {
     this.spinning = true;
     this.cabinet.classList.add('spinning');
     if (this.lever) this.lever.classList.add('pulled');
-    Sound.blip(120, 0.45, 'sawtooth', 0.04);
+    // Lever pull THUNK: a low percussive blip + a quick rising sweep into the spinning hum.
+    Sound.blip( 80, 0.12, 'square',   0.08);
+    Sound.blip(160, 0.10, 'sawtooth', 0.06);
+    setTimeout(() => Sound.blip(220, 0.55, 'sawtooth', 0.05), 110);
     if (this.statusEl) this.statusEl.textContent = 'The reels stir…';
 
     // Roll three landing symbols
@@ -1941,9 +1943,14 @@ class SlotMachineGame {
         strip.style.transform = `translateY(${landY}px)`;
         strip.dataset.landing = String(landingPos);
         this.reelEls[reelIdx].classList.add('locked');
-        Sound.blip(420, 0.05, 'square', 0.06);
+        // Metallic CLUNK — three layered tones land at once
+        Sound.blip( 90, 0.06, 'square',   0.07);
+        Sound.blip(360, 0.07, 'square',   0.05);
+        Sound.blip(720, 0.04, 'triangle', 0.04);
+        // Spring the lever back at the first reel lock
+        if (reelIdx === 0 && this.lever) this.lever.classList.remove('pulled');
         if (reelIdx === 2) {
-          setTimeout(() => this.evaluate(targets), 220);
+          setTimeout(() => this.evaluate(targets), 240);
         }
       }, stopMs[reelIdx]);
     });
@@ -1974,27 +1981,36 @@ class SlotMachineGame {
       updateStat('slotJackpots', this.jackpots);
       updateStat('slotBestStreak', this.bestWin);
 
-      Arcade.banner(winSym.name + '!', winSym.banner);
-      Arcade.confetti(cx, cy, 28, winSym.palette);
+      Arcade.banner(`${winSym.glyph}  ${winSym.name}!  ${winSym.glyph}`, winSym.banner);
+      Arcade.confetti(cx, cy, 32, winSym.palette);
       if (cardEl) {
-        Arcade.confettiRain(cardEl, 50, winSym.palette);
+        Arcade.confettiRain(cardEl, 60, winSym.palette);
         Arcade.shake(cardEl, 'hard');
       }
       Arcade.popScore(cx, cy - 30, `+${win}`, winSym.glow);
       Sound.jingle('jackpot');
-      // Glow the locked reels in the win colour briefly
-      this.reelEls.forEach(reel => {
+      // Sequential reel pulse — left → middle → right with a 180ms stagger
+      this.reelEls.forEach((reel, i) => {
         reel.style.setProperty('--reel-win-glow', winSym.glow);
-        reel.classList.add('win-glow');
-        setTimeout(() => reel.classList.remove('win-glow'), 1400);
+        setTimeout(() => {
+          reel.classList.add('win-glow');
+          Sound.blip(440 + i * 110, 0.10, 'triangle', 0.05);
+          setTimeout(() => reel.classList.remove('win-glow'), 1100);
+        }, i * 180);
       });
-      if (this.statusEl) this.statusEl.textContent = `★ ${winSym.name} — +${win}!`;
+      if (this.statusEl) this.statusEl.textContent = `${winSym.glyph} ${winSym.name} — +${win}!`;
     } else if (a === b || b === c || a === c) {
-      // Pair = near miss
-      Arcade.banner('ALMOST!', 'neon');
-      Arcade.popScore(cx, cy - 30, '+5', '#7dd3fc');
+      // Pair = near miss; pair payout = 10% of triple, min 5
+      const pairSymIdx = (a === b) ? a : (b === c) ? b : a;
+      const pairSym = sym[pairSymIdx];
+      const pairWin = Math.max(5, Math.round(pairSym.payout * 0.1));
+      if (pairWin > this.bestWin) this.bestWin = pairWin;
+      updateStat('slotBestStreak', this.bestWin);
+
+      Arcade.banner(`${pairSym.glyph} ALMOST! ${pairSym.glyph}`, 'neon');
+      Arcade.popScore(cx, cy - 30, `+${pairWin}`, pairSym.glow);
       Sound.jingle('cha-ching');
-      if (this.statusEl) this.statusEl.textContent = 'So close — pair found.';
+      if (this.statusEl) this.statusEl.textContent = `So close — two ${pairSym.glyph} +${pairWin}.`;
     } else {
       Sound.blip(220, 0.18, 'triangle', 0.04);
       if (this.statusEl) this.statusEl.textContent = 'Try again — the Force is patient.';
