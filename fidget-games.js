@@ -1854,12 +1854,21 @@ class SlotMachineGame {
         strip.appendChild(cell);
       });
       strip.dataset.symbols = symbolsForStrip.join(',');
-      // Initial position: random landing
-      const start = Math.floor(Math.random() * symbolsForStrip.length);
+      // Initial position: random landing — measured at spin time, set
+      // simply to 0 here so it's well-defined even before layout.
       strip.style.transition = 'none';
-      strip.style.transform = `translateY(${-start * SlotMachineGame.SYMBOL_HEIGHT}px)`;
-      strip.dataset.landing = String(start);
+      strip.style.transform = 'translateY(0px)';
+      strip.dataset.landing = '0';
     });
+  }
+
+  /** Read the actual rendered symbol-cell height. Falls back to 84 if
+      the layout hasn't settled yet (returns 0 from the DOM). */
+  cellHeight(strip) {
+    const first = strip && strip.firstElementChild;
+    if (!first) return 84;
+    const h = first.getBoundingClientRect().height;
+    return h > 4 ? h : (first.offsetHeight || 84);
   }
 
   buildStarfield() {
@@ -1902,24 +1911,34 @@ class SlotMachineGame {
 
     this.stripEls.forEach((strip, reelIdx) => {
       const symbols = strip.dataset.symbols.split(',').map(Number);
-      // Find an instance of the target near the bottom of the visible strip
+      // Find any instance of the target in the strip
       let landingPos = symbols.indexOf(targets[reelIdx]);
       if (landingPos < 0) landingPos = 0;
+
+      const H = this.cellHeight(strip);
       // Add full strip cycles so the reel actually appears to spin a few times
-      const cycles = 4 + reelIdx;  // each subsequent reel spins one extra cycle
+      const cycles = 4 + reelIdx;
       const totalIndex = landingPos + cycles * symbols.length;
-      const totalY = -totalIndex * SlotMachineGame.SYMBOL_HEIGHT;
+      const totalY = -totalIndex * H;
+      const landY  = -landingPos  * H;
       const durationS = (stopMs[reelIdx] / 1000).toFixed(2);
 
-      strip.style.transition = `transform ${durationS}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
-      // Force reflow before applying the new transform
-      void strip.offsetHeight;
-      strip.style.transform = `translateY(${totalY}px)`;
+      // Commit transition: none on the strip's current position, then in
+      // the next animation frame apply a fresh transition + target so the
+      // browser actually animates the change (rather than batching the
+      // transition + transform into a single non-animated update).
+      strip.style.transition = 'none';
+      void strip.offsetWidth;
+
+      requestAnimationFrame(() => {
+        strip.style.transition = `transform ${durationS}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
+        strip.style.transform = `translateY(${totalY}px)`;
+      });
 
       setTimeout(() => {
         // Snap to a normalized position so further spins stay in range
         strip.style.transition = 'none';
-        strip.style.transform = `translateY(${-landingPos * SlotMachineGame.SYMBOL_HEIGHT}px)`;
+        strip.style.transform = `translateY(${landY}px)`;
         strip.dataset.landing = String(landingPos);
         this.reelEls[reelIdx].classList.add('locked');
         Sound.blip(420, 0.05, 'square', 0.06);
