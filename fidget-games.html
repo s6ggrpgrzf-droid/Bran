@@ -24,6 +24,12 @@
       <h1>Fidget Games</h1>
       <p class="tagline">✨ Tap, squeeze, spin, breathe ✨</p>
     </div>
+    <div class="arcade-marquee" aria-hidden="true">
+      <div class="arcade-marquee__track">
+        <span>✦ FIDGET ARCADE ✦ TAP ✦ SQUEEZE ✦ SPIN ✦ BREATHE ✦ FEVER MODE ✦ JACKPOT ✦</span>
+        <span>✦ FIDGET ARCADE ✦ TAP ✦ SQUEEZE ✦ SPIN ✦ BREATHE ✦ FEVER MODE ✦ JACKPOT ✦</span>
+      </div>
+    </div>
   </header>
 
   <main id="main-content">
@@ -83,6 +89,10 @@
         <p class="section-intro">Press and hold. The longer you squeeze, the bigger the release.</p>
         <div class="fidget-game-card">
           <div id="stress-ball-game" class="fidget-game-container" role="application" aria-label="Stress ball game">
+            <svg id="power-meter" viewBox="0 0 100 100" aria-hidden="true">
+              <circle class="power-track" cx="50" cy="50" r="48" />
+              <circle class="power-fill"  cx="50" cy="50" r="48" />
+            </svg>
             <div id="stress-ball" class="stress-ball"></div>
             <svg id="squeeze-ring" viewBox="0 0 100 100" aria-hidden="true">
               <circle cx="50" cy="50" r="46" />
@@ -208,6 +218,8 @@
       }
     })();
   </script>
+
+  <div id="fx-layer" aria-hidden="true"></div>
 
   <script src="fidget-games.js"></script>
 </body>

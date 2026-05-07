@@ -3887,7 +3887,327 @@ body.no-scroll { overflow: hidden; }
   .walk-chip { right: 0.75rem; bottom: calc(72px + 0.75rem); padding: 0.5rem 0.85rem; }
 }
 
-/* Reduced motion */
+/* ════════════════════════════════════════════════════════════
+   Arcade FX layer (fidget tab)
+   ════════════════════════════════════════════════════════════ */
+
+#fx-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Marquee strip under the header tagline */
+.arcade-marquee {
+  margin-top: 0.85rem;
+  padding: 0.45rem 0;
+  background: linear-gradient(90deg, rgba(232,124,160,0.18), rgba(167,139,250,0.18), rgba(125,211,252,0.18));
+  border-top: 1px solid rgba(255,255,255,0.55);
+  border-bottom: 1px solid rgba(255,255,255,0.55);
+  box-shadow: 0 0 14px rgba(167,139,250,0.35), inset 0 0 12px rgba(255,255,255,0.45);
+  overflow: hidden;
+}
+.arcade-marquee__track {
+  display: inline-flex;
+  gap: 3rem;
+  white-space: nowrap;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  font-size: 0.85rem;
+  background: linear-gradient(90deg, #e87ca0, #a78bfa, #7dd3fc, #fbbf24, #e87ca0);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 4px rgba(167,139,250,0.55));
+  animation: arcadeScroll 22s linear infinite, arcadeHue 8s linear infinite;
+}
+@keyframes arcadeScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes arcadeHue {
+  to { background-position: 200% 0; }
+}
+
+/* Big arcade banners ("FEVER!", "SUPER!", "JACKPOT!") */
+.fx-banner {
+  position: fixed;
+  left: 50%;
+  top: 28%;
+  transform: translate(-50%, -50%) scale(0.6);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 7vw, 3.6rem);
+  letter-spacing: 0.06em;
+  padding: 0.4rem 1.4rem;
+  border-radius: 18px;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.25);
+  animation: fxBannerPop 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  z-index: 10000;
+}
+.fx-banner--neon {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(232,124,160,0.95), rgba(167,139,250,0.95));
+  box-shadow: 0 0 36px rgba(232,124,160,0.55), 0 8px 28px rgba(0,0,0,0.25), inset 0 0 14px rgba(255,255,255,0.35);
+}
+.fx-banner--gold {
+  color: #4a2900;
+  background: linear-gradient(135deg, #fde68a, #fbbf24);
+  box-shadow: 0 0 40px rgba(251,191,36,0.7), 0 8px 28px rgba(0,0,0,0.2), inset 0 0 14px rgba(255,255,255,0.6);
+}
+.fx-banner--rainbow {
+  color: #fff;
+  background: linear-gradient(90deg, #e87ca0, #a78bfa, #7dd3fc, #34d399, #fbbf24, #fb7185);
+  background-size: 250% 100%;
+  box-shadow: 0 0 44px rgba(167,139,250,0.6), 0 8px 28px rgba(0,0,0,0.25);
+  animation: fxBannerPop 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, arcadeHue 1.6s linear infinite;
+}
+@keyframes fxBannerPop {
+  0%   { transform: translate(-50%, -50%) scale(0.4) rotate(-3deg); opacity: 0; }
+  18%  { transform: translate(-50%, -50%) scale(1.18) rotate(2deg);  opacity: 1; }
+  35%  { transform: translate(-50%, -50%) scale(1.0)  rotate(-1deg); opacity: 1; }
+  80%  { transform: translate(-50%, -50%) scale(1.02); opacity: 1; }
+  100% { transform: translate(-50%, -55%) scale(1.0);  opacity: 0; }
+}
+
+/* Score popups (+1, +5, ×3) */
+.fx-score-pop {
+  position: fixed;
+  transform: translate(-50%, 0);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #e87ca0;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 8px currentColor;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: fxScorePop 0.85s ease-out forwards;
+  z-index: 10001;
+}
+@keyframes fxScorePop {
+  0%   { opacity: 0; transform: translate(-50%, 0) scale(0.7); }
+  20%  { opacity: 1; transform: translate(-50%, -8px) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -56px) scale(1); }
+}
+
+/* Confetti rain (used on big milestones) */
+.fx-rain {
+  position: fixed;
+  border-radius: 2px;
+  pointer-events: none;
+  animation: fxRainFall 1.5s cubic-bezier(0.36, 0.04, 0.64, 1) forwards;
+  z-index: 9999;
+}
+@keyframes fxRainFall {
+  0%   { opacity: 0; transform: translate(0, -10px) rotate(0deg); }
+  10%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--tx, 0), var(--ty, 240px)) rotate(540deg); }
+}
+
+/* Card-level shake */
+@keyframes fxShake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-3px, 0, 0); }
+  40%, 60% { transform: translate3d(3px, 0, 0); }
+}
+@keyframes fxShakeHard {
+  10%, 90% { transform: translate3d(-3px, 1px, 0) rotate(-0.5deg); }
+  20%, 80% { transform: translate3d(5px, -1px, 0) rotate(0.5deg); }
+  30%, 50%, 70% { transform: translate3d(-7px, 2px, 0) rotate(-1deg); }
+  40%, 60% { transform: translate3d(7px, -2px, 0) rotate(1deg); }
+}
+.fidget-game-card.fx-shake      { animation: fxShake 0.4s ease-in-out; }
+.fidget-game-card.fx-shake-hard { animation: fxShakeHard 0.45s ease-in-out; }
+
+/* Red flash border (used on Dot Tapper miss) */
+.fidget-game-card.card-flash-red {
+  animation: fxCardRed 0.7s ease;
+}
+@keyframes fxCardRed {
+  0%, 100% { box-shadow: var(--shadow-sm); border-color: var(--color-border); }
+  25%      { box-shadow: 0 0 28px rgba(239,68,68,0.55), 0 0 0 3px rgba(239,68,68,0.6) inset; border-color: rgba(239,68,68,0.7); }
+  65%      { box-shadow: 0 0 18px rgba(239,68,68,0.35); border-color: rgba(239,68,68,0.4); }
+}
+
+/* Sand sparkle trail */
+.fx-spark {
+  position: fixed;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff7c2 0%, #fbbf24 60%, transparent 100%);
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(251,191,36,0.7));
+  animation: fxSpark 0.55s ease-out forwards;
+  z-index: 9999;
+}
+@keyframes fxSpark {
+  0%   { opacity: 0.95; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0;    transform: translate(-50%, -50%) scale(0.3); }
+}
+
+/* Stress-ball steam puff */
+.fx-steam {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.45) 50%, rgba(255,255,255,0) 80%);
+  pointer-events: none;
+  animation: fxSteam 1.1s ease-out forwards;
+  z-index: 9998;
+  filter: blur(1px);
+}
+@keyframes fxSteam {
+  0%   { opacity: 0;    transform: translate(0, 0) scale(0.6); }
+  20%  { opacity: 0.9; }
+  100% { opacity: 0;    transform: translate(var(--tx, 0), -90px) scale(1.6); }
+}
+
+/* Special bubble types — center the emoji glyph */
+.bubble {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #fff;
+  font-weight: 800;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.35);
+  user-select: none;
+}
+.bubble-bomb  { color: #fff; }
+.bubble-star  { color: #fff; }
+.bubble-ice   { color: #0c4a6e; text-shadow: 0 1px 3px rgba(255,255,255,0.6); }
+
+/* Bubble fever mode background pulse */
+#bubble-game.fever {
+  animation: bubbleFever 0.45s ease-in-out infinite alternate;
+  box-shadow: 0 0 30px rgba(251,191,36,0.6), inset 0 0 30px rgba(167,139,250,0.45);
+}
+@keyframes bubbleFever {
+  from { background: radial-gradient(ellipse at 30% 20%, #fce7f3 0%, #ede9fe 50%, #e0f2fe 100%); }
+  to   { background: radial-gradient(ellipse at 70% 60%, #fff7c2 0%, #fce7f3 35%, #ede9fe 70%, #bae6fd 100%); }
+}
+
+/* Spinner ticker line */
+.spinner-tick {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 22px;
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255,255,255,0.85);
+  z-index: 14;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.spinner-tick.tick-flash {
+  animation: tickFlash 0.18s ease-out;
+}
+@keyframes tickFlash {
+  0%   { transform: translateX(-50%) scaleY(1) rotate(0deg); background: #fff; }
+  50%  { transform: translateX(-50%) scaleY(1.4) rotate(2deg); background: #fbbf24; box-shadow: 0 0 16px rgba(251,191,36,0.85); }
+  100% { transform: translateX(-50%) scaleY(1) rotate(0deg); background: #fff; }
+}
+
+/* Dot Tapper trace overlay */
+.dot-trace {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  overflow: visible;
+}
+.dot-trace-line {
+  filter: drop-shadow(0 0 8px currentColor);
+  animation: traceFade 0.85s ease-out forwards;
+}
+@keyframes traceFade {
+  0%   { opacity: 0.95; stroke-width: 4; }
+  100% { opacity: 0;    stroke-width: 1; }
+}
+
+/* Stress Ball power meter ring */
+#power-meter {
+  position: absolute;
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}
+#power-meter .power-track {
+  fill: none;
+  stroke: rgba(255,255,255,0.25);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+#power-meter .power-fill {
+  fill: none;
+  stroke: #7dd3fc;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 301.6;
+  stroke-dashoffset: 301.6;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+  filter: drop-shadow(0 0 6px currentColor);
+  transition: stroke-dashoffset 0.08s linear, stroke 0.2s ease;
+}
+
+/* Pop-It line flash + cascade pop-up */
+.popit-cell.popit-line-flash {
+  animation: popitLineFlash 0.4s ease-out;
+}
+@keyframes popitLineFlash {
+  0%   { box-shadow: 0 4px 8px rgba(0,0,0,0.12), inset 0 -3px 6px rgba(0,0,0,0.18); }
+  50%  { box-shadow: 0 0 26px #fbbf24, 0 0 12px #fff7c2, inset 0 -3px 6px rgba(0,0,0,0.18); transform: scale(1.12); }
+  100% { box-shadow: 0 4px 8px rgba(0,0,0,0.12), inset 0 -3px 6px rgba(0,0,0,0.18); }
+}
+.popit-cell.popit-pop-up {
+  animation: popitPopUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popitPopUp {
+  0%   { transform: scale(0.92); }
+  60%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Neon animated card frame (subtle) */
+.fidget-game-card {
+  position: relative;
+}
+.fidget-game-card::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius) + 2px);
+  padding: 2px;
+  background: linear-gradient(120deg, rgba(232,124,160,0.55), rgba(167,139,250,0.55), rgba(125,211,252,0.55), rgba(232,124,160,0.55));
+  background-size: 250% 250%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.7;
+  animation: neonGlide 8s linear infinite;
+}
+@keyframes neonGlide {
+  0%   { background-position:   0% 50%; }
+  100% { background-position: 250% 50%; }
+}
+
+/* ── Reduced motion ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .streak-chip,
   .streak-chip--hot,
@@ -3900,7 +4220,23 @@ body.no-scroll { overflow: hidden; }
   .form-error,
   .mood-encouragement,
   .dump-panel,
-  .tip-featured {
+  .tip-featured,
+  .arcade-marquee__track,
+  .fx-banner,
+  .fx-banner--rainbow,
+  .fx-score-pop,
+  .fx-rain,
+  .fx-spark,
+  .fx-steam,
+  .fidget-game-card.fx-shake,
+  .fidget-game-card.fx-shake-hard,
+  .fidget-game-card.card-flash-red,
+  .fidget-game-card::after,
+  #bubble-game.fever,
+  .spinner-tick.tick-flash,
+  .dot-trace-line,
+  .popit-cell.popit-line-flash,
+  .popit-cell.popit-pop-up {
     animation: none !important;
     transition: none !important;
   }
