@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Daily weather forecast for McCloud, Oklahoma.">
-  <title>Brandon — McCloud Weather</title>
+  <meta name="description" content="Daily weather forecast for McCloud and Edmond, Oklahoma.">
+  <title>Brandon — Oklahoma Weather</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#e87ca0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,6 +58,30 @@
       margin-top: 0.35rem;
       letter-spacing: 0.04em;
     }
+    .wx-location-switch {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 0 0 1.25rem;
+    }
+    .wx-loc-btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.75);
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .wx-loc-btn.active {
+      background: #e87ca0;
+      border-color: #e87ca0;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(232,124,160,0.35);
+    }
   </style>
 </head>
 <body class="weather-page">
@@ -71,8 +95,8 @@
     </div>
     <div class="container">
       <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
-      <h1>McCloud Weather</h1>
-      <p class="tagline">📍 McCloud, Oklahoma — Home Base</p>
+      <h1 id="wx-city-name">McCloud Weather</h1>
+      <p class="tagline" id="wx-city-tagline">📍 McCloud, Oklahoma — Home Base</p>
     </div>
   </header>
 
@@ -80,6 +104,12 @@
     <section aria-labelledby="weather-heading">
       <div class="container">
         <h2 id="weather-heading" class="sr-only">Current Weather</h2>
+
+        <!-- Location switcher -->
+        <div class="wx-location-switch" role="group" aria-label="Choose location">
+          <button class="wx-loc-btn active" data-loc="mccloud" aria-pressed="true">McCloud</button>
+          <button class="wx-loc-btn" data-loc="edmond" aria-pressed="false">Edmond</button>
+        </div>
 
         <!-- Loading skeleton -->
         <div id="wx-loading" aria-live="polite" aria-label="Loading weather data">
@@ -193,10 +223,17 @@
   <script>
     'use strict';
 
-    // ── McCloud, OK coordinates ───────────────────────────────
-    const LAT = 35.0111;
-    const LON = -97.0967;
-    const CACHE_KEY  = 'bran_weather_v1';
+    // ── Locations ───────────────────────────────────────────
+    const LOCATIONS = {
+      mccloud: { name: 'McCloud', tagline: '📍 McCloud, Oklahoma — Home Base', lat: 35.0111, lon: -97.0967 },
+      edmond:  { name: 'Edmond',  tagline: '📍 Edmond, Oklahoma',              lat: 35.6528, lon: -97.4781 },
+    };
+    let currentLoc = 'mccloud';
+    try {
+      const saved = localStorage.getItem('bran_wx_loc');
+      if (saved && LOCATIONS[saved]) currentLoc = saved;
+    } catch {}
+    const cacheKey = () => `bran_weather_v1_${currentLoc}`;
     const CACHE_TTL  = 30 * 60 * 1000; // 30 min
 
     // ── Star field ────────────────────────────────────────────
@@ -220,7 +257,7 @@
     // ── Cache ─────────────────────────────────────────────────
     function getCache() {
       try {
-        const raw = sessionStorage.getItem(CACHE_KEY);
+        const raw = sessionStorage.getItem(cacheKey());
         if (!raw) return null;
         const { data, ts } = JSON.parse(raw);
         if (Date.now() - ts > CACHE_TTL) return null;
@@ -230,9 +267,34 @@
 
     function setCache(data) {
       try {
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+        sessionStorage.setItem(cacheKey(), JSON.stringify({ data, ts: Date.now() }));
       } catch {}
     }
+
+    // ── Location switching ────────────────────────────────────
+    function applyLocation() {
+      const loc = LOCATIONS[currentLoc];
+      document.getElementById('wx-city-name').textContent = `${loc.name} Weather`;
+      document.getElementById('wx-city-tagline').textContent = loc.tagline;
+      const frame = document.querySelector('.radar-container iframe');
+      frame.src = `https://www.wunderground.com/wundermap?lat=${loc.lat}&lon=${loc.lon}&zoom=8&type=WunderMap_radar`;
+      frame.title = `Live weather radar for ${loc.name}, Oklahoma`;
+      document.querySelectorAll('.wx-loc-btn').forEach(btn => {
+        const on = btn.dataset.loc === currentLoc;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', String(on));
+      });
+      try { localStorage.setItem('bran_wx_loc', currentLoc); } catch {}
+    }
+
+    document.querySelectorAll('.wx-loc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.loc === currentLoc) return;
+        currentLoc = btn.dataset.loc;
+        applyLocation();
+        loadWeather(false);
+      });
+    });
 
     // ── Emoji + condition mapping ─────────────────────────────
     function weatherEmoji(forecast, isDaytime) {
@@ -403,8 +465,9 @@
 
       try {
         // Step 1: resolve grid
+        const loc = LOCATIONS[currentLoc];
         const ptRes = await fetch(
-          `https://api.weather.gov/points/${LAT},${LON}`,
+          `https://api.weather.gov/points/${loc.lat},${loc.lon}`,
           { headers: { 'User-Agent': 'Bran wellness app (github.com/s6ggrpgrzf-droid/Bran)' } }
         );
         if (!ptRes.ok) throw new Error('points');
@@ -436,13 +499,14 @@
       const btn = document.getElementById('refresh-btn');
       btn.classList.add('spinning');
       btn.addEventListener('animationend', () => btn.classList.remove('spinning'), { once: true });
-      sessionStorage.removeItem(CACHE_KEY);
+      sessionStorage.removeItem(cacheKey());
       loadWeather(true);
     });
 
     document.getElementById('retry-btn').addEventListener('click', () => loadWeather(true));
 
     // ── Init ──────────────────────────────────────────────────
+    applyLocation();
     loadWeather(false);
   </script>
 </body>
