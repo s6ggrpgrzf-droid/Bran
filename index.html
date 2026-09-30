@@ -319,10 +319,14 @@
   <!-- 60s breath overlay (built/shown by app.js) -->
   <div id="breath-overlay" class="breath-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="breath-title">
     <div class="breath-stage">
-      <div class="breath-ring" aria-hidden="true"></div>
-      <h2 id="breath-title" class="breath-title">Breathe</h2>
-      <p id="breath-phase" class="breath-phase">Get ready…</p>
-      <p id="breath-timer" class="breath-timer">60s</p>
+      <div class="breath-visual">
+        <div class="breath-ring" aria-hidden="true"></div>
+        <div class="breath-text">
+          <h2 id="breath-title" class="breath-title">Breathe</h2>
+          <p id="breath-phase" class="breath-phase">Get ready…</p>
+          <p id="breath-timer" class="breath-timer">60s</p>
+        </div>
+      </div>
       <button type="button" id="breath-close" class="breath-close" aria-label="Close">Done</button>
     </div>
   </div>

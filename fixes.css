@@ -7,3 +7,14 @@
 .weekly-chart-empty{grid-column:1 / -1;align-self:center;text-align:center;color:#6d5a70;font-size:0.85rem;font-weight:600;margin:0;}
 .empty-state{font-style:normal !important;text-align:center;padding:2rem 1.5rem;border:2px dashed #f0d4e8;border-radius:20px;background:rgba(255,255,255,0.6);}
 .footer-credit{margin-top:0.5rem;font-size:0.8rem;opacity:0.9;}
+
+/* Tighten bottom spacing — remove dead gap above the fixed nav */
+main{padding-bottom:4.25rem !important;}
+main>section:last-of-type{padding-bottom:2.5rem;}
+
+/* Breath overlay rebuild — ring sits behind centered text, Done button clear */
+#breath-overlay .breath-stage{width:auto;height:auto;margin:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;padding:2rem;}
+#breath-overlay .breath-visual{position:relative;width:220px;height:220px;flex:none;display:flex;align-items:center;justify-content:center;}
+#breath-overlay .breath-ring{position:absolute;inset:0;width:100%;height:100%;margin:0;border:none;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.4));box-shadow:0 0 60px rgba(255,255,255,0.6), 0 0 120px rgba(167,139,250,0.5);animation:none;pointer-events:none;}
+#breath-overlay .breath-text{position:relative;z-index:1;text-align:center;color:#fff;}
+#breath-overlay .breath-close{position:relative;z-index:2;margin-top:0;}
