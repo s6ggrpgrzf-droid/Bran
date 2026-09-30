@@ -201,12 +201,14 @@ function renderWeeklyChart(log) {
   const heights = { great: 100, good: 80, okay: 55, low: 35, rough: 22 };
   const today = new Date();
   const bars = [];
+  let hasAnyEntry = false;
 
   for (let i = 6; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     const iso = dateStr(d);
     const entry = byDate[iso];
+    if (entry) hasAnyEntry = true;
     const moodObj = entry ? MOODS.find(m => m.value === entry.mood) : null;
     const height = entry ? heights[entry.mood] : 8;
     const color  = moodObj ? moodObj.color : 'rgba(167,139,250,0.15)';
@@ -221,7 +223,9 @@ function renderWeeklyChart(log) {
       </div>
     `);
   }
-  container.innerHTML = bars.join('');
+  container.innerHTML = hasAnyEntry
+    ? bars.join('')
+    : '<p class="weekly-chart-empty">Your week at a glance will bloom here 🌱</p>';
 }
 
 // ── Render history ───────────────────────────────────────
@@ -359,7 +363,7 @@ function rotateTipOfMoment() {
       <h3>${escapeHtml(title)}</h3>
       <p>${escapeHtml(body)}</p>
       <button type="button" class="btn-soft tip-featured-jump" data-target="${escapeHtml(id)}">
-        Show it in the list ↓
+        See it below ↓
       </button>
     </div>
   `;
