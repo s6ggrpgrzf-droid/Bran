@@ -1,3 +1,9 @@
 /* Bran fixes 2026-09-30: contrast + dialog z-index */
 :root{--color-text-muted:#6d5a70 !important;}
 .breath-overlay{z-index:300 !important;}
+
+/* Cosmetic fixes 2026-09-30 */
+.hero-greeting .greeting-text{color:#3d2c40 !important;text-shadow:0 1px 6px rgba(255,255,255,0.6) !important;}
+.weekly-chart-empty{grid-column:1 / -1;align-self:center;text-align:center;color:#6d5a70;font-size:0.85rem;font-weight:600;margin:0;}
+.empty-state{font-style:normal !important;text-align:center;padding:2rem 1.5rem;border:2px dashed #f0d4e8;border-radius:20px;background:rgba(255,255,255,0.6);}
+.footer-credit{margin-top:0.5rem;font-size:0.8rem;opacity:0.9;}
