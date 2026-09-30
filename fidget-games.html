@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Calming fidget toys and mini-games for focus and relaxation.">
-  <title>Brandon — Fidget Games</title>
+  <meta name="description" content="Soft, calming fidget toys for restless moments. No scores, no pressure — just gentle things to touch.">
+  <title>Brandon — Fidget Garden</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=slot6">
+  <link rel="stylesheet" href="styles.css?v=garden1">
+  <link rel="stylesheet" href="fidgets.css?v=garden1">
+  <link rel="stylesheet" href="fixes.css">
 </head>
 <body class="fidgets-page">
-  <div id="bg-stars" aria-hidden="true"></div>
-
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header role="banner">
@@ -21,200 +21,130 @@
     </div>
     <div class="container">
       <div class="header-sparkles" aria-hidden="true">✦ ✧ ✦</div>
-      <h1>Fidget Games</h1>
-      <p class="tagline">✨ Tap, squeeze, spin, breathe ✨</p>
-    </div>
-    <div class="arcade-marquee" aria-hidden="true">
-      <div class="arcade-marquee__track">
-        <span>✦ FIDGET ARCADE ✦ TAP ✦ SQUEEZE ✦ SPIN ✦ BREATHE ✦ FEVER MODE ✦ JACKPOT ✦</span>
-        <span>✦ FIDGET ARCADE ✦ TAP ✦ SQUEEZE ✦ SPIN ✦ BREATHE ✦ FEVER MODE ✦ JACKPOT ✦</span>
-      </div>
+      <h1>Fidget Garden</h1>
+      <p class="tagline">🌿 Soft toys for restless moments 🌿</p>
+      <p class="garden-sub">No scores, no timers, nothing to win.<br>Just gentle things to touch.</p>
     </div>
   </header>
 
   <main id="main-content">
 
-    <!-- Game 1: Bubble Pop (reworked) -->
-    <section id="bubble-section" aria-labelledby="bubble-heading">
+    <!-- Toy 1: Bubble Pop -->
+    <section class="toy" aria-labelledby="bubble-heading">
       <div class="container">
         <h2 id="bubble-heading">Bubble Pop 🫧</h2>
-        <p class="section-intro">Pop the bubbles. Catch a rare golden one for a sparkle bonus.</p>
-        <div class="fidget-game-card">
-          <div id="bubble-game" class="fidget-game-container" role="application" aria-label="Bubble pop game"></div>
-          <div class="game-stats">
-            <p>Bubbles popped: <strong id="bubble-count">0</strong> · Best combo: <strong id="bubble-best-combo">0</strong></p>
+        <p class="section-intro">Bubbles drift by. Pop the ones you like.</p>
+        <div class="toy-card">
+          <div id="bubble-stage" class="toy-stage" role="application" aria-label="Bubble pop toy"></div>
+          <p class="toy-note"><span id="bubble-count">0</span> popped</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toy 2: Breathing Orb -->
+    <section class="toy" aria-labelledby="orb-heading">
+      <div class="container">
+        <h2 id="orb-heading">Breathing Orb 🌬️</h2>
+        <p class="section-intro">Follow the orb with your breath. In as it grows, out as it shrinks.</p>
+        <div class="toy-card">
+          <div id="orb-stage" class="toy-stage toy-stage--center" role="application" aria-label="Breathing orb toy">
+            <div id="breath-orb" class="breath-orb" aria-hidden="true"></div>
+            <p id="orb-phase" class="orb-phase" aria-live="polite">Press begin when you're ready</p>
+          </div>
+          <div class="toy-controls">
+            <button type="button" id="orb-toggle" class="garden-btn">Begin 🌸</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Game 2: Spinner Wheel (reworked: drag-to-spin, labelled segments) -->
-    <section id="spinner-section" aria-labelledby="spinner-heading">
+    <!-- Toy 3: Worry Stone -->
+    <section class="toy" aria-labelledby="stone-heading">
       <div class="container">
-        <h2 id="spinner-heading">Spinner Wheel 🎡</h2>
-        <p class="section-intro">Drag in a circle, or just click. Faster flicks spin longer.</p>
-        <div class="fidget-game-card">
-          <div id="spinner-game" class="fidget-game-container" role="application" aria-label="Spinner wheel game">
-            <div id="spinner-wheel" class="spinner-wheel"></div>
-          </div>
-          <div class="game-stats">
-            <p>Times spun: <strong id="spinner-count">0</strong></p>
-            <p class="spinner-result-label">Landed on: <strong id="spinner-result">—</strong></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Game 3: Dot Tapper (reworked: 3x3, persisted high level, level-up confetti) -->
-    <section id="dot-section" aria-labelledby="dot-heading">
-      <div class="container">
-        <h2 id="dot-heading">Dot Tapper 🎯</h2>
-        <p class="section-intro">Watch the pattern, then repeat it. How long can you stretch your memory?</p>
-        <div class="fidget-game-card">
-          <div id="dot-tapper-game" class="fidget-game-container" role="application" aria-label="Dot tapper memory game">
-            <div class="dot-grid"></div>
-          </div>
-          <div class="game-stats">
-            <p class="dot-status" id="dot-status">Get ready…</p>
-            <p>Level: <strong id="dot-level">1</strong> · Best: <strong id="dot-best">1</strong></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Game 4: Stress Ball (reworked: heat-up tint, idle breathe) -->
-    <section id="stress-section" aria-labelledby="stress-heading">
-      <div class="container">
-        <h2 id="stress-heading">Stress Ball 💙</h2>
-        <p class="section-intro">Press and hold. The longer you squeeze, the bigger the release.</p>
-        <div class="fidget-game-card">
-          <div id="stress-ball-game" class="fidget-game-container" role="application" aria-label="Stress ball game">
-            <svg id="power-meter" viewBox="0 0 100 100" aria-hidden="true">
-              <circle class="power-track" cx="50" cy="50" r="48" />
-              <circle class="power-fill"  cx="50" cy="50" r="48" />
-            </svg>
-            <div id="stress-ball" class="stress-ball"></div>
-            <svg id="squeeze-ring" viewBox="0 0 100 100" aria-hidden="true">
-              <circle cx="50" cy="50" r="46" />
-            </svg>
-          </div>
-          <div class="game-stats">
-            <p>Squeezes: <strong id="stress-count">0</strong> · Time held: <strong id="stress-time">0</strong>s</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Game 5: Zen Sand Garden (NEW) -->
-    <section id="sand-section" aria-labelledby="sand-heading">
-      <div class="container">
-        <h2 id="sand-heading">Zen Sand Garden 🪷</h2>
-        <p class="section-intro">Drag to rake patterns into the sand. Smooth it whenever you need a fresh start.</p>
-        <div class="fidget-game-card">
-          <div id="sand-game" class="fidget-game-container" role="application" aria-label="Zen sand garden">
-            <canvas id="sand-canvas" width="600" height="380"></canvas>
-          </div>
-          <div class="sand-controls">
-            <button type="button" id="sand-smooth" class="sand-btn">Smooth Sand</button>
-            <button type="button" id="sand-tool" class="sand-btn" data-tool="rake">Rake 🪮</button>
-          </div>
-          <div class="game-stats">
-            <p>Strokes drawn: <strong id="sand-strokes">0</strong></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Game 6: Pop-It Grid (NEW) -->
-    <section id="popit-section" aria-labelledby="popit-heading">
-      <div class="container">
-        <h2 id="popit-heading">Pop-It Grid 🌈</h2>
-        <p class="section-intro">Push each silicone bubble. Tap again to pop it back up. Pure satisfying repetition.</p>
-        <div class="fidget-game-card">
-          <div id="popit-game" class="fidget-game-container" role="application" aria-label="Pop-it bubble grid">
-            <div id="popit-grid" class="popit-grid"></div>
-          </div>
-          <div class="popit-controls">
-            <button type="button" id="popit-reset" class="sand-btn">Reset Pops</button>
-          </div>
-          <div class="game-stats">
-            <p>Total pops: <strong id="popit-count">0</strong></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Game 7: Ripple Pond (NEW) -->
-    <section id="ripple-section" aria-labelledby="ripple-heading">
-      <div class="container">
-        <h2 id="ripple-heading">Ripple Pond 💧</h2>
-        <p class="section-intro">Tap the water and watch the ripples meet. No score, just stillness.</p>
-        <div class="fidget-game-card">
-          <div id="ripple-game" class="fidget-game-container" role="application" aria-label="Ripple pond">
-            <canvas id="ripple-canvas" width="600" height="380"></canvas>
-          </div>
-          <div class="game-stats">
-            <p>Ripples sent: <strong id="ripple-count">0</strong></p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Game 8: Galactic Slots (Star Wars) -->
-    <section id="slot-section" aria-labelledby="slot-heading">
-      <div class="container">
-        <h2 id="slot-heading">Galactic Slots ⭐</h2>
-        <p class="section-intro">Pull the lever. Match three to feel the Force.</p>
-        <div class="fidget-game-card">
-          <div id="slot-game" class="fidget-game-container" role="application" aria-label="Star Wars slot machine">
-            <div class="slot-cabinet">
-              <div class="slot-stars" aria-hidden="true"></div>
-
-              <!-- Chrome rivets in the four corners -->
-              <span class="slot-rivet slot-rivet--tl" aria-hidden="true"></span>
-              <span class="slot-rivet slot-rivet--tr" aria-hidden="true"></span>
-              <span class="slot-rivet slot-rivet--bl" aria-hidden="true"></span>
-              <span class="slot-rivet slot-rivet--br" aria-hidden="true"></span>
-
-              <!-- LED-bulb ringed brand sign -->
-              <div class="slot-marquee">
-                <div class="slot-bulbs slot-bulbs--top" aria-hidden="true"></div>
-                <div class="slot-title">✦ GALACTIC SLOTS ✦</div>
-                <div class="slot-bulbs slot-bulbs--bottom" aria-hidden="true"></div>
-              </div>
-
-              <!-- Reel face: 3 visible rows with a glowing payline through the middle -->
-              <div class="slot-face">
-                <div class="slot-reels">
-                  <div class="slot-reel" data-reel="0"><div class="slot-strip"></div></div>
-                  <div class="slot-reel" data-reel="1"><div class="slot-strip"></div></div>
-                  <div class="slot-reel" data-reel="2"><div class="slot-strip"></div></div>
-                </div>
-                <div class="slot-payline" aria-hidden="true"></div>
-              </div>
-
-              <div class="slot-result" id="slot-status" aria-live="polite">May the spin be with you.</div>
-
-              <!-- Coin tray decoration + main spin button -->
-              <div class="slot-tray" aria-hidden="true">
-                <div class="slot-tray__slot"></div>
-              </div>
-              <button type="button" id="slot-lever" class="slot-lever-btn">
-                <span class="slot-lever-knob" aria-hidden="true"></span>
-                <span class="slot-lever-text">PULL TO SPIN</span>
-              </button>
-
-              <!-- Mounted side-lever arm — visual only, fires same spin -->
-              <button type="button" id="slot-arm" class="slot-arm" aria-label="Pull the side lever">
-                <span class="slot-arm__mount" aria-hidden="true"></span>
-                <span class="slot-arm__rod"   aria-hidden="true"></span>
-                <span class="slot-arm__ball"  aria-hidden="true"></span>
-              </button>
+        <h2 id="stone-heading">Worry Stone 🤲</h2>
+        <p class="section-intro">Rub in slow circles. The stone warms as you do.</p>
+        <div class="toy-card">
+          <div id="stone-stage" class="toy-stage toy-stage--center" role="application" aria-label="Worry stone toy" style="touch-action:none">
+            <div id="worry-stone" class="worry-stone" aria-hidden="true">
+              <span class="worry-stone__sheen"></span>
             </div>
           </div>
-          <div class="game-stats">
-            <p>🪙 Coins: <strong id="slot-coins">0</strong> · Spins: <strong id="slot-spins">0</strong> · Jackpots: <strong id="slot-jackpots">0</strong> · Best: <strong id="slot-best">0</strong></p>
+          <p class="toy-note"><span id="stone-rubs">0</span> slow circles</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toy 4: Spinner Wheel -->
+    <section class="toy" aria-labelledby="spinner-heading">
+      <div class="container">
+        <h2 id="spinner-heading">Spinner Wheel 🎡</h2>
+        <p class="section-intro">Give it a flick and see what gentle word it lands on.</p>
+        <div class="toy-card">
+          <div id="spinner-stage" class="toy-stage toy-stage--center" role="application" aria-label="Spinner wheel toy" style="touch-action:none">
+            <div id="spinner-pointer" class="spinner-pointer" aria-hidden="true"></div>
+            <canvas id="spinner-canvas" width="300" height="300"></canvas>
           </div>
+          <p class="toy-note spinner-word" id="spinner-word" aria-live="polite">—</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toy 5: Stress Ball -->
+    <section class="toy" aria-labelledby="stress-heading">
+      <div class="container">
+        <h2 id="stress-heading">Stress Ball 💙</h2>
+        <p class="section-intro">Press and hold. Let go whenever you're ready.</p>
+        <div class="toy-card">
+          <div id="stress-stage" class="toy-stage toy-stage--center" role="application" aria-label="Stress ball toy" style="touch-action:none">
+            <div id="stress-ball" class="stress-ball" aria-hidden="true"></div>
+          </div>
+          <p class="toy-note">Squeeze as long as you like</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toy 6: Zen Sand Garden -->
+    <section class="toy" aria-labelledby="sand-heading">
+      <div class="container">
+        <h2 id="sand-heading">Zen Sand Garden 🪷</h2>
+        <p class="section-intro">Drag to rake soft lines in the sand.</p>
+        <div class="toy-card">
+          <div class="toy-stage">
+            <canvas id="sand-canvas" class="garden-canvas" width="600" height="360" role="application" aria-label="Zen sand garden toy"></canvas>
+          </div>
+          <div class="toy-controls">
+            <button type="button" id="sand-smooth" class="garden-btn garden-btn--soft">Smooth the sand</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toy 7: Pop-It Grid -->
+    <section class="toy" aria-labelledby="popit-heading">
+      <div class="container">
+        <h2 id="popit-heading">Pop-It Board 🌈</h2>
+        <p class="section-intro">Push each bubble in, tap again to pop it back. Endlessly repeatable.</p>
+        <div class="toy-card">
+          <div class="toy-stage toy-stage--center">
+            <div id="popit-grid" class="popit-grid" role="application" aria-label="Pop-it board toy"></div>
+          </div>
+          <div class="toy-controls">
+            <button type="button" id="popit-reset" class="garden-btn garden-btn--soft">Start over</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toy 8: Ripple Pond -->
+    <section class="toy" aria-labelledby="ripple-heading">
+      <div class="container">
+        <h2 id="ripple-heading">Ripple Pond 💧</h2>
+        <p class="section-intro">Touch the water. Watch the ripples fade away.</p>
+        <div class="toy-card">
+          <div class="toy-stage">
+            <canvas id="ripple-canvas" class="garden-canvas" width="600" height="360" role="application" aria-label="Ripple pond toy"></canvas>
+          </div>
+          <p class="toy-note">No score, just stillness</p>
         </div>
       </div>
     </section>
@@ -223,7 +153,7 @@
 
   <footer role="contentinfo">
     <div class="container">
-      <p>Made with ❤️ for Brandon</p>
+      <p>Made with ❤️ by James — for his favorite person, Brandon 💜</p>
     </div>
   </footer>
 
@@ -249,7 +179,7 @@
       <span class="bottom-nav__label">Trivia</span>
     </a>
     <a href="fidget-games.html" class="bottom-nav__item active" aria-current="page">
-      <span class="bottom-nav__icon" aria-hidden="true">🎮</span>
+      <span class="bottom-nav__icon" aria-hidden="true">🌿</span>
       <span class="bottom-nav__label">Fidgets</span>
     </a>
     <a href="memorial.html" class="bottom-nav__item">
@@ -258,28 +188,6 @@
     </a>
   </nav>
 
-  <script>
-    'use strict';
-    (function createStars() {
-      const c = document.getElementById('bg-stars');
-      for (let i = 0; i < 55; i++) {
-        const s = document.createElement('div');
-        s.className = 'bg-star';
-        const sz = 1.5 + Math.random() * 3;
-        s.style.cssText = [
-          `left:${(Math.random()*100).toFixed(2)}%`,
-          `top:${(Math.random()*100).toFixed(2)}%`,
-          `width:${sz.toFixed(1)}px`, `height:${sz.toFixed(1)}px`,
-          `animation-delay:${(Math.random()*5).toFixed(2)}s`,
-          `animation-duration:${(1.5+Math.random()*3).toFixed(2)}s`,
-        ].join(';');
-        c.appendChild(s);
-      }
-    })();
-  </script>
-
-  <div id="fx-layer" aria-hidden="true"></div>
-
-  <script src="fidget-games.js?v=slot6"></script>
+  <script src="fidget-games.js?v=garden1"></script>
 </body>
 </html>
