@@ -180,9 +180,11 @@
 }
 
 /* ── Stress Ball ───────────────────────────────────────────── */
-.stress-ball{
+/* ID-qualified to beat the legacy #stress-ball rule in styles.css */
+#stress-ball.stress-ball{
   width:150px;
   height:150px;
+  min-height:150px;
   border-radius:50%;
   background:radial-gradient(circle at 35% 30%, #bae6fd 0%, #7dd3fc 40%, #60a5fa 80%, #3b82f6 100%);
   box-shadow:inset -10px -14px 28px rgba(37,99,235,0.3), inset 8px 10px 22px rgba(255,255,255,0.5), 0 14px 34px rgba(96,165,250,0.35);
@@ -246,7 +248,7 @@
   #bubble-stage{height:260px;}
   .popit-grid{grid-template-columns:repeat(6, 1fr);gap:8px;}
   .worry-stone{width:140px;height:108px;}
-  .stress-ball{width:125px;height:125px;}
+  #stress-ball.stress-ball{width:125px;height:125px;min-height:125px;}
   .breath-orb{width:110px;height:110px;}
 }
 
