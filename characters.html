@@ -43,6 +43,23 @@
       letter-spacing: 0.06em;
       margin: 0.5rem 0 1.25rem;
     }
+    /* ── Vibe Quiz ── */
+    .vibe-card{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(240,212,232,.9);border-radius:28px;padding:2rem;box-shadow:0 8px 32px rgba(167,139,250,.18);max-width:640px;margin:0 auto;text-align:center}
+    .vibe-progress{font-size:.85rem;font-weight:800;color:#a78bfa;letter-spacing:.08em;margin-bottom:1rem;text-transform:uppercase}
+    .vibe-q{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.25rem;margin-bottom:1.25rem;color:#3d2c40}
+    .vibe-opts{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media(max-width:520px){.vibe-opts{grid-template-columns:1fr}}
+    .vibe-opt{font-family:'Nunito',sans-serif;font-weight:700;font-size:1rem;background:#fff;border:2px solid #f0d4e8;border-radius:16px;padding:.9rem .75rem;cursor:pointer;color:#3d2c40;transition:transform .15s ease,border-color .15s ease,background .15s ease}
+    .vibe-opt:hover{border-color:#e87ca0;background:#fce7f3;transform:translateY(-2px)}
+    .vibe-result-img{width:120px;height:120px;object-fit:cover;border-radius:50%;border:4px solid #f0d4e8;box-shadow:0 8px 24px rgba(232,124,160,.3);margin-bottom:1rem}
+    .vibe-result-emoji{font-size:4rem;margin-bottom:.5rem}
+    .vibe-result-name{font-family:'Nunito',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:.25rem;color:#3d2c40}
+    .vibe-result-role{font-style:italic;color:#6d5a70;font-size:.9rem;margin-bottom:1rem}
+    .vibe-result-quote{font-size:1.05rem;font-weight:600;color:#3d2c40;background:linear-gradient(160deg,#fdf4f9,#f5f0ff);border-radius:16px;padding:1rem 1.25rem;margin-bottom:1rem;line-height:1.6}
+    .vibe-result-note{color:#6d5a70;margin-bottom:1.25rem;font-weight:600}
+    .btn-bloom{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;color:#fff;background:linear-gradient(135deg,#e87ca0,#a78bfa);border:none;border-radius:999px;padding:.8rem 1.75rem;cursor:pointer;box-shadow:0 6px 20px rgba(232,124,160,.35);transition:transform .2s ease,box-shadow .2s ease}
+    .btn-bloom:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(232,124,160,.45)}
+    @media (prefers-reduced-motion:reduce){.vibe-opt{transition:none}}
   </style>
 </head>
 <body class="characters-page">
@@ -78,6 +95,14 @@
         <div class="card-grid" id="quotes-grid" role="list" aria-live="polite">
           <!-- Rendered by script -->
         </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="vibe-heading">
+      <div class="container">
+        <h2 id="vibe-heading">Which Character's Vibe Are You Today? ✨</h2>
+        <p class="section-intro">Three tiny questions. One character who gets you.</p>
+        <div id="vibe-quiz" class="vibe-card" aria-live="polite"></div>
       </div>
     </section>
   </main>
@@ -567,6 +592,83 @@
     }).catch(() => {
       renderCards('all');
     });
+  </script>
+
+  <script>
+  // ── Vibe Quiz: which character's vibe are you today? ──
+  (function(){
+    var quiz=document.getElementById('vibe-quiz');
+    if(!quiz||typeof CHARACTERS==='undefined') return;
+    var QUESTIONS=[
+      {q:"How's your energy right now?",opts:[
+        {t:'🔥 Fired up',chars:['Naruto Uzumaki','Rock Lee','Inuyasha','Han Solo']},
+        {t:'🌊 Steady',chars:['Kakashi Hatake','Obi-Wan Kenobi','Qui-Gon Jinn']},
+        {t:'🌸 Soft',chars:['Sakura Haruno','Kagome Higurashi','Sango','Princess Leia']},
+        {t:'🌙 Quiet',chars:['Itachi Uchiha','Sesshomaru','Yoda','Gaara']}
+      ]},
+      {q:'Pick a place to recharge:',opts:[
+        {t:'🏋️ Training grounds',chars:['Rock Lee','Naruto Uzumaki','Luke Skywalker']},
+        {t:'🌲 A quiet forest',chars:['Yoda','Qui-Gon Jinn','Sesshomaru','Kikyo']},
+        {t:'🏠 Home with friends',chars:['Shippo','Miroku','Sango','Han Solo']},
+        {t:'🌌 Under the stars',chars:['Gaara','Itachi Uchiha','Princess Leia','Obi-Wan Kenobi']}
+      ]},
+      {q:'What do you need most today?',opts:[
+        {t:'🦁 Courage',chars:['Naruto Uzumaki','Inuyasha','Luke Skywalker','Rock Lee']},
+        {t:'🍃 Calm',chars:['Kakashi Hatake','Yoda','Qui-Gon Jinn','Miroku']},
+        {t:'😄 Laughter',chars:['Shippo','Miroku','Han Solo','Jiraiya']},
+        {t:'😴 Rest',chars:['Gaara','Sakura Haruno','Kagome Higurashi','Kikyo']}
+      ]}
+    ];
+    var NOTES=[
+      'tackles the day head-on — and so can you.',
+      'keeps going no matter what. Channel that.',
+      'protects their peace fiercely. Take a page from that.',
+      'knows rest is part of the mission too.'
+    ];
+    var step=0, scores={};
+    function renderQ(){
+      var Q=QUESTIONS[step];
+      var html='<div class="vibe-progress">Question '+(step+1)+' of 3</div>'
+        +'<div class="vibe-q">'+Q.q+'</div><div class="vibe-opts">';
+      Q.opts.forEach(function(o,i){
+        html+='<button type="button" class="vibe-opt" data-i="'+i+'">'+o.t+'</button>';
+      });
+      quiz.innerHTML=html+'</div>';
+      quiz.querySelectorAll('.vibe-opt').forEach(function(b){
+        b.addEventListener('click',function(){
+          Q.opts[+b.dataset.i].chars.forEach(function(n){scores[n]=(scores[n]||0)+1;});
+          step++;
+          if(step<QUESTIONS.length){renderQ();}else{renderResult();}
+        });
+      });
+    }
+    function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+    function renderResult(){
+      var best=null,bestScore=-1;
+      CHARACTERS.forEach(function(c){
+        var s=scores[c.name]||0;
+        if(s>bestScore){bestScore=s;best=c;}
+      });
+      var note=NOTES[Math.floor(Math.random()*NOTES.length)];
+      var imgHtml=best.img
+        ? '<img class="vibe-result-img" src="'+best.img+'" alt="" loading="lazy" onerror="this.style.display=\'none\';var e=this.nextElementSibling;if(e)e.style.display=\'block\';">'
+        : '';
+      var html='<div class="vibe-progress">Your vibe today</div>'
+        +imgHtml
+        +'<div class="vibe-result-emoji"'+(best.img?' style="display:none"':'')+' aria-hidden="true">'+best.avatar+'</div>'
+        +'<div class="vibe-result-name">'+esc(best.name)+'</div>'
+        +'<div class="vibe-result-role">'+esc(best.role)+'</div>'
+        +'<div class="vibe-result-quote">&ldquo;'+esc(best.quote)+'&rdquo;</div>'
+        +'<div class="vibe-result-note">'+esc(best.name.split(' ')[0])+' '+note+'</div>'
+        +'<button type="button" id="vibe-retake" class="btn-bloom">Ask again ✨</button>';
+      quiz.innerHTML=html;
+      document.getElementById('vibe-retake').addEventListener('click',function(){
+        step=0;scores={};renderQ();
+      });
+      try{quiz.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}
+    }
+    renderQ();
+  })();
   </script>
 </body>
 </html>

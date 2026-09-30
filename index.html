@@ -12,6 +12,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="fixes.css">
+  <style>
+    /* ── Let It Go + Break Spinner ── */
+    .calm-card{background:rgba(255,255,255,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(240,212,232,.9);border-radius:28px;padding:1.75rem;box-shadow:0 8px 32px rgba(167,139,250,.18);max-width:640px;margin:0 auto}
+    .calm-card label{display:block;font-weight:800;font-family:'Nunito',sans-serif;margin-bottom:.6rem;color:#3d2c40}
+    .calm-card textarea{width:100%;border:2px solid #f0d4e8;border-radius:16px;padding:.8rem 1rem;font-family:'Nunito Sans',sans-serif;font-size:1rem;color:#3d2c40;background:#fff;resize:vertical}
+    .calm-card textarea:focus{outline:none;border-color:#e87ca0;box-shadow:0 0 0 3px rgba(232,124,160,.2)}
+    .calm-actions{margin-top:1rem}
+    .btn-bloom{font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;color:#fff;background:linear-gradient(135deg,#e87ca0,#a78bfa);border:none;border-radius:999px;padding:.8rem 1.75rem;cursor:pointer;box-shadow:0 6px 20px rgba(232,124,160,.35);transition:transform .2s ease,box-shadow .2s ease}
+    .btn-bloom:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(232,124,160,.45)}
+    .btn-bloom:active{transform:translateY(0)}
+    .btn-bloom:disabled{opacity:.6;cursor:default;transform:none}
+    .letgo-stage{position:relative;min-height:150px;display:none}
+    .letgo-bubble{position:absolute;left:50%;bottom:0;transform:translateX(-50%);max-width:92%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.95),rgba(186,230,253,.85));border:2px solid rgba(125,211,252,.7);color:#3d2c40;font-weight:700;border-radius:999px;padding:.9rem 1.6rem;font-size:.95rem;box-shadow:0 8px 24px rgba(125,211,252,.4),inset 0 2px 8px rgba(255,255,255,.8);animation:bubbleRise 4.5s ease-in forwards;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+    @keyframes bubbleRise{0%{opacity:0;transform:translateX(-50%) translateY(20px) scale(.7)}12%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-190px) scale(1.15)}}
+    .letgo-after{margin-top:1.25rem;text-align:center;font-weight:700;color:#6d5a70;line-height:2}
+    .spinner-result{min-height:5.5rem;display:flex;align-items:center;justify-content:center;text-align:center;font-family:'Nunito',sans-serif;font-weight:800;font-size:1.35rem;color:#3d2c40;background:linear-gradient(160deg,#fdf4f9,#f5f0ff);border:2px dashed #f0d4e8;border-radius:20px;padding:1.25rem;margin-bottom:1.25rem}
+    .spinner-result.pop{animation:spinPop .45s ease}
+    @keyframes spinPop{0%{transform:scale(.92)}55%{transform:scale(1.04)}100%{transform:scale(1)}}
+    .spinner-emoji{font-size:2rem;margin-right:.6rem}
+    @media (prefers-reduced-motion:reduce){.letgo-bubble{animation-duration:.01s}.spinner-result.pop{animation:none}.btn-bloom{transition:none}}
+  </style>
 </head>
 <body class="wellness-page">
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -74,6 +95,37 @@
             <button type="button" id="dump-toggle-recent" class="btn-link" aria-expanded="false">Show recent</button>
           </div>
           <ul id="dump-recent" class="dump-recent" hidden></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── LET IT GO ── -->
+    <section id="let-it-go" aria-labelledby="letgo-heading">
+      <div class="container">
+        <h2 id="letgo-heading">Let It Go 🫧</h2>
+        <p class="section-intro">Something from work stuck in your head? Put it in a bubble and watch it float away. Nothing is saved — it's just gone.</p>
+        <div class="calm-card">
+          <div id="letgo-form">
+            <label for="letgo-input">What's weighing on you?</label>
+            <textarea id="letgo-input" rows="2" maxlength="200" placeholder="That email, that meeting, that thing someone said…"></textarea>
+            <div class="calm-actions">
+              <button type="button" id="letgo-release" class="btn-bloom">Release it 🫧</button>
+            </div>
+          </div>
+          <div id="letgo-stage" class="letgo-stage" aria-live="polite"></div>
+          <p id="letgo-after" class="letgo-after" hidden><span id="letgo-msg"></span><br><button type="button" id="letgo-again" class="btn-link">Let go of another</button></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BREAK SPINNER ── -->
+    <section id="break-spinner" aria-labelledby="spinner-heading">
+      <div class="container">
+        <h2 id="spinner-heading">Break Spinner 🎡</h2>
+        <p class="section-intro">Can't decide how to rest? Let the spinner choose for you.</p>
+        <div class="calm-card" style="text-align:center">
+          <div id="spinner-result" class="spinner-result" aria-live="polite"><span>Tap spin ✨</span></div>
+          <button type="button" id="spinner-btn" class="btn-bloom">Spin</button>
         </div>
       </div>
     </section>
@@ -339,6 +391,72 @@
     <span id="walk-chip-time" class="walk-chip-time">5:00</span>
     <button type="button" id="walk-chip-cancel" class="walk-chip-cancel" aria-label="Cancel walk timer">✕</button>
   </div>
+
+  <script>
+  // ── Let It Go: worry dissolver ──
+  (function(){
+    var input=document.getElementById('letgo-input'), release=document.getElementById('letgo-release'),
+        stage=document.getElementById('letgo-stage'), form=document.getElementById('letgo-form'),
+        after=document.getElementById('letgo-after'), msg=document.getElementById('letgo-msg'),
+        again=document.getElementById('letgo-again');
+    if(!input) return;
+    var kindWords=[
+      "It's out of your head now. Breathe. 🌸",
+      "Gone. You don't have to carry that. 🌿",
+      "Released. Your shoulders can drop now. 💧",
+      "Floated away. That moment is over. ✨"
+    ];
+    release.addEventListener('click',function(){
+      var text=input.value.trim();
+      if(!text){ input.focus(); return; }
+      form.hidden=true;
+      stage.style.display='block';
+      var b=document.createElement('div');
+      b.className='letgo-bubble';
+      b.textContent=text.length>60?text.slice(0,60)+'…':text;
+      stage.appendChild(b);
+      msg.textContent=kindWords[Math.floor(Math.random()*kindWords.length)];
+      setTimeout(function(){ after.hidden=false; }, 3400);
+    });
+    again.addEventListener('click',function(){
+      stage.innerHTML=''; stage.style.display='none';
+      input.value=''; after.hidden=true; form.hidden=false; input.focus();
+    });
+  })();
+  // ── Break Spinner ──
+  (function(){
+    var btn=document.getElementById('spinner-btn'), result=document.getElementById('spinner-result');
+    if(!btn) return;
+    var ideas=[
+      {e:'💕',t:'Text James'},
+      {e:'💧',t:'Drink a full glass of water'},
+      {e:'🌤️',t:'Step outside for 2 minutes'},
+      {e:'🙆',t:'Stretch your shoulders and neck'},
+      {e:'🌬️',t:'Close your eyes — 5 slow breaths'},
+      {e:'🍎',t:'Eat a little snack'},
+      {e:'👀',t:'Look at something far away for 20 seconds'},
+      {e:'🌿',t:'Visit the Fidget Garden',link:'fidget-games.html'}
+    ];
+    var spinning=false;
+    btn.addEventListener('click',function(){
+      if(spinning) return; spinning=true; btn.disabled=true;
+      var ticks=0, total=14+Math.floor(Math.random()*8);
+      var winner=ideas[Math.floor(Math.random()*ideas.length)];
+      var iv=setInterval(function(){
+        var pick=ideas[Math.floor(Math.random()*ideas.length)];
+        result.innerHTML='<span><span class="spinner-emoji" aria-hidden="true">'+pick.e+'</span>'+pick.t+'</span>';
+        if(++ticks>=total){
+          clearInterval(iv);
+          result.classList.remove('pop'); void result.offsetWidth;
+          var inner='<span><span class="spinner-emoji" aria-hidden="true">'+winner.e+'</span>'+winner.t+'</span>';
+          result.innerHTML=winner.link?'<a href="'+winner.link+'">'+inner+'</a>':inner;
+          result.classList.add('pop');
+          spinning=false; btn.disabled=false;
+        }
+      },90);
+    });
+  })();
+  </script>
 
   <script defer src="app.js"></script>
 
