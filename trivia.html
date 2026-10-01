@@ -194,9 +194,9 @@
     }
 
     function showStreak(n) {
-      const hero = document.querySelector('.trivia-hero');
-      if (!hero) return;
-      const old  = hero.querySelector('.streak-badge');
+      const body = document.querySelector('.question-card .question-body');
+      if (!body) return;
+      const old  = body.querySelector('.streak-badge');
       if (old) old.remove();
       const label = n >= 5 ? `${n} in a row! 💥`
                   : n >= 4 ? `${n} in a row! 🔥`
@@ -205,7 +205,7 @@
       const badge = document.createElement('div');
       badge.className   = 'streak-badge';
       badge.textContent = label;
-      hero.insertBefore(badge, hero.firstChild);
+      body.insertBefore(badge, body.firstChild);
       badge.addEventListener('animationend', () => badge.remove());
     }
 
