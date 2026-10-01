@@ -234,7 +234,11 @@
     S.selected = null;
     lawn.classList.remove('placing');
     updateTopbar(); updatePackets();
-    setStatus(`${p.name} planted 🌷`);
+    if ((p.id === 'peashooter' || p.id === 'snowpea') && !zombieAhead(r, c + 1.6)) {
+      setStatus(`${p.name} planted — it'll open fire when a zombie comes down this row 🎯`);
+    } else {
+      setStatus(`${p.name} planted 🌷`);
+    }
   }
 
   function renderPlant(plant) {
