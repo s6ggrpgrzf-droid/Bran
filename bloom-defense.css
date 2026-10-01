@@ -90,6 +90,7 @@
 .bloom-stage {
   position: relative; min-width: 540px; border-radius: 17px; overflow: hidden;
   user-select: none; -webkit-user-select: none;
+  touch-action: manipulation;
   background: linear-gradient(180deg, #86c93f 0%, #7abf38 100%);
 }
 .bloom-lawn { position: relative; z-index: 1; }
@@ -316,6 +317,15 @@
   .bloom-title { font-size: 1.6rem; }
   .bloom-banner { font-size: 1.5rem; }
   .bloom-bank { font-size: 0.95rem; min-width: 4.6rem; }
+  /* Fit the whole lawn on narrow phones instead of scrolling it */
+  .bloom-stage { min-width: 0; }
+  .bloom-row { grid-template-columns: 44px repeat(9, 1fr); }
+  .bloom-tile { height: 52px; }
+  .bloom-mower { font-size: 1.5rem; }
+  .bloom-plant { font-size: 1.6rem; }
+  .bloom-zombie .zs { font-size: 1.7rem; }
+  .bloom-sun-token .ss { font-size: 1.5rem; }
+  .bloom-hpbar, .bloom-zhp { width: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
