@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=garden1">
   <link rel="stylesheet" href="fidgets.css?v=garden1">
+  <link rel="stylesheet" href="bloom-defense.css?v=1">
   <link rel="stylesheet" href="fixes.css">
 </head>
 <body class="fidgets-page">
@@ -151,6 +152,33 @@
       </div>
     </section>
 
+    <!-- Toy 9: Bloom Defense -->
+    <section class="toy" aria-labelledby="bloom-heading">
+      <div class="container">
+        <h2 id="bloom-heading">Bloom Defense 🌻🧟</h2>
+        <p class="section-intro">A cozy little lane-defense game. Plant your garden, hold back the zombies.</p>
+        <div class="toy-card bloom-card">
+          <div class="bloom-topbar">
+            <div class="bloom-bank" aria-label="Sun collected"><span aria-hidden="true">☀️</span><span id="bloom-sun">250</span></div>
+            <div class="bloom-wave-label">Wave <span id="bloom-wave-num">–</span>/10</div>
+            <div class="bloom-wavebar" aria-hidden="true"><div id="bloom-wavebar-fill"></div></div>
+            <div class="bloom-score" aria-label="Score">⭐ <span id="bloom-score">0</span></div>
+            <button type="button" id="bloom-pause" class="bloom-iconbtn" aria-label="Pause game">⏸️</button>
+          </div>
+          <div id="bloom-packets" class="bloom-packets" role="group" aria-label="Seed packets"></div>
+          <div class="bloom-lawn-wrap">
+            <div id="bloom-stage" class="bloom-stage" style="touch-action:none">
+              <div id="bloom-lawn" class="bloom-lawn" role="group" aria-label="Lawn, 5 rows by 9 columns"></div>
+              <div id="bloom-fx" class="bloom-fx" aria-hidden="true"></div>
+              <div id="bloom-banner" class="bloom-banner" aria-hidden="true"></div>
+              <div id="bloom-overlay" class="bloom-overlay"></div>
+            </div>
+          </div>
+          <p class="toy-note" id="bloom-status" aria-live="polite">Press Start to play 🌷</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer role="contentinfo">
@@ -191,5 +219,6 @@
   </nav>
 
   <script src="fidget-games.js?v=garden1"></script>
+  <script src="bloom-defense.js?v=1"></script>
 </body>
 </html>
